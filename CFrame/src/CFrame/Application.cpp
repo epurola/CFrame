@@ -1,6 +1,7 @@
 #include "Application.h"
 #include "Log.h"
 #include "Window.h"
+#include "Renderer/Renderer.h"
 
 namespace CFrame
 {
@@ -29,9 +30,12 @@ namespace CFrame
     void Application::run()
 	{
 		Window window(*eventDispatcher);
+
 		window.Create(1600, 1200, "CFrame");
+		Renderer renderer(window);
 		while (running) {
 			window.OnUpdate();
+			renderer.DrawRectangle(600, 444, 200, 200, { 255, 0, 255, 0 }, 0.0, 0);
 		}
 	}
 

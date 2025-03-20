@@ -1,6 +1,15 @@
 #pragma once
+#include <stdint.h>
+#include "glad/glad.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp> 
 #include "../Window.h"
-#include "Glad/Glad.h"
+#include "VertexBuffer.h"
+#include "VertexArray.h"
+#include "IndexBufferr.h"
+#include "Shader.h"
+#include "Texture.h"
+#include "SDL3/SDL.h"
 
 namespace CFrame {
 
@@ -14,11 +23,9 @@ namespace CFrame {
 		void DrawRectangle(float x, float y, float w, float h, SDL_Color color, float angle, int radius);
 
 	private:
-		Window* window;
+		Window& window;
 		SDL_FRect rect;
 		SDL_Texture* texture = NULL;
 		SDL_FColor fcolor;
-
-
 	};
 }

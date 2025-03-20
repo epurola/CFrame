@@ -4,8 +4,9 @@
 namespace CFrame {
 
 	Renderer::Renderer(Window& window)
+        :window(window)
 	{
-	
+       
 	}
 
 	Renderer::~Renderer()
@@ -20,7 +21,7 @@ namespace CFrame {
         float a = color.a / 255.0f;
 
         int windowWidth, windowHeight;
-        SDL_GetWindowSize(window->GetWindow(), &windowWidth, &windowHeight);
+        SDL_GetWindowSize(window.GetWindow(), &windowWidth, &windowHeight);
 
 
         /*Vertices of the rectangle. Calculates the top left as the origin*/
@@ -57,17 +58,18 @@ namespace CFrame {
             float(windowHeight), 0.0f, // Bottom, Top
             -1.0f, 1.0f); // Near, Far
 
+       // create shader with uniform u_Color
+        //Shader shader("../../res/shaders/basic.shader");
+        Shader shader("res/shaders/basic.shader");
 
-        /*create shader with uniform u_Color*/
-        Shader shader("../../res/shaders/basic.shader");
         shader.Bind();
         shader.Setuniform4f("u_Color", r, g, b, a);
         shader.SetUniformMat4f("u_MVP", proj);
 
-        Texture texture("../../res/textures/white-queen.png");
+        /*Texture texture("../../res/textures/white-queen.png");
         texture.Bind();
-        shader.SetUniform1i("u_Texture", 0); // 0 = the slot texture is bound to'
-
+        shader.SetUniform1i("u_Texture", 0); // 0 = the slot texture is bound to'*/
+      
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 

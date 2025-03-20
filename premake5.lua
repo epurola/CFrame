@@ -29,12 +29,13 @@ project "CFrame"
 	files
 	{
 		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
+		"%{prj.name}/src/**.cpp",
 	}
 
 	includedirs
 	{
 		"%{prj.name}/vendor/spdlog/include",
+		"%{prj.name}/vendor/glm/glm",
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.SDL3}"
 	}

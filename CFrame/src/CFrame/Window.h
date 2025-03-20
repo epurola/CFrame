@@ -18,7 +18,7 @@ namespace CFrame
 
 		inline unsigned int GetWidth() const { return width; }
 		inline unsigned int GetHeight() const { return height; }
-		inline SDL_Window* GetWindow() const { return window; }
+	    SDL_Window* GetWindow() { return window; }
 
 
 		 Window& Create(unsigned int width = 1280, 

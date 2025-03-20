@@ -1,4 +1,5 @@
 #include "Window.h"
+#include "glad/glad.h"
 
 namespace CFrame 
 {
@@ -68,15 +69,28 @@ Window& Window::Create(unsigned int width, unsigned int height, const std::strin
 		CF_CORE_ERROR("SDL_Init Error: {} ", SDL_GetError());
     }
 
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+
 	window = SDL_CreateWindow(title.c_str(), width, height, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
 	if (window == nullptr) {
 		CF_CORE_ERROR("SDL_CreateWindow Error: {0}");
 	}
 
+
 	context = SDL_GL_CreateContext(window);
-	if (context = nullptr) {
+	if (context == nullptr) {
 		CF_CORE_ERROR("SDL_CreateContext Error: {0}");
 	}
+
+	if (!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress)) {
+		SDL_Log("Failed to initialize GLAD");
+		
+	}
+
 	
 	return *this;
 }
