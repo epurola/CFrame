@@ -1,0 +1,3 @@
+[submodule "CFrame/vendor/spdlog"]
+	path = CFrame/vendor/spdlog
+	url = https://github.com/gabime/spdlog.git
