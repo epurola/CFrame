@@ -5,6 +5,8 @@
 #include <cstdio> 
 
 #include "CFrame/Application.h"
+
+#include "CFrame/UIElements/VBox.h"
 /*Logging*/
 #include "CFrame/Log.h"
 /*Entry point*/

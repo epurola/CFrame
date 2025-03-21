@@ -94,7 +94,10 @@ project "SandBox"
 	includedirs
 	{
 		"CFrame/vendor/spdlog/include",
-		"CFrame/src"
+		"CFrame/src",
+		"%{prj.name}/vendor/glm/glm",
+		"%{IncludeDir.Glad}",
+		"%{IncludeDir.SDL3}"
 	}
 	links
 	{

@@ -1,4 +1,6 @@
 #include "Renderer.h"
+#include <iostream>
+#include <filesystem>
 
 
 namespace CFrame {
@@ -58,9 +60,9 @@ namespace CFrame {
             float(windowHeight), 0.0f, // Bottom, Top
             -1.0f, 1.0f); // Near, Far
 
-       // create shader with uniform u_Color
+        //create shader with uniform u_Color
         //Shader shader("../../res/shaders/basic.shader");
-        Shader shader("res/shaders/basic.shader");
+        Shader shader("C:/dev/CFrame/CFrame/src/CFrame/res/shaders/basic.shader");
 
         shader.Bind();
         shader.Setuniform4f("u_Color", r, g, b, a);

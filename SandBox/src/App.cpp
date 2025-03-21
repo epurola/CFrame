@@ -5,11 +5,12 @@ class SandBox : public CFrame::Application
 public:
 	SandBox() 
 	{
-
+		CFrame::VBox* vbox = new CFrame::VBox(1600, 1200);
+		addElement(vbox);
 	}
 	~SandBox() 
 	{
-
+		
 	}
 
 };
@@ -20,3 +21,4 @@ CFrame::Application* CFrame::CreateApplication()
 {
 	return new SandBox();
 }
+

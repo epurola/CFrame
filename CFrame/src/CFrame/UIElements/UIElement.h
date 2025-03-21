@@ -1,6 +1,8 @@
 #pragma once
 #include <vector>
 #include "../Core.h"
+#include "../Renderer/Renderer.h"
+#include "../CFrameEvent/CFrameEvent.h"
 
 namespace CFrame 
 {
@@ -21,9 +23,11 @@ namespace CFrame
         UIElement(int x = 0, int y = 0, int w = -1, int h = -1, UIElement* parent = nullptr);
         virtual ~UIElement() = default;
 
-        virtual void Render() = 0;
+        virtual void Render(Renderer& renderer) = 0;
 
         virtual void UpdateChildSizes() {}
+
+        virtual void OnEvent(CFrameEvent& event) = 0;
 
         void SetMargin(int marginleft, int marginRight, int marginTop, int marginBottom);
         void SetPadding(int padding);

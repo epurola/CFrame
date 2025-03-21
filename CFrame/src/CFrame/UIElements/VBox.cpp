@@ -13,7 +13,12 @@ namespace CFrame
 		
 	}
 
-	void VBox::UpdateChildSizes()
+    void VBox::Render(Renderer& renderer)
+    {
+        renderer.DrawRectangle(x, y, width, height, { 255,255,200,255 }, 0.0, 0);
+    }
+
+    void VBox::UpdateChildSizes()
 	{
         if (children.empty())
             return;
@@ -146,5 +151,8 @@ namespace CFrame
             }
         }
 	}
+    void VBox::OnEvent(CFrameEvent& event)
+    {
+    }
 }
 

@@ -2,6 +2,7 @@
 #include "Log.h"
 #include "Window.h"
 #include "Renderer/Renderer.h"
+#include <chrono>
 
 namespace CFrame
 {
@@ -10,6 +11,9 @@ namespace CFrame
 		eventDispatcher = std::make_unique<EventDispatcher>();
 
 		eventDispatcher->AddListener(CFrameEventType::WindowClosed,
+			[this](CFrameEvent& event) { OnEvent(event); });
+
+		eventDispatcher->AddListener(CFrameEventType::WindowResized,
 			[this](CFrameEvent& event) { OnEvent(event); });
 	}
 
@@ -20,11 +24,26 @@ namespace CFrame
 
 	void Application::OnEvent(CFrameEvent& e) 
 	{
-		CF_CORE_INFO("Closing Window");
 		if (CFrameEventType::WindowClosed == e.GetEventType()) 
 		{
+			CF_CORE_INFO("Closing Window");
 			running = false;
 		}
+		if (CFrameEventType::WindowResized == e.GetEventType())
+		{
+			CF_CORE_INFO("Resized window {0}, {1}", 
+				         dynamic_cast<WindowResizedEvent&>(e).GetWidth(), 
+				         dynamic_cast<WindowResizedEvent&>(e).GetHeight());
+
+			//The main pane should be updated
+			//window update viewport
+			//rootElement.UpdateChildSizes()
+		}
+	}
+
+	void Application::addElement(UIElement* element)
+	{
+		UIElements.push_back(element);
 	}
 
     void Application::run()
@@ -34,9 +53,11 @@ namespace CFrame
 		window.Create(1600, 1200, "CFrame");
 		Renderer renderer(window);
 		while (running) {
-			window.OnUpdate();
-			renderer.DrawRectangle(600, 444, 200, 200, { 255, 0, 255, 0 }, 0.0, 0);
+
+			for (auto& element : UIElements) {
+				element->Render(renderer);
+			}
+			window.OnUpdate(); // Add SwapBuffers and HadleInput to Window so input can be doen before draw
 		}
 	}
-
 }

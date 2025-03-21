@@ -1,5 +1,6 @@
 #pragma once
 #include "UIElement.h"
+#include "../Renderer/Renderer.h"
 
 namespace CFrame {
 
@@ -15,7 +16,7 @@ namespace CFrame {
 		virtual void UpdateChildSizes() = 0;
 		void AddChild(UIElement* child);
 
-		void Render() override;
+		void Render(Renderer& renderer) override;
 
 		void SetAlignment(AlignItems xAlign, AlignItems yAlign );
 

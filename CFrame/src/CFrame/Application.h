@@ -15,6 +15,8 @@ public:
 
 	void OnEvent(CFrameEvent& e);
 
+	void addElement(UIElement* element);
+
 
 	void run();
 

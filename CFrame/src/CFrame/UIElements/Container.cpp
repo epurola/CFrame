@@ -19,7 +19,7 @@ namespace CFrame
 		children.push_back(child);
     }
 
-	void Container::Render()
+	void Container::Render(Renderer& renderer)
 	{
 
 	}
