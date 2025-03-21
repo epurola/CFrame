@@ -18,6 +18,11 @@ namespace CFrame
         renderer.DrawRectangle(x, y, width, height, { 255,255,200,255 }, 0.0, 0);
     }
 
+    void VBox::OnEvent(CFrameEvent& event)
+    {
+        CF_CORE_INFO("VBox Event!");
+    }
+
     void VBox::UpdateChildSizes()
 	{
         if (children.empty())
@@ -77,7 +82,7 @@ namespace CFrame
         case AlignItems::Start:
             ypos = ypos;
         default:
-            ypos = ypos;
+            ypos;
             break;
         }
 
@@ -151,8 +156,6 @@ namespace CFrame
             }
         }
 	}
-    void VBox::OnEvent(CFrameEvent& event)
-    {
-    }
+   
 }
 

@@ -15,6 +15,9 @@ namespace CFrame
 
 		eventDispatcher->AddListener(CFrameEventType::WindowResized,
 			[this](CFrameEvent& event) { OnEvent(event); });
+
+		eventDispatcher->AddListener(CFrameEventType::MouseButtonDown,
+			[this](CFrameEvent& event) { OnEvent(event); });
 	}
 
 	Application::~Application() 
@@ -38,6 +41,10 @@ namespace CFrame
 			//The main pane should be updated
 			//window update viewport
 			//rootElement.UpdateChildSizes()
+		}
+
+		for (auto& element : UIElements) {
+			element->OnEvent(e);
 		}
 	}
 

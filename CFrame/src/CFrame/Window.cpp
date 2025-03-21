@@ -45,7 +45,6 @@ void Window::OnUpdate()
 	   {
 		   WindowResizedEvent resizedEvent(event.window.data1, event.window.data2);
 		   dispatcher.Dispatch(resizedEvent);
-		   SDL_SetWindowSize(window, event.window.data1, event.window.data2);
 		   break;
 	   }
 	   case SDL_EVENT_WINDOW_CLOSE_REQUESTED:
