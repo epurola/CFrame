@@ -5,11 +5,13 @@ class SandBox : public CFrame::Application
 public:
 	SandBox() 
 	{
-		CFrame::VBox* vbox = new CFrame::VBox(1600, 1200);
+		SetWindowSize(1000, 1000);
+		CFrame::VBox* vbox = new CFrame::VBox();
 		CFrame::Button* button = new CFrame::Button(100,100,200, 200);
 		vbox->AddChild(button);
 		vbox->UpdateChildSizes();
 		addElement(vbox);
+		rootContainer->AddChild(vbox);
 	}
 	~SandBox() 
 	{

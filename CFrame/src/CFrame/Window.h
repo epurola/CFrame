@@ -21,6 +21,8 @@ namespace CFrame
 	    SDL_Window* GetWindow() { return window; }
 		void GL_UpdateviewPort(int x, int y, int w, int h);
 		void GL_ClearColorBuffer();
+		void SetWidth(int w);
+		void SetHeight(int h);
 
 
 		 Window& Create(unsigned int width = 1280, 

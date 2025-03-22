@@ -71,7 +71,6 @@ namespace CFrame {
         /*Texture texture("../../res/textures/white-queen.png");
         texture.Bind();
         shader.SetUniform1i("u_Texture", 0); // 0 = the slot texture is bound to'*/
-      
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 

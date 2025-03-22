@@ -2,14 +2,15 @@
 
 namespace CFrame 
 {
-    VBox::VBox(int w, int h)
-        :Container(0,0,w,h, nullptr)
-	{
+
+    VBox::VBox(int x, int y, int w, int h, UIElement* parent)
+        : Container(x, y, w, h, nullptr)
+    {
         isHeightResizable = true;
         isWidthResizable = true;
-	}
+    }
 
-	VBox::~VBox()
+    VBox::~VBox()
 	{
 		
 	}
@@ -41,7 +42,7 @@ namespace CFrame
         int totalMargins = 0;
 
         int xpos = GetX() + properties.padding; // add margin
-        int ypos = y + properties.padding;
+        int ypos = GetY() + properties.padding;
 
         for (auto* child : children)
         {
@@ -119,11 +120,14 @@ namespace CFrame
 
             if (dynamic_cast<Container*>(child) && child->IsHeightResizable())
             {
+                CF_CORE_INFO("Resizable container");
                 child->SetWidth(width - (properties.padding * 2));
                 child->SetHeight(flexibleHeight);
                 child->SetX(xpos);
                 child->SetY(ypos);
                 child->UpdateChildSizes();
+                CF_CORE_INFO("Width: {0}", width - (properties.padding * 2));
+                CF_CORE_INFO("XPOS: {0}", xpos);
             }
 
             if (dynamic_cast<Container*>(child) && !child->IsHeightResizable())

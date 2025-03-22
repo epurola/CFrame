@@ -74,6 +74,16 @@ void Window::GL_ClearColorBuffer()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
+void Window::SetWidth(int windowWidth)
+{
+	width = windowWidth;
+}
+
+void Window::SetHeight(int windowHeight)
+{
+	height = windowHeight;
+}
+
 Window& Window::Create(unsigned int width, unsigned int height, const std::string& title)
 {
 	this->width = width;

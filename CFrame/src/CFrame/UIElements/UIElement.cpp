@@ -6,7 +6,8 @@ namespace CFrame {
 	UIElement::UIElement(int x, int y, int w, int h, UIElement* parent)
 		:x(x), y(y), width(w), height(h), parent(parent)
 	{
-
+		if (width == -1 && parent) width = parent->width;
+		if (height == -1 && parent) height = parent->height;
 	}
 
 	void UIElement::SetMargin(int marginleft, int marginRight, int marginTop, int marginBottom)

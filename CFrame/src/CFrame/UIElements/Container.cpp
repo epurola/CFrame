@@ -24,6 +24,8 @@ namespace CFrame
 	void Container::AddChild(UIElement* child)
     {
 		children.push_back(child);
+		child->SetParent(this);
+		CF_CORE_INFO("Parent width: {0}", width);
     }
 
 	void Container::Render(Renderer& renderer)
