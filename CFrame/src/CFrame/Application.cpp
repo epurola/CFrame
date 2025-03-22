@@ -6,15 +6,17 @@
 
 namespace CFrame
 {
-	Application::Application() 
+	Application::Application(int width, int height)
+		: windowWidth(width), windowHeight(height)
 	{
 		eventDispatcher = std::make_unique<EventDispatcher>();
-		rootContainer = std::make_unique <VBox>(windowWidth, windowHeight);
-		rootContainer->SetAlignment(AlignItems::Start, AlignItems::Start);
 		window = std::make_unique<Window>(*eventDispatcher);
 		window->SetHeight(windowHeight);
 		window->SetWidth(windowWidth);
-
+		CF_CORE_INFO("Window Width: {0}", windowWidth);
+		rootContainer = std::make_unique <VBox>(windowWidth, windowHeight);
+		rootContainer->SetAlignment(AlignItems::Start, AlignItems::Start);
+		
 		eventDispatcher->AddListener(CFrameEventType::WindowClosed,
 			[this](CFrameEvent& event) { OnEvent(event); });
 
@@ -62,8 +64,8 @@ namespace CFrame
 
 	void Application::SetWindowSize(int width, int height)
 	{
-		windowWidth = width;
 		windowHeight = height;
+		windowWidth = width;
 	}
 
     void Application::run()

@@ -127,6 +127,7 @@ namespace CFrame
                 child->SetY(ypos);
                 child->UpdateChildSizes();
                 CF_CORE_INFO("Width: {0}", width - (properties.padding * 2));
+                CF_CORE_INFO("Height: {0}", flexibleHeight);
                 CF_CORE_INFO("XPOS: {0}", xpos);
             }
 

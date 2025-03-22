@@ -11,7 +11,7 @@ namespace CFrame
 class CFRAME_API Application
 {
 public: 
-	Application();
+	Application(int width, int height);
 	virtual ~Application();
 
 	void OnEvent(CFrameEvent& e);
@@ -30,8 +30,8 @@ private:
 	std::unique_ptr<Window> window;
 
 	bool running = true;
-	int windowWidth = 1280;
-	int windowHeight = 720;
+	int windowWidth ;
+	int windowHeight;
 	
 };
 
