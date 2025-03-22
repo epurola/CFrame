@@ -7,6 +7,8 @@
 #include "CFrame/Application.h"
 
 #include "CFrame/UIElements/VBox.h"
+
+#include "CFrame/UIElements/Button.h"
 /*Logging*/
 #include "CFrame/Log.h"
 /*Entry point*/

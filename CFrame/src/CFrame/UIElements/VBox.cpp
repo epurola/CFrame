@@ -16,6 +16,9 @@ namespace CFrame
     void VBox::Render(Renderer& renderer)
     {
         renderer.DrawRectangle(x, y, width, height, { 255,255,200,255 }, 0.0, 0);
+        for (auto& child : children) {
+            child->Render(renderer);
+        }
     }
 
     void VBox::OnEvent(CFrameEvent& event)
