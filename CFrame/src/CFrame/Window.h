@@ -19,6 +19,8 @@ namespace CFrame
 		inline unsigned int GetWidth() const { return width; }
 		inline unsigned int GetHeight() const { return height; }
 	    SDL_Window* GetWindow() { return window; }
+		void GL_UpdateviewPort(int x, int y, int w, int h);
+		void GL_ClearColorBuffer();
 
 
 		 Window& Create(unsigned int width = 1280, 

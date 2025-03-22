@@ -75,6 +75,7 @@ namespace CFrame {
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
+
         va.UnBind();
         vb.Unbind();
         shader.UnBind();

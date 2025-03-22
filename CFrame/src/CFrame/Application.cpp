@@ -9,6 +9,8 @@ namespace CFrame
 	Application::Application() 
 	{
 		eventDispatcher = std::make_unique<EventDispatcher>();
+		rootContainer = std::make_unique <VBox>(1600, 1200);
+		window = std::make_unique<Window>(*eventDispatcher);
 
 		eventDispatcher->AddListener(CFrameEventType::WindowClosed,
 			[this](CFrameEvent& event) { OnEvent(event); });
@@ -39,8 +41,8 @@ namespace CFrame
 				         dynamic_cast<WindowResizedEvent&>(e).GetHeight());
 
 			//The main pane should be updated
-			//window update viewport
-			//rootElement.UpdateChildSizes()
+			
+			rootContainer->UpdateChildSizes();//Elements must be added to root container
 		}
 
 		for (auto& element : UIElements) {
@@ -55,16 +57,14 @@ namespace CFrame
 
     void Application::run()
 	{
-		Window window(*eventDispatcher);
-
-		window.Create(1600, 1200, "CFrame");
-		Renderer renderer(window);
+		window->Create(1600, 1200, "CFrame");
+		Renderer renderer(*window);
 		while (running) {
-
+			window->GL_ClearColorBuffer();
 			for (auto& element : UIElements) {
-				element->Render(renderer);
+				element->Render(renderer); //Here loop thru rootcontainer instead
 			}
-			window.OnUpdate(); // Add SwapBuffers and HadleInput to Window so input can be doen before draw
+			window->OnUpdate(); // Add SwapBuffers and HadleInput to Window so input can be doen before draw
 		}
 	}
 }

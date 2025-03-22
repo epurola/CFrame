@@ -4,6 +4,7 @@
 #include <memory>
 #include <vector>
 #include "UIElements/UIElement.h"
+#include "UIElements/VBox.h"
 
 namespace CFrame
 {
@@ -23,6 +24,8 @@ public:
 private:
 	std::unique_ptr<EventDispatcher> eventDispatcher;
 	std::vector<UIElement*> UIElements;
+	std::unique_ptr<VBox> rootContainer;
+	std::unique_ptr<Window> window;
 
 	bool running = true;
 	

@@ -8,6 +8,7 @@ public:
 		CFrame::VBox* vbox = new CFrame::VBox(1600, 1200);
 		CFrame::Button* button = new CFrame::Button(100,100,200, 200);
 		vbox->AddChild(button);
+		vbox->UpdateChildSizes();
 		addElement(vbox);
 	}
 	~SandBox() 

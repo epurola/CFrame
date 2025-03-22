@@ -3,9 +3,10 @@
 namespace CFrame 
 {
     VBox::VBox(int w, int h)
+        :Container(0,0,w,h, nullptr)
 	{
-        SetWidth(w);
-        SetHeight(h);
+        isHeightResizable = true;
+        isWidthResizable = true;
 	}
 
 	VBox::~VBox()
@@ -23,7 +24,9 @@ namespace CFrame
 
     void VBox::OnEvent(CFrameEvent& event)
     {
-        CF_CORE_INFO("VBox Event!");
+        if (CFrameEventType::WindowResized == event.GetEventType()) {
+           
+        }
     }
 
     void VBox::UpdateChildSizes()
@@ -84,9 +87,9 @@ namespace CFrame
             break;
         case AlignItems::Start:
             ypos = ypos;
+            break;
         default:
             ypos;
-            break;
         }
 
         switch (xAlign)
@@ -103,8 +106,7 @@ namespace CFrame
             xpos = xpos;
             break;
         default:
-            xpos = xpos;
-            break;
+            xpos;
         }
 
         for (size_t i = 0; i < children.size(); i++)

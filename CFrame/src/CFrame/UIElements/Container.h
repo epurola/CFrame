@@ -11,6 +11,7 @@ namespace CFrame {
 	class CFRAME_API Container : public UIElement
 	{
 	public:
+		Container(int x, int y, int w, int h, UIElement* parent);
 		virtual ~Container();
 		void SetSpacing(int spacing);
 		virtual void UpdateChildSizes() = 0;

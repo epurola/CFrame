@@ -44,7 +44,9 @@ void Window::OnUpdate()
 	   case SDL_EVENT_WINDOW_RESIZED:
 	   {
 		   WindowResizedEvent resizedEvent(event.window.data1, event.window.data2);
+		   glViewport(0, 0, event.window.data1, event.window.data2);
 		   dispatcher.Dispatch(resizedEvent);
+		
 		   break;
 	   }
 	   case SDL_EVENT_WINDOW_CLOSE_REQUESTED:
@@ -60,6 +62,17 @@ void Window::OnUpdate()
    SDL_GL_SwapWindow(window);
 }
 
+
+void Window::GL_UpdateviewPort(int x, int y, int w, int h)
+{
+	glViewport(x, y, w, h);
+
+}
+
+void Window::GL_ClearColorBuffer()
+{
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
 
 Window& Window::Create(unsigned int width, unsigned int height, const std::string& title)
 {

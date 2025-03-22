@@ -6,7 +6,8 @@ namespace CFrame
 		           std::function<void()> onClick, UIElement* parent)
 		:UIElement(x, y, w, h, parent), onClick(onClick), text(text)
 	{
-	
+		isWidthResizable = false;
+		isHeightResizable = false;
 	}
 	Button::~Button()
 	{
