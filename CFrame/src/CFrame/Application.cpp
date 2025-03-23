@@ -13,7 +13,7 @@ namespace CFrame
 		window = std::make_unique<Window>(*eventDispatcher);
 		window->SetHeight(windowHeight);
 		window->SetWidth(windowWidth);
-		CF_CORE_INFO("Window Width: {0}", windowWidth);
+		
 		rootContainer = std::make_unique <VBox>(windowWidth, windowHeight);
 		rootContainer->SetAlignment(AlignItems::Start, AlignItems::Start);
 		

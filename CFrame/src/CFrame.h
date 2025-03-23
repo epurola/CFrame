@@ -8,6 +8,8 @@
 
 #include "CFrame/UIElements/VBox.h"
 
+#include "CFrame/UIElements/HBox.h"
+
 #include "CFrame/UIElements/Button.h"
 /*Logging*/
 #include "CFrame/Log.h"

@@ -25,7 +25,7 @@ namespace CFrame {
 		std::vector<UIElement*> children;
 
 	protected:
-		int spacing = 0;
+		int spacing = 20;
 		AlignItems xAlign, yAlign;
 	};
 

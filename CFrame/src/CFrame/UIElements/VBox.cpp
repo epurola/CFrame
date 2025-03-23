@@ -6,7 +6,7 @@ namespace CFrame
     VBox::VBox(int x, int y, int w, int h, UIElement* parent)
         : Container(x, y, w, h, nullptr)
     {
-        isHeightResizable = true;
+        isHeightResizable = true; //Todo adjust based on if it was prowided
         isWidthResizable = true;
     }
 
