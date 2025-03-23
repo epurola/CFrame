@@ -24,9 +24,19 @@ namespace CFrame
         glUseProgram(0);
     }
 
-    void Shader::Setuniform4f(const std::string name, float v0, float v1, float v2, float v3)
+    void Shader::SetUniform4f(const std::string name, float v0, float v1, float v2, float v3)
     {
         glUniform4f(GetuniformLocation(name), v0, v1, v2, v3);
+    }
+
+    void Shader::SetUniform2f(const std::string name, float v0, float v1)
+    {
+        glUniform2f(GetuniformLocation(name), v0, v1);
+    }
+
+    void Shader::SetUniform1f(const std::string name, float v0)
+    {
+        glUniform1f(GetuniformLocation(name), v0);
     }
 
     void Shader::SetUniform1i(const std::string& name, int value)

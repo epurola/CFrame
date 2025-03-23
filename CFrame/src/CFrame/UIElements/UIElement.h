@@ -32,6 +32,7 @@ namespace CFrame
         void SetMargin(int marginleft, int marginRight, int marginTop, int marginBottom);
         void SetPadding(int padding);
         void SetParent(UIElement* p);
+        void SetRadius(int r);
         void SetHeight(int h);
         void SetWidth(int w);
         void SetX(int x);

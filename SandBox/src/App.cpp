@@ -12,6 +12,7 @@ public:
 		CFrame::Button* button = new CFrame::Button(150,100,150, 75);
 		CFrame::Button* button1 = new CFrame::Button(100, 100, 150, 75);
 		CFrame::Button* button2 = new CFrame::Button(100, 100, 150, 75);
+		button->SetRadius(50);
 
 		CFrame::Button* button3 = new CFrame::Button(100, 100, 150, 75);
 		CFrame::Button* button4 = new CFrame::Button(100, 100, 150, 75);
@@ -32,7 +33,7 @@ public:
 		hbox->AddChild(vbox1);
 		hbox->UpdateChildSizes();
 		
-		addElement(hbox);
+		//addElement(hbox);
 		rootContainer->AddChild(hbox);
 	}
 	~SandBox() 

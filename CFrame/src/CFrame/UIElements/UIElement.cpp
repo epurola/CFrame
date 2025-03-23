@@ -28,6 +28,11 @@ namespace CFrame {
 		this->parent = p;
 	}
 
+	void UIElement::SetRadius(int r)
+	{
+		properties.radius = r;
+	}
+
 	void UIElement::SetHeight(int h)
 	{
 		this->height = h;

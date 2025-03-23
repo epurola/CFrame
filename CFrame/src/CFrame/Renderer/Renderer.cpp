@@ -65,8 +65,13 @@ namespace CFrame {
         Shader shader("C:/dev/CFrame/CFrame/src/CFrame/res/shaders/basic.shader");
 
         shader.Bind();
-        shader.Setuniform4f("u_Color", r, g, b, a);
+        shader.SetUniform4f("u_Color", r, g, b, a);
         shader.SetUniformMat4f("u_MVP", proj);
+
+        shader.SetUniform2f("u_RectMin", x, y);               // Bottom-left corner (x, y)
+        shader.SetUniform2f("u_RectMax", x + w, y + h);       // Top-right corner (x + width, y + height)
+        shader.SetUniform1f("u_Radius", float(radius));
+
 
         /*Texture texture("../../res/textures/white-queen.png");
         texture.Bind();
