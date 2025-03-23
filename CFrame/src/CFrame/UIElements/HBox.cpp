@@ -166,7 +166,11 @@ namespace CFrame {
 
 	void HBox::OnEvent(CFrameEvent& event)
 	{
+        for (auto& child : children) {
+            if (event.handled)  return;
 
+            child->OnEvent(event);
+        }
 
 	}
 }

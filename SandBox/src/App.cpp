@@ -9,13 +9,13 @@ public:
 		CFrame::VBox* vbox = new CFrame::VBox();
 		CFrame::VBox* vbox1 = new CFrame::VBox();
 
-		CFrame::Button* button = new CFrame::Button(100,100,200, 200);
-		CFrame::Button* button1 = new CFrame::Button(100, 100, 200, 200);
-		CFrame::Button* button2 = new CFrame::Button(100, 100, 200, 200);
+		CFrame::Button* button = new CFrame::Button(150,100,150, 75);
+		CFrame::Button* button1 = new CFrame::Button(100, 100, 150, 75);
+		CFrame::Button* button2 = new CFrame::Button(100, 100, 150, 75);
 
-		CFrame::Button* button3 = new CFrame::Button(100, 100, 200, 200);
-		CFrame::Button* button4 = new CFrame::Button(100, 100, 200, 200);
-		CFrame::Button* button5 = new CFrame::Button(100, 100, 200, 200);
+		CFrame::Button* button3 = new CFrame::Button(100, 100, 150, 75);
+		CFrame::Button* button4 = new CFrame::Button(100, 100, 150, 75);
+		CFrame::Button* button5 = new CFrame::Button(100, 100, 150, 75);
 
 		vbox->SetAlignment(CFrame::AlignItems::Center, CFrame::AlignItems::Start);
 		vbox1->SetAlignment(CFrame::AlignItems::Center, CFrame::AlignItems::Center);

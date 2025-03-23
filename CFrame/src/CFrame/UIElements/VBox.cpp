@@ -25,8 +25,10 @@ namespace CFrame
 
     void VBox::OnEvent(CFrameEvent& event)
     {
-        if (CFrameEventType::WindowResized == event.GetEventType()) {
-           
+        for (auto& child : children) {
+            if (event.handled)  return; 
+
+            child->OnEvent(event);
         }
     }
 

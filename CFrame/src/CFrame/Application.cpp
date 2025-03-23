@@ -16,6 +16,7 @@ namespace CFrame
 		
 		rootContainer = std::make_unique <VBox>(windowWidth, windowHeight);
 		rootContainer->SetAlignment(AlignItems::Start, AlignItems::Start);
+		UIElements.push_back(rootContainer.get());
 		
 		eventDispatcher->AddListener(CFrameEventType::WindowClosed,
 			[this](CFrameEvent& event) { OnEvent(event); });
