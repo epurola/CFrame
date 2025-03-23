@@ -7,8 +7,10 @@ namespace CFrame {
 		isHeightResizable = true; //Todo adjust based on if it was provided
 		isWidthResizable = true;
 	}
+
 	HBox::~HBox()
 	{
+
 	}
 
 	void HBox::Render(Renderer& renderer)

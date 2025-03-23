@@ -3,6 +3,8 @@
 #include "CFrameEvent/CFrameEvent.h"
 #include <memory>
 #include <vector>
+#include <chrono>
+#include <thread>
 #include "UIElements/UIElement.h"
 #include "UIElements/VBox.h"
 
