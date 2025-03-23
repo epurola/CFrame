@@ -22,22 +22,34 @@ namespace CFrame
 		renderer.DrawRectangle(x, y, width, height, { 0,255,255,255 }, 0.0, properties.radius);
 	}
 
-	void Button::OnEvent(CFrameEvent& event)
-	{
-		if (CFrameEventType::MouseButtonDown == event.GetEventType()) {
-			if (auto* mouseEvent = dynamic_cast<MouseButtonDownEvent*>(&event)) {
-				int xPos = mouseEvent->GetX();
-				int yPos = mouseEvent->GetY();
-				
-				if (xPos >= x && xPos <= (x + width) && (yPos >= y && yPos <= (y + height)))
-				{
-					CF_CORE_INFO("Button Clicked!");
-					event.handled = true;
-				}
-				
-			}
-		}
-	}
+    void Button::OnEvent(CFrameEvent& event)
+    {
+        // Early return if the event is not a MouseButtonDown event
+        if (CFrameEventType::MouseButtonDown != event.GetEventType()) {
+            return;
+        }
+
+        auto* mouseEvent = dynamic_cast<MouseButtonDownEvent*>(&event);
+        if (!mouseEvent) {
+            return; // Early return if the event is not a MouseButtonDownEvent
+        }
+
+        int xPos = mouseEvent->GetX();
+        int yPos = mouseEvent->GetY();
+
+        // Check if the mouse position is inside the button's bounds
+        if (xPos < x || xPos >(x + width) || yPos < y || yPos >(y + height)) {
+            return; // Early return if the click is outside the button
+        }
+
+        // Log the click and call the onClick handler
+        CF_CORE_INFO("Button Clicked!");
+        if (onClick) {
+            onClick(); // Call the function pointer
+        }
+
+        event.handled = true; // Mark the event as handled
+    }
 	
 }
 
