@@ -13,6 +13,8 @@ namespace CFrame
 
         void Render(Renderer& renderer) override;
         void OnEvent(CFrameEvent& event) override;
+
+        inline ElementType GetElementType() const override { return ElementType::BUTTON; };
       
 
     private:

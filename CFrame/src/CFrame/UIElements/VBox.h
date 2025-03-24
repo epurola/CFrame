@@ -26,6 +26,7 @@ namespace CFrame
 		void UpdateChildSizes() override;
 
 		void OnEvent(CFrameEvent& event) override;
+		inline ElementType GetElementType() const override { return ElementType::CONTAINER; };
 
 	private:
 

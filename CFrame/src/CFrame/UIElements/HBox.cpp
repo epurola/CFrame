@@ -116,7 +116,7 @@ namespace CFrame {
 
             //Store UIconatainer into a variable so oly check once
 
-            if (dynamic_cast<Container*>(child) && child->IsWidthResizable())
+            if (child->GetElementType() == ElementType::CONTAINER && child->IsWidthResizable())
             {
                 child->SetWidth(flexWidth);
                 child->SetHeight(height - (properties.padding * 2));
@@ -125,7 +125,7 @@ namespace CFrame {
                 child->UpdateChildSizes();
             }
 
-            if (dynamic_cast<Container*>(child) && !child->IsWidthResizable())
+            if (child->GetElementType() == ElementType::CONTAINER && !child->IsWidthResizable())
             {
                 child->SetX(xpos);
                 child->SetY(ypos);

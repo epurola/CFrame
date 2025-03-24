@@ -18,6 +18,11 @@ namespace CFrame
         int radius = 0;
         float scale = 1;
     };
+    enum ElementType
+    {
+        CONTAINER,
+        BUTTON
+    };
 
     class CFRAME_API UIElement {
 
@@ -30,6 +35,8 @@ namespace CFrame
         virtual void UpdateChildSizes() {}
 
         virtual void OnEvent(CFrameEvent& event) = 0;
+
+        virtual ElementType GetElementType() const = 0;
 
         void SetMargin(int marginleft, int marginRight, int marginTop, int marginBottom);
         void SetPadding(int padding);

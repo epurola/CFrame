@@ -22,6 +22,7 @@ namespace CFrame {
 		void SetAlignment(AlignItems xAlign, AlignItems yAlign );
 
 		inline int GetSpacing() const { return spacing; }
+		inline ElementType GetElementType() const override { return ElementType::CONTAINER; };
 		std::vector<UIElement*> children;
 
 	protected:

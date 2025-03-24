@@ -120,7 +120,7 @@ namespace CFrame
             child->SetY(ypos + child->GetProperties().marginTop);
             
 
-            if (dynamic_cast<Container*>(child) && child->IsHeightResizable())
+            if (child->GetElementType() == ElementType::CONTAINER && child->IsHeightResizable())
             {
                 CF_CORE_INFO("Resizable container");
                 child->SetWidth(width - (properties.padding * 2));
@@ -133,7 +133,7 @@ namespace CFrame
                 CF_CORE_INFO("XPOS: {0}", xpos);
             }
 
-            if (dynamic_cast<Container*>(child) && !child->IsHeightResizable())
+            if (child->GetElementType() == ElementType::CONTAINER && !child->IsHeightResizable())
             {
                 child->SetX(xpos);
                 child->SetY(ypos);
