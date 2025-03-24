@@ -20,7 +20,7 @@ namespace CFrame {
 
 		~Renderer();
 
-		void DrawRectangle(float x, float y, float w, float h, SDL_Color color, float angle, int radius);
+		void DrawRectangle(float x, float y, float w, float h, SDL_Color color, float angle, int radius, float scale);
 
 	private:
 		Window& window;

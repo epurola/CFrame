@@ -3,6 +3,7 @@
 #include "../Core.h"
 #include "../Renderer/Renderer.h"
 #include "../CFrameEvent/CFrameEvent.h"
+#include "Color.h"
 
 namespace CFrame 
 {
@@ -15,6 +16,7 @@ namespace CFrame
         int marginBottom = 0;
         int padding = 0;
         int radius = 0;
+        float scale = 1;
     };
 
     class CFRAME_API UIElement {
@@ -37,6 +39,8 @@ namespace CFrame
         void SetWidth(int w);
         void SetX(int x);
         void SetY(int y);
+        void SetColor(Color color);
+        void SetScale(float scale);
 
         inline int GetX() const { return x; }
         inline int GetY() const { return y; }
@@ -52,6 +56,7 @@ namespace CFrame
         bool isWidthResizable;
         bool isHeightResizable;
         int x, y, width, height;
+        Color color;
         ElementProperties properties;
     };
 

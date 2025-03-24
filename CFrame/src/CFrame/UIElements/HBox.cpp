@@ -15,7 +15,7 @@ namespace CFrame {
 
 	void HBox::Render(Renderer& renderer)
 	{
-		renderer.DrawRectangle(x, y, width, height, { 0,0,255,255 }, 0.0, 0);
+		renderer.DrawRectangle(x, y, width, height, { 0,0,255,255 }, 0.0, 0, properties.scale);
 		for (auto& child : children) {
 			child->Render(renderer);
 		}

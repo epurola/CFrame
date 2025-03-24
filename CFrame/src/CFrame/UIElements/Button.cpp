@@ -19,7 +19,7 @@ namespace CFrame
 
 	void Button::Render(Renderer& renderer)
 	{
-		renderer.DrawRectangle(x, y, width, height, { 0,255,255,255 }, 0.0, properties.radius);
+		renderer.DrawRectangle(x, y, width, height, color.toSDLColor(255), 0.0, properties.radius, properties.scale);
 	}
 
     void Button::OnEvent(CFrameEvent& event)
@@ -42,13 +42,13 @@ namespace CFrame
             return; // Early return if the click is outside the button
         }
 
-        // Log the click and call the onClick handler
+        //call the onClick handler
         CF_CORE_INFO("Button Clicked!");
         if (onClick) {
-            onClick(); // Call the function pointer
+            onClick(); 
         }
 
-        event.handled = true; // Mark the event as handled
+        event.handled = true; 
     }
 	
 }

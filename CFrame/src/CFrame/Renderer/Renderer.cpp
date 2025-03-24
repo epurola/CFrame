@@ -15,7 +15,7 @@ namespace CFrame {
 	{
 
 	}
-	void Renderer::DrawRectangle(float x, float y, float w, float h, SDL_Color color, float angle, int radius)
+	void Renderer::DrawRectangle(float x, float y, float w, float h, SDL_Color color, float angle, int radius, float scale)
 	{
         float r = color.r / 255.0f;
         float g = color.g / 255.0f;
@@ -24,7 +24,7 @@ namespace CFrame {
 
         int windowWidth, windowHeight;
         SDL_GetWindowSize(window.GetWindow(), &windowWidth, &windowHeight);
-
+        
 
         /*Vertices of the rectangle. Calculates the top left as the origin*/
         float vertices[] = {
@@ -68,14 +68,11 @@ namespace CFrame {
         shader.SetUniform4f("u_Color", r, g, b, a);
         shader.SetUniformMat4f("u_MVP", proj);
 
-        shader.SetUniform2f("u_RectMin", x, y);               // Bottom-left corner (x, y)
-        shader.SetUniform2f("u_RectMax", x + w, y + h);       // Top-right corner (x + width, y + height)
+        shader.SetUniform2f("u_RectMin", x, y);  
+        shader.SetUniform2f("u_RectMax", x + w, y + h);      
         shader.SetUniform1f("u_Radius", float(radius));
-
-
-        /*Texture texture("../../res/textures/white-queen.png");
-        texture.Bind();
-        shader.SetUniform1i("u_Texture", 0); // 0 = the slot texture is bound to'*/
+        
+       
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 

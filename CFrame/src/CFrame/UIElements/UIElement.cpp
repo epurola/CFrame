@@ -53,6 +53,16 @@ namespace CFrame {
 		this->y = y;
 	}
 
+	void UIElement::SetColor(Color color)
+	{
+		this->color = color;
+	}
+
+	void UIElement::SetScale(float scale)
+	{
+		this->properties.scale = scale;
+	}
+
 	ElementProperties& UIElement::GetProperties()
 	{
 		return properties;
