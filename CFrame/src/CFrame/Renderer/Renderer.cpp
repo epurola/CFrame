@@ -71,8 +71,6 @@ namespace CFrame {
         shader.SetUniform2f("u_RectMin", x, y);  
         shader.SetUniform2f("u_RectMax", x + w, y + h);      
         shader.SetUniform1f("u_Radius", float(radius));
-        
-       
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 

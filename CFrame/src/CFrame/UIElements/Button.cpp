@@ -5,7 +5,8 @@ namespace CFrame
 {
 	Button::Button(int x, int y, int w, int h, const std::string& text, 
 		           std::function<void()> onClick, UIElement* parent)
-		:UIElement(x, y, w, h, parent), onClick(onClick), text(text)
+		:UIElement(x, y, w, h, parent), onClick(onClick), text(text),
+        animator(std::make_unique<Animator>(*this))
 	{
 		isWidthResizable = false;
 		isHeightResizable = false;
@@ -19,7 +20,19 @@ namespace CFrame
 
 	void Button::Render(Renderer& renderer)
 	{
-		renderer.DrawRectangle(x, y, width, height, color.toSDLColor(255), 0.0, properties.radius, properties.scale);
+        int renderWidth = width;
+        int renderHeight = height;
+
+        animator->Update(0.016f); //This will acumulate in animator elapsedtime
+
+        if (animator->IsAnimating()) {
+            renderWidth = renderWidth * properties.scale;
+            renderHeight = renderHeight * properties.scale;
+        }
+        int centeredX = x + (width - renderWidth) / 2;
+        int centeredY = y + (height - renderHeight) / 2;
+
+		renderer.DrawRectangle(centeredX, centeredY, renderWidth, renderHeight, color.toSDLColor(255), 0.0, properties.radius, properties.scale);
 	}
 
     void Button::OnEvent(CFrameEvent& event)
@@ -41,6 +54,8 @@ namespace CFrame
         if (xPos < x || xPos >(x + width) || yPos < y || yPos >(y + height)) {
             return; // Early return if the click is outside the button
         }
+
+        animator->StartAnimation(1.0f);
 
         //call the onClick handler
         CF_CORE_INFO("Button Clicked!");

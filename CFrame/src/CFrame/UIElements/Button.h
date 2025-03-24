@@ -2,6 +2,9 @@
 #include <string>
 #include <functional>
 #include "UIElement.h"
+#include <memory> 
+
+#include "../Animator/Animator.h"
 
 namespace CFrame 
 {
@@ -21,5 +24,6 @@ namespace CFrame
         //Color color;
         std::function<void()> onClick;
         std::string text;
+        std::unique_ptr<Animator> animator;
     };
 }
