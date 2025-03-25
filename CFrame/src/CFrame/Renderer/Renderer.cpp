@@ -15,7 +15,7 @@ namespace CFrame {
 	{
 
 	}
-	void Renderer::DrawRectangle(float x, float y, float w, float h, SDL_Color color, float angle, int radius, float scale)
+	void Renderer::DrawRectangle(float x, float y, float w, float h, SDL_Color color, float angle, int radius)
 	{
         float r = color.r / 255.0f;
         float g = color.g / 255.0f;

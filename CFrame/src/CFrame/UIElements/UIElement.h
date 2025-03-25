@@ -16,7 +16,9 @@ namespace CFrame
         int marginBottom = 0;
         int padding = 0;
         int radius = 0;
-        float scale = 1;
+        float scaleX = 1;
+        float scaleY = 1;
+        float duration = 0;
     };
     enum ElementType
     {
@@ -47,7 +49,7 @@ namespace CFrame
         void SetX(int x);
         void SetY(int y);
         void SetColor(Color color);
-        void SetScale(float scale);
+        void SetScale(float scaleX, float scaleY, float duration);
 
         inline int GetX() const { return x; }
         inline int GetY() const { return y; }
@@ -55,6 +57,7 @@ namespace CFrame
         inline int GetHeight() const { return height; }
         inline bool IsWidthResizable() const { return isWidthResizable; }
         inline bool IsHeightResizable() const { return isHeightResizable; }
+        inline bool IsElementWithAnimation() const { return isAnimatedElement; }
         ElementProperties& GetProperties();
         
 
@@ -65,6 +68,7 @@ namespace CFrame
         int x, y, width, height;
         Color color;
         ElementProperties properties;
+        bool isAnimatedElement = false;
     };
 
 }

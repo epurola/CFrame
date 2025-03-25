@@ -58,9 +58,12 @@ namespace CFrame {
 		this->color = color;
 	}
 
-	void UIElement::SetScale(float scale)
+	void UIElement::SetScale(float scaleX, float scaleY, float duration)
 	{
-		this->properties.scale = scale;
+		isAnimatedElement = true;
+		this->properties.duration = duration;
+		this->properties.scaleX = scaleX;
+		this->properties.scaleY = scaleY;
 	}
 
 	ElementProperties& UIElement::GetProperties()

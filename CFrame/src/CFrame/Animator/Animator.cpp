@@ -17,7 +17,7 @@ namespace CFrame
 		float t = (animationDuration > 0) ? elapsedTime / animationDuration : 1.0f;
 		if (t > 1.0f) t = 1.0f;
 
-		element.SetScale(1.0f + t * (1.5f - 1.0f)); //startscale + t *(targetScale - startScale)
+		element.SetScale(1.0f + t * (1.5f - 1.0f), 1.0f + t * (2.0f - 1.0f), 1.0f); //startscale + t *(targetScale - startScale)
 
 		if (t >= 1.0f) {
 			isAnimating = false;

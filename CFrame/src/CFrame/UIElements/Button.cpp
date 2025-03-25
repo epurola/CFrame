@@ -23,16 +23,16 @@ namespace CFrame
         int renderWidth = width;
         int renderHeight = height;
 
-        animator->Update(0.016f); //This will acumulate in animator elapsedtime
+        animator->Update(0.016f); //60fps
 
         if (animator->IsAnimating()) {
-            renderWidth = renderWidth * properties.scale;
-            renderHeight = renderHeight * properties.scale;
+            renderWidth = renderWidth * properties.scaleX;
+            renderHeight = renderHeight * properties.scaleY;
         }
         int centeredX = x + (width - renderWidth) / 2;
         int centeredY = y + (height - renderHeight) / 2;
 
-		renderer.DrawRectangle(centeredX, centeredY, renderWidth, renderHeight, color.toSDLColor(255), 0.0, properties.radius, properties.scale);
+		renderer.DrawRectangle(centeredX, centeredY, renderWidth, renderHeight, color.toSDLColor(255), 0.0, properties.radius);
 	}
 
     void Button::OnEvent(CFrameEvent& event)
@@ -55,7 +55,9 @@ namespace CFrame
             return; // Early return if the click is outside the button
         }
 
-        animator->StartAnimation(1.0f);
+        if (IsElementWithAnimation()) {
+            animator->StartAnimation(properties.duration);
+        }
 
         //call the onClick handler
         CF_CORE_INFO("Button Clicked!");
