@@ -20,7 +20,7 @@ public:
 		CFrame::Button* button3 = new CFrame::Button(100, 100, 150, 75);
 		CFrame::Button* button4 = new CFrame::Button(100, 100, 150, 75);
 		CFrame::Button* button5 = new CFrame::Button(100, 100, 150, 75);
-		button5->SetScale(1.5, 2.0, 1.0);
+		button5->SetScale(1.5f, 1.5f);
 
 		vbox->SetAlignment(CFrame::AlignItems::Center, CFrame::AlignItems::Start);
 		vbox1->SetAlignment(CFrame::AlignItems::Center, CFrame::AlignItems::Center);

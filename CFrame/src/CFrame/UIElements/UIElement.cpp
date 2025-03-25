@@ -60,10 +60,18 @@ namespace CFrame {
 
 	void UIElement::SetScale(float scaleX, float scaleY, float duration)
 	{
-		isAnimatedElement = true;
-		this->properties.duration = duration;
+		if (duration > 0.0f) {
+			isAnimatedElement = true;
+			this->properties.duration = duration;
+		}
 		this->properties.scaleX = scaleX;
 		this->properties.scaleY = scaleY;
+	}
+
+	void UIElement::AnimateScale(float scaleX, float scaleY)
+	{
+		this->properties.animScaleX = scaleX;
+		this->properties.animScaleY = scaleY;
 	}
 
 	ElementProperties& UIElement::GetProperties()

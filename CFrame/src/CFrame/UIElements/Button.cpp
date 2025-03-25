@@ -23,11 +23,16 @@ namespace CFrame
         int renderWidth = width;
         int renderHeight = height;
 
+        if (!isAnimatedElement) {
+             renderWidth = width * properties.scaleX;
+             renderHeight = height * properties.scaleY;
+        }
+       
         animator->Update(0.016f); //60fps
 
         if (animator->IsAnimating()) {
-            renderWidth = renderWidth * properties.scaleX;
-            renderHeight = renderHeight * properties.scaleY;
+            renderWidth = renderWidth * properties.animScaleX;
+            renderHeight = renderHeight * properties.animScaleY;
         }
         int centeredX = x + (width - renderWidth) / 2;
         int centeredY = y + (height - renderHeight) / 2;

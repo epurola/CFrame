@@ -18,7 +18,9 @@ namespace CFrame
         int radius = 0;
         float scaleX = 1;
         float scaleY = 1;
-        float duration = 0;
+        float animScaleX = 1;
+        float animScaleY = 1;
+        float duration = 0.0f;
     };
     enum ElementType
     {
@@ -49,7 +51,8 @@ namespace CFrame
         void SetX(int x);
         void SetY(int y);
         void SetColor(Color color);
-        void SetScale(float scaleX, float scaleY, float duration);
+        void SetScale(float scaleX, float scaleY, float duration = 0.0);
+        void AnimateScale(float scaleX, float scaleY);
 
         inline int GetX() const { return x; }
         inline int GetY() const { return y; }
