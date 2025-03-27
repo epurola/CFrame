@@ -8,8 +8,8 @@ namespace CFrame
 		:UIElement(x, y, w, h, parent), onClick(onClick), text(text),
         animator(std::make_unique<Animator>(*this))
 	{
-		isWidthResizable = false;
-		isHeightResizable = false;
+        isWidthResizable = (w == -1);
+        isHeightResizable = (h == -1);
 		SetRadius(15);
 	}
 

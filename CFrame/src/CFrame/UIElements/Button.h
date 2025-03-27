@@ -11,7 +11,13 @@ namespace CFrame
     class CFRAME_API Button : public UIElement 
     {
     public:
-        Button(int x=0, int y = 0, int w =-1, int h =-1, const std::string& text = "Button", std::function<void()> onClick = nullptr, UIElement* parent = nullptr);
+        Button(int x , int y , int w , int h , const std::string& text = "Button", std::function<void()> onClick =  []() {}, UIElement* parent = nullptr);
+
+
+        explicit Button(int w, int h)
+            : Button(0, 0, w, h, "Button", nullptr) {
+        }
+
         ~Button();
 
         void Render(Renderer& renderer) override;

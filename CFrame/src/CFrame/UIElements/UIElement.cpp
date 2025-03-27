@@ -57,7 +57,8 @@ namespace CFrame {
 	{
 		this->color = color;
 	}
-
+	/*By providing a time to SetScale the scaling becomes animated otherwise it is
+	applied to the width and height permanently*/
 	void UIElement::SetScale(float scaleX, float scaleY, float duration)
 	{
 		if (duration > 0.0f) {

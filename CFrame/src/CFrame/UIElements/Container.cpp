@@ -26,8 +26,6 @@ namespace CFrame
 		children.push_back(child);
 		child->SetParent(this);
 		UpdateChildSizes();
-		CF_CORE_INFO("Parent width: {0}", width);
-		CF_CORE_INFO("Parent heigh: {0}", height);
     }
 
 	void Container::Render(Renderer& renderer)
