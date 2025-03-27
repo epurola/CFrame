@@ -26,6 +26,9 @@ namespace CFrame
 
 		eventDispatcher->AddListener(CFrameEventType::MouseButtonDown,
 			[this](CFrameEvent& event) { OnEvent(event); });
+
+		eventDispatcher->AddListener(CFrameEventType::MouseMoved,
+			[this](CFrameEvent& event) { OnEvent(event); });
 	}
 
 	Application::~Application() 

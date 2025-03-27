@@ -14,6 +14,8 @@ public:
 		CFrame::Button* button1 = new CFrame::Button(100, 100, 150, 75);
 		CFrame::Button* button2 = new CFrame::Button(100, 100, 150, 75);
 
+		button2->SetOnHover([button2]() {button2->SetScale(2.0, 2.0);});
+
 		button->SetColor(Color::Red);
 
 		CFrame::Button* button3 = new CFrame::Button(100, 100, 150, 75);

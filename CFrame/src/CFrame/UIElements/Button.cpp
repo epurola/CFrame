@@ -4,8 +4,8 @@
 namespace CFrame 
 {
 	Button::Button(int x, int y, int w, int h, const std::string& text, 
-		           std::function<void()> onClick, UIElement* parent)
-		:UIElement(x, y, w, h, parent), onClick(onClick), text(text),
+		           std::function<void()> onClick, std::function<void()> onHover, UIElement* parent)
+		:UIElement(x, y, w, h, parent), onClick(onClick), onHover(onHover), text(text),
         animator(std::make_unique<Animator>(*this))
 	{
         isWidthResizable = (w == -1);
@@ -43,34 +43,73 @@ namespace CFrame
     void Button::OnEvent(CFrameEvent& event)
     {
         // Early return if the event is not a MouseButtonDown event
-        if (CFrameEventType::MouseButtonDown != event.GetEventType()) {
+        if (CFrameEventType::MouseButtonDown != event.GetEventType() &&
+            event.GetEventType() != CFrameEventType::MouseMoved) {
             return;
         }
 
-        auto* mouseEvent = dynamic_cast<MouseButtonDownEvent*>(&event);
-        if (!mouseEvent) {
-            return; // Early return if the event is not a MouseButtonDownEvent
+        if (event.GetEventType() == CFrameEventType::MouseButtonDown) {
+
+            auto* mouseEvent = dynamic_cast<MouseButtonDownEvent*>(&event);
+            if (!mouseEvent) {
+                return; // Early return if the event is not a MouseButtonDownEvent
+            }
+
+            int xPos = mouseEvent->GetX();
+            int yPos = mouseEvent->GetY();
+
+            // Check if the mouse position is inside the button's bounds
+            if (xPos < x || xPos >(x + width) || yPos < y || yPos >(y + height)) {
+                return; // Early return if the click is outside the button
+            }
+
+            if (IsElementWithAnimation()) {
+                animator->StartAnimation(properties.duration);
+            }
+
+            //call the onClick handler
+            CF_CORE_INFO("Button Clicked!");
+            if (onClick) {
+                onClick();
+            }
+            event.handled = true;
         }
+        if (event.GetEventType() == CFrameEventType::MouseMoved) {
 
-        int xPos = mouseEvent->GetX();
-        int yPos = mouseEvent->GetY();
+            auto* mouseEvent = dynamic_cast<MouseMovedEvent*>(&event);
+            if (!mouseEvent) {
+                return; // Early return if the event is not a MouseButtonDownEvent
+            }
 
-        // Check if the mouse position is inside the button's bounds
-        if (xPos < x || xPos >(x + width) || yPos < y || yPos >(y + height)) {
-            return; // Early return if the click is outside the button
+            int xPos = mouseEvent->GetX();
+            int yPos = mouseEvent->GetY();
+
+            // Check if the mouse position is inside the button's bounds
+            if (xPos < x || xPos >(x + width) || yPos < y || yPos >(y + height)) {
+                return; // Early return if the click is outside the button
+            }
+
+            if (IsElementWithAnimation() && !animator->IsAnimating()) {
+                animator->StartAnimation(properties.duration);
+            }
+
+            //call the onClick handler
+            CF_CORE_INFO("Button Hovered!");
+            if (onHover) {
+                onHover();
+            }
+            event.handled = true;
         }
+    }
 
-        if (IsElementWithAnimation()) {
-            animator->StartAnimation(properties.duration);
-        }
+    void Button::SetOnClick(std::function<void()> onClick)
+    {
+        this->onClick = onClick;
+    }
 
-        //call the onClick handler
-        CF_CORE_INFO("Button Clicked!");
-        if (onClick) {
-            onClick(); 
-        }
-
-        event.handled = true; 
+    void Button::SetOnHover(std::function<void()> onHover)
+    {
+        this->onHover = onHover;
     }
 	
 }
