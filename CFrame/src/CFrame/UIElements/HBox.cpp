@@ -4,8 +4,9 @@ namespace CFrame {
 	HBox::HBox(int x, int y, int w, int h, UIElement* parent)
 		:Container(x,y,w,h, parent)
 	{
-		isHeightResizable = true; //Todo adjust based on if it was provided
-		isWidthResizable = true;
+		isHeightResizable = (h == -1); 
+		isWidthResizable = (w == -1);
+        SetColor(Color::LightGray);
 	}
 
 	HBox::~HBox()
@@ -15,7 +16,7 @@ namespace CFrame {
 
 	void HBox::Render(Renderer& renderer)
 	{
-		renderer.DrawRectangle(x, y, width, height, { 0,0,255,255 }, 0.0, 0);
+		renderer.DrawRectangle(x, y, width, height, color.toSDLColor(255),0.0, properties.radius);
 		for (auto& child : children) {
 			child->Render(renderer);
 		}

@@ -36,7 +36,7 @@ namespace CFrame
         }
         int centeredX = x + (width - renderWidth) / 2;
         int centeredY = y + (height - renderHeight) / 2;
-
+        
 		renderer.DrawRectangle(centeredX, centeredY, renderWidth, renderHeight, color.toSDLColor(255), 0.0, properties.radius);
 	}
 
@@ -86,8 +86,14 @@ namespace CFrame
 
             // Check if the mouse position is inside the button's bounds
             if (xPos < x || xPos >(x + width) || yPos < y || yPos >(y + height)) {
-                return; // Early return if the click is outside the button
+                if (hovering) {
+                    onLeave();
+                    hovering = false;
+                }
+                
+                return;
             }
+            hovering = true;
 
             if (IsElementWithAnimation() && !animator->IsAnimating()) {
                 animator->StartAnimation(properties.duration);
@@ -105,6 +111,11 @@ namespace CFrame
     void Button::SetOnClick(std::function<void()> onClick)
     {
         this->onClick = onClick;
+    }
+
+    void Button::SetOnLeave(std::function<void()> onLeave)
+    {
+        this->onLeave = onLeave;
     }
 
     void Button::SetOnHover(std::function<void()> onHover)

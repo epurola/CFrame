@@ -65,6 +65,7 @@ namespace CFrame {
 			isAnimatedElement = true;
 			this->properties.duration = duration;
 		}
+		
 		this->properties.scaleX = scaleX;
 		this->properties.scaleY = scaleY;
 	}

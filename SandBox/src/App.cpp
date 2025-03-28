@@ -14,7 +14,8 @@ public:
 		CFrame::Button* button1 = new CFrame::Button(100, 100, 150, 75);
 		CFrame::Button* button2 = new CFrame::Button(100, 100, 150, 75);
 
-		button2->SetOnHover([button2]() {button2->SetScale(2.0, 2.0);});
+		button2->SetOnHover([button2]() {button2->SetScale(1.1, 1.1);});
+		button2->SetOnLeave([button2]() {button2->SetScale(1.0, 1.0);});
 
 		button->SetColor(Color::Red);
 
@@ -23,12 +24,23 @@ public:
 		CFrame::Button* button5 = new CFrame::Button(100,100);
 		button5->SetScale(1.5f, 1.5f, 1.0f);
 
-		vbox->SetAlignment(CFrame::AlignItems::Center, CFrame::AlignItems::Start);
+		vbox->SetAlignment(CFrame::AlignItems::Stretch, CFrame::AlignItems::Start);
 		vbox1->SetAlignment(CFrame::AlignItems::Center, CFrame::AlignItems::Center);
+
+		CFrame::HBox* hbox2 = new CFrame::HBox(-1, 100);
+		CFrame::Button* button6 = new CFrame::Button(50, 50);
+		CFrame::Button* button7 = new CFrame::Button(50, 50);
+		CFrame::Button* button8 = new CFrame::Button(50, 50);
+		hbox2->AddChild(button6);
+		hbox2->AddChild(button7);
+		hbox2->AddChild(button8);
+		hbox2->SetAlignment(CFrame::AlignItems::Center, CFrame::AlignItems::Center);
+		hbox2->SetRadius(15);
 
 		vbox->AddChild(button);
 		vbox->AddChild(button1);
 		vbox->AddChild(button2);
+		vbox->AddChild(hbox2);
 		
 		vbox1->AddChild(button3);
 		vbox1->AddChild(button4);

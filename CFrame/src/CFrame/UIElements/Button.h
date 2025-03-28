@@ -27,6 +27,7 @@ namespace CFrame
         void OnEvent(CFrameEvent& event) override;
         void SetOnHover(std::function<void()> onHover);
         void SetOnClick(std::function<void()> onClick);
+        void SetOnLeave(std::function<void()> onLeave);
 
         inline ElementType GetElementType() const override { return ElementType::BUTTON; };
       
@@ -35,7 +36,9 @@ namespace CFrame
         //Color color;
         std::function<void()> onClick;
         std::function<void()> onHover;
+        std::function<void()> onLeave = []() {};
         std::string text;
         std::unique_ptr<Animator> animator;
+        bool hovering = false;
     };
 }
