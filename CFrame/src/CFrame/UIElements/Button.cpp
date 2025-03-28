@@ -4,8 +4,8 @@
 namespace CFrame 
 {
 	Button::Button(int x, int y, int w, int h, const std::string& text, 
-		           std::function<void()> onClick, std::function<void()> onHover, UIElement* parent)
-		:UIElement(x, y, w, h, parent), onClick(onClick), onHover(onHover), text(text),
+          std::function<void()> onClick, UIElement* parent) 
+		:UIElement(x, y, w, h, parent), onClick(onClick), text(text),
         animator(std::make_unique<Animator>(*this))
 	{
         isWidthResizable = (w == -1);
@@ -111,16 +111,6 @@ namespace CFrame
     void Button::SetOnClick(std::function<void()> onClick)
     {
         this->onClick = onClick;
-    }
-
-    void Button::SetOnLeave(std::function<void()> onLeave)
-    {
-        this->onLeave = onLeave;
-    }
-
-    void Button::SetOnHover(std::function<void()> onHover)
-    {
-        this->onHover = onHover;
     }
 	
 }

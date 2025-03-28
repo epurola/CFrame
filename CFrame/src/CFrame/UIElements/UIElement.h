@@ -62,6 +62,9 @@ namespace CFrame
         inline bool IsHeightResizable() const { return isHeightResizable; }
         inline bool IsElementWithAnimation() const { return isAnimatedElement; }
         ElementProperties& GetProperties();
+
+        void SetOnHover(std::function<void()> onHover);
+        void SetOnLeave(std::function<void()> onLeave);
         
 
     protected:
@@ -72,6 +75,8 @@ namespace CFrame
         Color color;
         ElementProperties properties;
         bool isAnimatedElement = false;
+        std::function<void()> onHover = []() {};
+        std::function<void()> onLeave = []() {};
     };
 
 }
