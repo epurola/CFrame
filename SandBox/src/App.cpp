@@ -9,6 +9,7 @@ public:
 		CFrame::VBox* vbox = new CFrame::VBox();
 		CFrame::VBox* vbox1 = new CFrame::VBox();
 		vbox->SetPadding(20);
+		hbox->SetColor(Color::DarkGray);
 
 		CFrame::Button* button = new CFrame::Button(150,100,150, 75);
 		CFrame::Button* button1 = new CFrame::Button(100, 100, 150, 75);
@@ -39,8 +40,8 @@ public:
 		hbox2->SetAlignment(CFrame::AlignItems::Center, CFrame::AlignItems::Center);
 		hbox2->SetRadius(15);
 		hbox2->SetSpacing(50);
-		hbox2->SetMargin(0,0,50,50);
-		rootContainer->SetPadding(50);
+		hbox2->SetMargin(0,0,100,0);
+		
 
 		vbox->AddChild(button);
 		vbox->AddChild(button1);
@@ -56,7 +57,8 @@ public:
 		hbox->UpdateChildSizes();
 		
 		//addElement(hbox);
-		
+		rootContainer->SetPadding(30);
+		rootContainer->SetColor(Color::White);
 		rootContainer->AddChild(hbox);
 	}
 	~SandBox() 

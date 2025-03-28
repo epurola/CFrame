@@ -7,6 +7,7 @@
 #include <thread>
 #include "UIElements/UIElement.h"
 #include "UIElements/VBox.h"
+#include "Renderer/Renderer.h"
 
 namespace CFrame
 {
@@ -30,6 +31,7 @@ private:
 	std::vector<UIElement*> UIElements;
 	
 	std::unique_ptr<Window> window;
+	std::unique_ptr<Renderer> renderer;
 
 	bool running = true;
 	int windowWidth ;

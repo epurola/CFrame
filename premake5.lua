@@ -19,8 +19,10 @@ workspace "CFrame"
 
 project "CFrame"
 	location "CFrame"
-	kind "SharedLib"
+	kind "Staticlib"
 	language "C++"
+	cppdialect "c++17"
+	staticruntime "on"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -47,8 +49,6 @@ project "CFrame"
 	}
 
 	filter "system:windows"
-		cppdialect "c++17"
-		staticruntime "On"
 		systemversion "latest"
 
 
@@ -58,28 +58,27 @@ project "CFrame"
 			"CF_BUILD_DLL"
 		}
 
-		postbuildcommands
-{
-    "{COPYFILE} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Sandbox"  
-}
-
 
 		filter "configurations:Debug"
 			defines "CF_DEBUG"
-			symbols "On"
+			symbols "on"
 
 		filter "configurations:Release"
 			defines "CF_RELEASE"
-			optimize "On"
+			optimize "on"
 
 		filter "configurations:Dist"
 			defines "CF_DIST"
-			optimize "On"
+			optimize "on"
+
+
 
 project "SandBox"
 	location "SandBox"
 	kind "ConsoleApp"
 	language "C++"
+	cppdialect "c++17"
+	staticruntime "on"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 
@@ -105,8 +104,6 @@ project "SandBox"
 	}
 
 		filter "system:windows"
-		cppdialect "c++17"
-		staticruntime "On"
 		systemversion "latest"
 
 
@@ -117,12 +114,12 @@ project "SandBox"
 
 		filter "configurations:Debug"
 			defines "CF_DEBUG"
-			symbols "On"
+			symbols "on"
 
 		filter "configurations:Release"
 			defines "CF_RELEASE"
-			optimize "On"
+			optimize "on"
 
 		filter "configurations:Dist"
 			defines "CF_DIST"
-			optimize "On"
+			optimize "on"
