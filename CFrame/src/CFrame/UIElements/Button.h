@@ -29,7 +29,6 @@ namespace CFrame
 
         inline ElementType GetElementType() const override { return ElementType::BUTTON; };
       
-
     private:
         //Color color;
         std::function<void()> onClick;

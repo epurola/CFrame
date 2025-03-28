@@ -45,7 +45,7 @@ namespace CFrame {
             }
             else
             {
-                fixedWidth += child->GetWidth() + (child->GetProperties().marginLeft + properties.marginRight);//May not be right
+                fixedWidth += child->GetWidth() + (child->GetProperties().marginLeft + child->GetProperties().marginRight);//May not be right
             }
             if (child->GetHeight() > maxChildHeight && !child->IsHeightResizable())
             {
@@ -69,7 +69,6 @@ namespace CFrame {
         if (maxChildHeight == 0) {
             maxChildHeight = height - (properties.padding * 2);
         }
-
 
 
         switch (xAlign)
@@ -121,15 +120,15 @@ namespace CFrame {
             {
                 child->SetWidth(flexWidth);
                 child->SetHeight(height - (properties.padding * 2));
-                child->SetX(xpos);
-                child->SetY(ypos);
+               //child->SetX(xpos);
+               // child->SetY(ypos);
                 child->UpdateChildSizes();
             }
 
             if (child->GetElementType() == ElementType::CONTAINER && !child->IsWidthResizable())
             {
-                child->SetX(xpos);
-                child->SetY(ypos);
+               // child->SetX(xpos);
+               // child->SetY(ypos);
                 child->UpdateChildSizes();
             }
 

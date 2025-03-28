@@ -17,7 +17,7 @@ namespace CFrame
 
     void VBox::Render(Renderer& renderer)
     {
-        renderer.DrawRectangle(x, y, width, height, { 255,255,200,255 }, 0.0, 0);
+        renderer.DrawRectangle(x, y, width, height, color.toSDLColor(255), 0.0, properties.radius);
         for (auto& child : children) {
             child->Render(renderer);
         }
@@ -43,8 +43,8 @@ namespace CFrame
         int flexibleHeight = 0;
         int totalMargins = 0;
 
-        int xpos = GetX() + properties.padding; // add margin
-        int ypos = GetY() + properties.padding;
+        int xpos = GetX() + properties.padding + properties.marginLeft; // add margin
+        int ypos = GetY() + properties.padding + properties.marginTop;
 
         for (auto* child : children)
         {
@@ -54,13 +54,13 @@ namespace CFrame
             }
             else
             {
-                fixedHeight += child->GetHeight() + (child->GetProperties().marginTop * 2);
+                fixedHeight += child->GetHeight() + (child->GetProperties().marginTop + child->GetProperties().marginBottom);
             }
             if (child->GetWidth() > maxChildWidth && !child->IsWidthResizable())
             {
                 maxChildWidth = child->GetWidth();
             }
-            totalMargins += child->GetProperties().marginLeft * 2;
+            totalMargins += child->GetProperties().marginLeft + child->GetProperties().marginRight;
         }
 
         int totalSpacing = spacing * (children.size() - 1);
@@ -122,21 +122,17 @@ namespace CFrame
 
             if (child->GetElementType() == ElementType::CONTAINER && child->IsHeightResizable())
             {
-                CF_CORE_INFO("Resizable container");
                 child->SetWidth(width - (properties.padding * 2));
                 child->SetHeight(flexibleHeight);
-                child->SetX(xpos);
-                child->SetY(ypos);
+                //child->SetX(xpos);
+                //child->SetY(ypos);
                 child->UpdateChildSizes();
-                CF_CORE_INFO("Width: {0}", width - (properties.padding * 2));
-                CF_CORE_INFO("Height: {0}", flexibleHeight);
-                CF_CORE_INFO("XPOS: {0}", xpos);
             }
 
             if (child->GetElementType() == ElementType::CONTAINER && !child->IsHeightResizable())
             {
-                child->SetX(xpos);
-                child->SetY(ypos);
+               // child->SetX(xpos);
+               // child->SetY(ypos);
                 child->UpdateChildSizes();
             }
 

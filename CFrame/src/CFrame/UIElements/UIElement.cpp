@@ -66,6 +66,7 @@ namespace CFrame {
 	{
 		this->onHover = onHover;
 	}
+
 	/*By providing a time to SetScale the scaling becomes animated otherwise it is
 	applied to the width and height permanently*/
 	void UIElement::SetScale(float scaleX, float scaleY, float duration)
