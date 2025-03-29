@@ -11,7 +11,7 @@ Application::Application(int width, int height)
 {  
 	eventDispatcher = std::make_unique<EventDispatcher>();  
 	window = std::make_unique<Window>(*eventDispatcher);  
-	renderer = std::make_unique<Renderer>(*window); 
+	
 	window->SetHeight(windowHeight);  
 	window->SetWidth(windowWidth);  
 	
@@ -85,6 +85,7 @@ void Application::SetWindowSize(int width, int height)
 	constexpr std::chrono::milliseconds frame_duration(static_cast<int>(1000.0 / target_fps));  
 
 	window->Create(windowWidth, windowHeight, "CFrame");  
+	renderer = std::make_unique<Renderer>(*window);
 	 
 
 	while (running) {  

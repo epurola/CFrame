@@ -8,7 +8,7 @@ namespace CFrame {
 	Renderer::Renderer(Window& window)
         :window(window)
 	{
-       
+        shader = std::make_unique<Shader>("C:/dev/CFrame/CFrame/src/CFrame/res/shaders/basic.shader");
 	}
 
 	Renderer::~Renderer()
@@ -62,21 +62,20 @@ namespace CFrame {
             -1.0f, 1.0f); // Near, Far
 
         //create shader with uniform u_Color
-        Shader shader("C:/dev/CFrame/CFrame/src/CFrame/res/shaders/basic.shader");
 
-        shader.Bind();
-        shader.SetUniform4f("u_Color", r, g, b, a);
-        shader.SetUniformMat4f("u_MVP", proj);
+        shader->Bind();
+        shader->SetUniform4f("u_Color", r, g, b, a);
+        shader->SetUniformMat4f("u_MVP", proj);
 
-        shader.SetUniform2f("u_RectMin", x, y);  
-        shader.SetUniform2f("u_RectMax", x + w, y + h);      
-        shader.SetUniform1f("u_Radius", float(radius));
+        shader->SetUniform2f("u_RectMin", x, y);  
+        shader->SetUniform2f("u_RectMax", x + w, y + h);      
+        shader->SetUniform1f("u_Radius", float(radius));
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
         va.UnBind();
         vb.Unbind();
-        shader.UnBind();
+        shader->UnBind();
 	}
 }
 

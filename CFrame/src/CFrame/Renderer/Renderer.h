@@ -3,6 +3,7 @@
 #include "glad/glad.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp> 
+#include <memory>
 #include "../Window.h"
 #include "VertexBuffer.h"
 #include "VertexArray.h"
@@ -27,5 +28,6 @@ namespace CFrame {
 		SDL_FRect rect;
 		SDL_Texture* texture = NULL;
 		SDL_FColor fcolor;
+		std::unique_ptr<Shader> shader;
 	};
 }
