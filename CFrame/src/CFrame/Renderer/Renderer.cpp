@@ -15,6 +15,7 @@ namespace CFrame {
 	{
 
 	}
+
 	void Renderer::DrawRectangle(float x, float y, float w, float h, SDL_Color color, float angle, int radius)
 	{
         float r = color.r / 255.0f;
@@ -61,7 +62,6 @@ namespace CFrame {
             -1.0f, 1.0f); // Near, Far
 
         //create shader with uniform u_Color
-        //Shader shader("../../res/shaders/basic.shader");
         Shader shader("C:/dev/CFrame/CFrame/src/CFrame/res/shaders/basic.shader");
 
         shader.Bind();

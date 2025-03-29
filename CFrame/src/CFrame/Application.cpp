@@ -89,10 +89,12 @@ void Application::SetWindowSize(int width, int height)
 
 	while (running) {  
 		auto start_time = std::chrono::steady_clock::now();  
-		window->GL_ClearColorBuffer();  
+		window->GL_ClearColorBuffer(); 
+
 		for (auto& element : UIElements) {  
 			element->Render(*renderer);   
 		}  
+
 		window->OnUpdate(); // Add SwapBuffers and HadleInput to Window so input can be doen before draw  
 
 		auto end_time = std::chrono::steady_clock::now();  

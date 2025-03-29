@@ -50,6 +50,9 @@ namespace CFrame
         void SetWidth(int w);
         void SetX(int x);
         void SetY(int y);
+        /// Sets the color of the UI element.
+        /// @param color.
+        /// The format is {r,g,b,a}. You can set a custom color using this format.
         void SetColor(Color color);
         void SetScale(float scaleX, float scaleY, float duration = 0.0);
         void AnimateScale(float scaleX, float scaleY);

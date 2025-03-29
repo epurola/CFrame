@@ -34,6 +34,7 @@ public:
 		CFrame::Button* button6 = new CFrame::Button(50, 50);
 		CFrame::Button* button7 = new CFrame::Button(50, 50);
 		CFrame::Button* button8 = new CFrame::Button(50, 50);
+
 		hbox2->AddChild(button6);
 		hbox2->AddChild(button7);
 		hbox2->AddChild(button8);
