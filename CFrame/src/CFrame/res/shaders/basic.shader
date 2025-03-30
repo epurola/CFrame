@@ -16,6 +16,8 @@ void main()
 #version 410 core
 out vec4 color;
 uniform vec4 u_Color;
+uniform vec4 u_Color2;
+uniform float u_UseGradient;
  // Bottom-left corner of the rectangle (x, y)
 uniform vec2 u_RectMin;      
 // Top-right corner of the rectangle (x, y)
@@ -49,10 +51,27 @@ void main()
     // Compute signed distance from the fragment to the rounded box
     float dist = sdRoundedBox(p, b, r);
 
+     // Normalize the coordinate for gradient effect 
+    float gradient = (p.x + b.x) / (2.0 * b.x); // Horizontal gradient
+    // float gradient = (p.y + b.y) / (2.0 * b.y); // Use this for a vertical gradient
+
+    // Define gradient colors
+    vec4 color1 = u_Color;
+    vec4 color2 = u_Color2; 
+
+    // Interpolate between the colors
+    vec4 gradientColor = mix(color1, color2, gradient);
+
     // If the distance is negative or zero, we're inside the box, color the fragment
     if (dist < 0.0)
     {
+        if (u_UseGradient == 1.0) {
+         color = gradientColor;
+        } 
+        else 
+        {
         color = u_Color;
+    }
     }
     else
     {

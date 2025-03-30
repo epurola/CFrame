@@ -16,12 +16,18 @@ namespace CFrame {
 
 	}
 
-	void Renderer::DrawRectangle(float x, float y, float w, float h, SDL_Color color, float angle, int radius)
+    //ToDo: Remove dependecy on SDL color here
+	void Renderer::DrawRectangle(float x, float y, float w, float h, SDL_Color color,SDL_Color gradient, float angle, int radius)
 	{
         float r = color.r / 255.0f;
         float g = color.g / 255.0f;
         float b = color.b / 255.0f;
         float a = color.a / 255.0f;
+
+        float rg = gradient.r / 255.0f;
+        float gg = gradient.g / 255.0f;
+        float bg = gradient.b / 255.0f;
+        float ag = gradient.a / 255.0f;
 
         int windowWidth, windowHeight;
         SDL_GetWindowSize(window.GetWindow(), &windowWidth, &windowHeight);
@@ -29,12 +35,12 @@ namespace CFrame {
 
         /*Vertices of the rectangle. Calculates the top left as the origin*/
         float vertices[] = {
-            /* x, y,        r, g, b, a         texture coordinates
-            location = 0    location = 1       location = 2*/
-            x, y + h,           r, g, b, a,        0.0f, 0.0f,       // Top-left
-            x + w, y + h,       r, g, b, a,        1.0f, 0.0f,       // Top-right
-            x + w, y ,          r, g, b, a,        1.0f, 1.0f,       // Bottom-right
-            x, y ,              r, g, b, a,        0.0f, 1.0f
+            /* x, y,        r, g, b, a         texture coordinates      Gradient color
+            location = 0    location = 1       location = 2             location = 3*/
+            x, y + h,           r, g, b, a,        0.0f, 0.0f,          rg, gg, bg, ag,        // Top-left
+            x + w, y + h,       r, g, b, a,        1.0f, 0.0f,          rg, gg, bg, ag,       // Top-right
+            x + w, y ,          r, g, b, a,        1.0f, 1.0f,          rg, gg, bg, ag,       // Bottom-right
+            x, y ,              r, g, b, a,        0.0f, 1.0f,          rg, gg, bg, ag
         };
 
         /*Indecies to draw a rectangle*/
@@ -43,7 +49,7 @@ namespace CFrame {
         /*create vertex buffer with the vertices and the size of the data
         4 vertices with 6 data point that are floats.
         Will also automaticaaly bind it*/
-        VertexBuffer vb(vertices, 4 * 8 * sizeof(float));
+        VertexBuffer vb(vertices, 4 * 12 * sizeof(float));
 
         /*Create Vertex Array*/
         VertexArray va;
@@ -51,6 +57,7 @@ namespace CFrame {
         layout.Push<float>(2); // Position x, y
         layout.Push<float>(4); // Color Data r, g, b, a
         layout.Push<float>(2); // Texture coordinates
+        layout.Push<float>(4); // Gradient Color Data r, g, b, a
         va.AddBuffer(vb, layout);
 
         /*creates index buffer with 6 indecies.*/
@@ -58,18 +65,18 @@ namespace CFrame {
 
         /*Define ortho protection matrix*/
         glm::mat4 proj = glm::ortho(0.0f, float(windowWidth), // Left, Right
-            float(windowHeight), 0.0f, // Bottom, Top
-            -1.0f, 1.0f); // Near, Far
+                                    float(windowHeight), 0.0f, // Bottom, Top
+                                     -1.0f, 1.0f); // Near, Far
 
-        //create shader with uniform u_Color
-
+        //Bind the shader and set uniforms
         shader->Bind();
         shader->SetUniform4f("u_Color", r, g, b, a);
+        shader->SetUniform4f("u_Color2", rg, gg, bg, ag);
         shader->SetUniformMat4f("u_MVP", proj);
-
         shader->SetUniform2f("u_RectMin", x, y);  
         shader->SetUniform2f("u_RectMax", x + w, y + h);      
         shader->SetUniform1f("u_Radius", float(radius));
+        shader->SetUniform1f("u_UseGradient", 1.0f);
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 

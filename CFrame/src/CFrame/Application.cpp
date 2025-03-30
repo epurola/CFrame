@@ -85,8 +85,9 @@ void Application::SetWindowSize(int width, int height)
 	constexpr std::chrono::milliseconds frame_duration(static_cast<int>(1000.0 / target_fps));  
 
 	window->Create(windowWidth, windowHeight, "CFrame");  
+	/*Needs to be created after window->Create since there is no 
+	valid GL context before that*/
 	renderer = std::make_unique<Renderer>(*window);
-	 
 
 	while (running) {  
 		auto start_time = std::chrono::steady_clock::now();  

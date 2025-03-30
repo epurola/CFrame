@@ -37,7 +37,7 @@ namespace CFrame
         int centeredX = x + (width - renderWidth) / 2;
         int centeredY = y + (height - renderHeight) / 2;
         
-		renderer.DrawRectangle(centeredX, centeredY, renderWidth, renderHeight, color.toSDLColor(255), 0.0, properties.radius);
+		renderer.DrawRectangle(centeredX, centeredY, renderWidth, renderHeight, color.toSDLColor(255), {255,0,0,255}, 0.0, properties.radius);
 	}
 
     void Button::OnEvent(CFrameEvent& event)
