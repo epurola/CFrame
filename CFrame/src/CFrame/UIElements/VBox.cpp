@@ -17,7 +17,7 @@ namespace CFrame
 
     void VBox::Render(Renderer& renderer)
     {
-        renderer.DrawRectangle(x, y, width, height, color.toSDLColor(255), color.toSDLColor(255), 0.0, properties.radius);
+        renderer.DrawRectangle(x, y, width, height, color.toSDLColor(255), color.toSDLColor(255), 0.0, properties.radius, 1.0f, 1.0f);
         for (auto& child : children) {
             child->Render(renderer);
         }

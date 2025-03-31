@@ -15,10 +15,11 @@ public:
 		CFrame::Button* button1 = new CFrame::Button(100, 100, 150, 75);
 		CFrame::Button* button2 = new CFrame::Button(100, 100, 150, 75);
 
-		button2->SetOnHover([button2]() {button2->SetScale(1.1, 1.1);});
-		button2->SetOnLeave([button2]() {button2->SetScale(1.0, 1.0);});
+		button2->SetOnHover([button2]() {button2->SetScale(1.1, 1.1); button2->SetGradient(Color::Cyan, Color::Gold);});
+		button2->SetOnLeave([button2]() {button2->SetScale(1.0, 1.0); button2->SetGradient(Color::Gray, Color::Gray);});
+		button2->AnimateGradient(5.0);
 
-		button->SetColor(Color::Red);
+		button->SetGradient(Color::Red, Color::Green);
 
 		CFrame::Button* button3 = new CFrame::Button(100, 100, 150, 75);
 		CFrame::Button* button4 = new CFrame::Button(100, 100, 150, 75);

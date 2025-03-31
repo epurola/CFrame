@@ -36,5 +36,13 @@ namespace CFrame
 	{
 		isAnimating = false;
 	}
+	float Animator::GetTime()
+	{
+		return (float)SDL_GetTicks() / 1000.0f;
+	}
+	void Animator::SetSpeed(float speed)
+	{
+		this->speed = speed;
+	}
 }
 

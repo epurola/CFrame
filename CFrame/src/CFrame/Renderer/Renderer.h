@@ -21,13 +21,12 @@ namespace CFrame {
 
 		~Renderer();
 
-		void DrawRectangle(float x, float y, float w, float h, SDL_Color color, SDL_Color gradient, float angle, int radius);
+		void DrawRectangle(float x, float y, float w, float h, 
+			SDL_Color color, SDL_Color gradient, float angle, int radius, float time, float speed);
 
 	private:
 		Window& window;
-		SDL_FRect rect;
 		SDL_Texture* texture = NULL;
-		SDL_FColor fcolor;
 		std::unique_ptr<Shader> shader;
 	};
 }

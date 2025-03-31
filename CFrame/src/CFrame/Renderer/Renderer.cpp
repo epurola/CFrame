@@ -17,7 +17,9 @@ namespace CFrame {
 	}
 
     //ToDo: Remove dependecy on SDL color here
-	void Renderer::DrawRectangle(float x, float y, float w, float h, SDL_Color color,SDL_Color gradient, float angle, int radius)
+	void Renderer::DrawRectangle(float x, float y, float w, float h, 
+        SDL_Color color,SDL_Color gradient, float angle, int radius, 
+        float time, float speed)
 	{
         float r = color.r / 255.0f;
         float g = color.g / 255.0f;
@@ -67,7 +69,6 @@ namespace CFrame {
         glm::mat4 proj = glm::ortho(0.0f, float(windowWidth), // Left, Right
                                     float(windowHeight), 0.0f, // Bottom, Top
                                      -1.0f, 1.0f); // Near, Far
-
         //Bind the shader and set uniforms
         shader->Bind();
         shader->SetUniform4f("u_Color", r, g, b, a);
@@ -76,7 +77,8 @@ namespace CFrame {
         shader->SetUniform2f("u_RectMin", x, y);  
         shader->SetUniform2f("u_RectMax", x + w, y + h);      
         shader->SetUniform1f("u_Radius", float(radius));
-        shader->SetUniform1f("u_UseGradient", 1.0f);
+        shader->SetUniform1f("u_Time", time);
+        shader->SetUniform1f("u_Speed", speed);
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 

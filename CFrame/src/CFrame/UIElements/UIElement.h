@@ -54,6 +54,7 @@ namespace CFrame
         /// @param color.
         /// The format is {r,g,b,a}. You can set a custom color using this format.
         void SetColor(Color color);
+        void SetGradient(Color color1, Color color2);
         void SetScale(float scaleX, float scaleY, float duration = 0.0);
         void AnimateScale(float scaleX, float scaleY);
 
@@ -76,6 +77,7 @@ namespace CFrame
         bool isHeightResizable;
         int x, y, width, height;
         Color color;
+        Color color2;
         ElementProperties properties;
         bool isAnimatedElement = false;
         std::function<void()> onHover = []() {};

@@ -11,6 +11,7 @@ namespace CFrame
         isWidthResizable = (w == -1);
         isHeightResizable = (h == -1);
 		SetRadius(15);
+        SetColor(Color::Gray);
 	}
 
 	Button::~Button()
@@ -37,7 +38,13 @@ namespace CFrame
         int centeredX = x + (width - renderWidth) / 2;
         int centeredY = y + (height - renderHeight) / 2;
         
-		renderer.DrawRectangle(centeredX, centeredY, renderWidth, renderHeight, color.toSDLColor(255), {255,0,0,255}, 0.0, properties.radius);
+		renderer.DrawRectangle(centeredX, centeredY, renderWidth, renderHeight, 
+            color.toSDLColor(255), 
+            color2.toSDLColor(255), 
+            0.0, 
+            properties.radius, 
+            animator->GetTime(), 
+            animator->GetSpeed());
 	}
 
     void Button::OnEvent(CFrameEvent& event)
@@ -111,6 +118,11 @@ namespace CFrame
     void Button::SetOnClick(std::function<void()> onClick)
     {
         this->onClick = onClick;
+    }
+
+    void Button::AnimateGradient(float speed)
+    {
+        animator->SetSpeed(speed);
     }
 	
 }

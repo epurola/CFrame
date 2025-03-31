@@ -56,6 +56,12 @@ namespace CFrame {
 	void UIElement::SetColor(Color color)
 	{
 		this->color = color;
+		this->color2 = color;
+	}
+	void UIElement::SetGradient(Color color1, Color color2)
+	{
+		this->color = color1;
+		this->color2 = color2;
 	}
 	void UIElement::SetOnLeave(std::function<void()> onLeave)
 	{
