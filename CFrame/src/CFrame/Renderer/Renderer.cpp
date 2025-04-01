@@ -79,6 +79,7 @@ namespace CFrame {
         shader->SetUniform1f("u_Radius", float(radius));
         shader->SetUniform1f("u_Time", time);
         shader->SetUniform1f("u_Speed", speed);
+        shader->SetUniform1f("u_BorderThickness", 2.0f); // This is currently drawn inside the shape
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 

@@ -19,6 +19,7 @@ uniform vec4 u_Color;
 uniform vec4 u_Color2;
 uniform float u_Time;
 uniform float u_Speed;
+uniform float u_BorderThickness;
  // Bottom-left corner of the rectangle (x, y)
 uniform vec2 u_RectMin;      
 // Top-right corner of the rectangle (x, y)
@@ -50,7 +51,7 @@ void main()
     vec4 r = vec4(u_Radius, u_Radius, u_Radius, u_Radius); 
 
     // Compute signed distance from the fragment to the rounded box
-    float dist = sdRoundedBox(p, b, r);
+    float dist = sdRoundedBox(p, b, r) + u_BorderThickness;
 
      // Normalize the coordinate for gradient effect 
     float gradient = (p.x + b.x + sin(u_Time * u_Speed) * b.x * 0.5) / (2.0 * b.x); // Horizontal gradient
@@ -58,17 +59,21 @@ void main()
     // Define gradient colors
     vec4 color1 = u_Color;
     vec4 color2 = u_Color2; 
+    vec4 borderColor = vec4(0.0, 0.0, 0.0, 1.0);
+
 
     // Interpolate between the colors
     vec4 gradientColor = mix(color1, color2, gradient);
 
     // If the distance is negative or zero, we're inside the box, color the fragment
-    if (dist < 0.0)
-    {
-       color =  gradientColor;
-    }
-    else
-    {
-        discard; // Discard fragments outside the rounded box
+     if (dist < -u_BorderThickness) {
+        // Inside the shape
+        color = gradientColor;
+    } else if (dist < u_BorderThickness) {
+        // Border area
+        color = borderColor;
+    } else {
+        // Outside
+        discard;
     }
 };
