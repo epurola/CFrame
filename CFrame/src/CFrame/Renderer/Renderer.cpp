@@ -19,7 +19,7 @@ namespace CFrame {
     //ToDo: Remove dependecy on SDL color here
 	void Renderer::DrawRectangle(float x, float y, float w, float h, 
         SDL_Color color,SDL_Color gradient, float angle, int radius, 
-        float time, float speed)
+        float time, float speed, float border, SDL_Color borderColor, SDL_Color borderGradient)
 	{
         float r = color.r / 255.0f;
         float g = color.g / 255.0f;
@@ -30,6 +30,16 @@ namespace CFrame {
         float gg = gradient.g / 255.0f;
         float bg = gradient.b / 255.0f;
         float ag = gradient.a / 255.0f;
+
+        float rb = borderColor.r / 255.0f;
+        float gb = borderColor.g / 255.0f;
+        float bb = borderColor.b / 255.0f;
+        float ab = borderColor.a / 255.0f;
+
+        float rgb = borderGradient.r / 255.0f;
+        float ggb = borderGradient.g / 255.0f;
+        float bgb = borderGradient.b / 255.0f;
+        float agb = borderGradient.a / 255.0f;
 
         int windowWidth, windowHeight;
         SDL_GetWindowSize(window.GetWindow(), &windowWidth, &windowHeight);
@@ -79,7 +89,9 @@ namespace CFrame {
         shader->SetUniform1f("u_Radius", float(radius));
         shader->SetUniform1f("u_Time", time);
         shader->SetUniform1f("u_Speed", speed);
-        shader->SetUniform1f("u_BorderThickness", 2.0f); // This is currently drawn inside the shape
+        shader->SetUniform1f("u_BorderThickness", border); // This is currently drawn inside the shape
+        shader->SetUniform4f("u_BorderColor1", rb, gb, bb, ab);
+        shader->SetUniform4f("u_BorderColor2", rgb, ggb, bgb, agb);
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 

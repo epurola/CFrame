@@ -17,7 +17,14 @@ namespace CFrame
 
     void VBox::Render(Renderer& renderer)
     {
-        renderer.DrawRectangle(x, y, width, height, color.toSDLColor(255), color.toSDLColor(255), 0.0, properties.radius, 1.0f, 1.0f);
+        renderer.DrawRectangle(x, y, width, height, 
+            properties.color1.toSDLColor(255), 
+            properties.color1.toSDLColor(255), 
+            0.0, 
+            properties.radius, 1.0f, 1.0f,0.0, 
+            properties.color1.toSDLColor(255),
+            properties.color1.toSDLColor(255));
+
         for (auto& child : children) {
             child->Render(renderer);
         }
@@ -116,23 +123,26 @@ namespace CFrame
         {
             UIElement* child = children[i];
 
-            child->SetX(xpos + child->GetProperties().marginLeft);
-            child->SetY(ypos + child->GetProperties().marginTop);
+           
+            xpos = xpos + child->GetProperties().marginLeft;
+            ypos = ypos + child->GetProperties().marginTop;
             
-
+            child->SetX(xpos);
+            child->SetY(ypos);
+            
             if (child->GetElementType() == ElementType::CONTAINER && child->IsHeightResizable())
             {
                 child->SetWidth(width - (properties.padding * 2));
                 child->SetHeight(flexibleHeight);
-                //child->SetX(xpos);
-                //child->SetY(ypos);
+                child->SetX(xpos );
+                child->SetY(ypos );
                 child->UpdateChildSizes();
             }
 
             if (child->GetElementType() == ElementType::CONTAINER && !child->IsHeightResizable())
             {
-               // child->SetX(xpos);
-               // child->SetY(ypos);
+                child->SetX(xpos );
+                child->SetY(ypos );
                 child->UpdateChildSizes();
             }
 
@@ -146,7 +156,6 @@ namespace CFrame
                 child->SetWidth(width - (properties.padding * 2));
             }
 
-
             if (child->IsWidthResizable())
             {
                 child->SetWidth(width - (properties.padding * 2));
@@ -158,9 +167,10 @@ namespace CFrame
             }
 
             ypos += child->GetHeight();
-            if (i < children.size() - 1)
+            xpos -= child->GetProperties().marginLeft; //Reset so the next element is                                        
+            if (i < children.size() - 1)                //relative to the container not the element before it
             {
-                ypos += spacing;
+                ypos += spacing ;
             }
         }
 	}

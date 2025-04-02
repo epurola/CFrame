@@ -4,7 +4,7 @@ namespace CFrame
 {
 	Container::Container(int x, int y, int w, int h, UIElement* parent)
 		:UIElement(x, y, w, h, parent), 
-		 xAlign(AlignItems::Center), yAlign(AlignItems::Center)
+		 xAlign(AlignItems::Start), yAlign(AlignItems::Start)
 	{
 
 	}

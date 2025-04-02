@@ -16,9 +16,10 @@ namespace CFrame
 
 		float t = (animationDuration > 0) ? elapsedTime / animationDuration : 1.0f;
 		if (t > 1.0f) t = 1.0f;
-		
-		element.AnimateScale(1.0f + t * (element.GetProperties().scaleX - 1.0f),
-			                1.0f + t * (element.GetProperties().scaleY - 1.0f)); //startscale + t *(targetScale - startScale) 
+
+
+		element.AnimateScale(1.0f + t * (element.GetAnimProperties().animScaleX - 1.0f),
+			                1.0f + t * (element.GetAnimProperties().animScaleY - 1.0f)); //startscale + t *(targetScale - startScale) 
 
 		if (t >= 1.0f) {
 			isAnimating = false;
@@ -40,9 +41,6 @@ namespace CFrame
 	{
 		return (float)SDL_GetTicks() / 1000.0f;
 	}
-	void Animator::SetSpeed(float speed)
-	{
-		this->speed = speed;
-	}
+	
 }
 

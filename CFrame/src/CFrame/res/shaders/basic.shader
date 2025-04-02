@@ -17,6 +17,8 @@ void main()
 out vec4 color;
 uniform vec4 u_Color;
 uniform vec4 u_Color2;
+uniform vec4 u_BorderColor1;
+uniform vec4 u_BorderColor2;
 uniform float u_Time;
 uniform float u_Speed;
 uniform float u_BorderThickness;
@@ -59,11 +61,13 @@ void main()
     // Define gradient colors
     vec4 color1 = u_Color;
     vec4 color2 = u_Color2; 
-    vec4 borderColor = vec4(0.0, 0.0, 0.0, 1.0);
+    vec4 borderColor1 = u_BorderColor1;
+    vec4 borderColor2 = u_BorderColor2;
 
 
     // Interpolate between the colors
     vec4 gradientColor = mix(color1, color2, gradient);
+    vec4 gradientBorderColor = mix(borderColor1, borderColor2, gradient);
 
     // If the distance is negative or zero, we're inside the box, color the fragment
      if (dist < -u_BorderThickness) {
@@ -71,7 +75,7 @@ void main()
         color = gradientColor;
     } else if (dist < u_BorderThickness) {
         // Border area
-        color = borderColor;
+        color = gradientBorderColor;
     } else {
         // Outside
         discard;

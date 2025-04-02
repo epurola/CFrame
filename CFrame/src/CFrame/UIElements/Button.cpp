@@ -24,27 +24,28 @@ namespace CFrame
         int renderWidth = width;
         int renderHeight = height;
 
-        if (!isAnimatedElement) {
+        if (!animProperties.isAnimatedElement) {
              renderWidth = width * properties.scaleX;
              renderHeight = height * properties.scaleY;
         }
        
-        animator->Update(0.016f); //60fps
-
         if (animator->IsAnimating()) {
-            renderWidth = renderWidth * properties.animScaleX;
-            renderHeight = renderHeight * properties.animScaleY;
+            animator->Update(0.016f); //60fps
         }
+
         int centeredX = x + (width - renderWidth) / 2;
         int centeredY = y + (height - renderHeight) / 2;
         
 		renderer.DrawRectangle(centeredX, centeredY, renderWidth, renderHeight, 
-            color.toSDLColor(255), 
-            color2.toSDLColor(255), 
+            properties.color1.toSDLColor(255), 
+            properties.color2.toSDLColor(255), 
             0.0, 
             properties.radius, 
             animator->GetTime(), 
-            animator->GetSpeed());
+            animProperties.speed,
+            GetBorder(),
+            properties.borderColor1.toSDLColor(255),
+            properties.borderColor2.toSDLColor(255));
 	}
 
     void Button::OnEvent(CFrameEvent& event)
@@ -70,10 +71,6 @@ namespace CFrame
                 return; // Early return if the click is outside the button
             }
 
-            if (IsElementWithAnimation()) {
-                animator->StartAnimation(properties.duration);
-            }
-
             //call the onClick handler
             CF_CORE_INFO("Button Clicked!");
             if (onClick) {
@@ -93,7 +90,7 @@ namespace CFrame
 
             // Check if the mouse position is inside the button's bounds
             if (xPos < x || xPos >(x + width) || yPos < y || yPos >(y + height)) {
-                if (hovering) {
+                if (hovering ) {
                     onLeave();
                     hovering = false;
                 }
@@ -102,13 +99,10 @@ namespace CFrame
             }
             hovering = true;
 
-            if (IsElementWithAnimation() && !animator->IsAnimating()) {
-                animator->StartAnimation(properties.duration);
-            }
 
             //call the onClick handler
             CF_CORE_INFO("Button Hovered!");
-            if (onHover) {
+            if (onHover ) {
                 onHover();
             }
             event.handled = true;
@@ -120,11 +114,11 @@ namespace CFrame
         this->onClick = onClick;
     }
 
-    void Button::AnimateGradient(float speed)
+    void Button::StartAnimation()
     {
-        animator->SetSpeed(speed);
+        animator->StartAnimation(animProperties.duration);
     }
-	
+
 }
 
 

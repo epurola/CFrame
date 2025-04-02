@@ -16,7 +16,14 @@ namespace CFrame {
 
 	void HBox::Render(Renderer& renderer)
 	{
-		renderer.DrawRectangle(x, y, width, height, color.toSDLColor(255), color.toSDLColor(255),0.0, properties.radius, 1.0f, 1.0f);
+		renderer.DrawRectangle(x, y, width, 
+            height, properties.color1.toSDLColor(255), 
+            properties.color1.toSDLColor(255),0.0, 
+            properties.radius, 
+            1.0f, 1.0f, 0.0,
+            properties.color1.toSDLColor(255),
+            properties.color1.toSDLColor(255));
+
 		for (auto& child : children) {
 			child->Render(renderer);
 		}
@@ -111,24 +118,25 @@ namespace CFrame {
         {
             UIElement* child = children[i];
 
-            child->SetX(xpos + child->GetProperties().marginLeft);
-            child->SetY(ypos + child->GetProperties().marginTop);
+            xpos = xpos + child->GetProperties().marginLeft;
+            ypos = ypos + child->GetProperties().marginTop;
 
-            //Store UIconatainer into a variable so oly check once
+            child->SetX(xpos);
+            child->SetY(ypos);
 
             if (child->GetElementType() == ElementType::CONTAINER && child->IsWidthResizable())
             {
                 child->SetWidth(flexWidth);
                 child->SetHeight(height - (properties.padding * 2));
-               //child->SetX(xpos);
-               // child->SetY(ypos);
+                child->SetX(xpos);
+                child->SetY(ypos);
                 child->UpdateChildSizes();
             }
 
             if (child->GetElementType() == ElementType::CONTAINER && !child->IsWidthResizable())
             {
-               // child->SetX(xpos);
-               // child->SetY(ypos);
+                child->SetX(xpos);
+                child->SetY(ypos);
                 child->UpdateChildSizes();
             }
 

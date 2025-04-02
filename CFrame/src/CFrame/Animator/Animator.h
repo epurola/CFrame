@@ -15,7 +15,7 @@ namespace CFrame
 		void StopAnimation();
 		float GetTime();
 		void SetSpeed(float speed);
-		inline float GetSpeed() const { return speed; }
+		//inline float GetSpeed() const { return speed; }
 		inline bool IsAnimating() const { return isAnimating; }
 
 	private:
@@ -23,6 +23,6 @@ namespace CFrame
 		float animationDuration = 1.0f;
 		float elapsedTime;
 		UIElement& element;
-		float speed = 0;
+		
 	};
 }

@@ -53,15 +53,32 @@ namespace CFrame {
 		this->y = y;
 	}
 
+	void UIElement::SetBorder(float border)
+	{
+		this->properties.border = border;
+	}
+
+	void UIElement::SetBorderColor(Color color1)
+	{
+		this->properties.borderColor1 = color1;
+		this->properties.borderColor2 = color1;
+	}
+
+	void UIElement::SetBorderGradient(Color color1, Color color2)
+	{
+		this->properties.borderColor1 = color1;
+		this->properties.borderColor2 = color2;
+	}
+
 	void UIElement::SetColor(Color color)
 	{
-		this->color = color;
-		this->color2 = color;
+		this->properties.color1 = color;
+		this->properties.color2 = color;
 	}
 	void UIElement::SetGradient(Color color1, Color color2)
 	{
-		this->color = color1;
-		this->color2 = color2;
+		this->properties.color1 = color1;
+		this->properties.color2 = color2;
 	}
 	void UIElement::SetOnLeave(std::function<void()> onLeave)
 	{
@@ -75,26 +92,22 @@ namespace CFrame {
 
 	/*By providing a time to SetScale the scaling becomes animated otherwise it is
 	applied to the width and height permanently*/
-	void UIElement::SetScale(float scaleX, float scaleY, float duration)
+	void UIElement::SetScale(float scaleX, float scaleY)
 	{
-		if (duration > 0.0f) {
-			isAnimatedElement = true;
-			this->properties.duration = duration;
-		}
-		
 		this->properties.scaleX = scaleX;
 		this->properties.scaleY = scaleY;
 	}
 
 	void UIElement::AnimateScale(float scaleX, float scaleY)
 	{
-		this->properties.animScaleX = scaleX;
-		this->properties.animScaleY = scaleY;
+		this->properties.scaleX = scaleX;
+		this->properties.scaleY = scaleY;
 	}
 
-	ElementProperties& UIElement::GetProperties()
+	void UIElement::AnimateGradient(float speed)
 	{
-		return properties;
+		this->animProperties.speed = speed;
 	}
+
 
 }

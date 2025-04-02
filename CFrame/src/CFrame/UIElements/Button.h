@@ -25,7 +25,7 @@ namespace CFrame
         void Render(Renderer& renderer) override;
         void OnEvent(CFrameEvent& event) override;
         void SetOnClick(std::function<void()> onClick);
-        void AnimateGradient(float speed);
+        void StartAnimation();
         
 
         inline ElementType GetElementType() const override { return ElementType::BUTTON; };
