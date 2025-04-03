@@ -10,7 +10,7 @@ namespace CFrame
 	{
         isWidthResizable = (w == -1);
         isHeightResizable = (h == -1);
-		SetRadius(15);
+		SetRadius(15,15,15,15);
         SetColor(Color::Gray);
 	}
 
@@ -90,7 +90,7 @@ namespace CFrame
 
             // Check if the mouse position is inside the button's bounds
             if (xPos < x || xPos >(x + width) || yPos < y || yPos >(y + height)) {
-                if (hovering ) {
+                if (hovering && !animator->IsAnimating()) { 
                     onLeave();
                     hovering = false;
                 }

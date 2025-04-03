@@ -10,9 +10,12 @@
 #include "IndexBufferr.h"
 #include "Shader.h"
 #include "Texture.h"
-#include "SDL3/SDL.h"
+#include "../UIElements/UIElement.h"
+#include <SDL3/SDL.h>
 
 namespace CFrame {
+
+	struct Radius;
 
 	class Renderer
 	{
@@ -23,7 +26,7 @@ namespace CFrame {
 
 		void DrawRectangle(float x, float y, float w, float h, 
 			SDL_Color color, SDL_Color gradient, 
-			float angle, int radius, float time, float speed, float border, 
+			float angle, Radius radius, float time, float speed, float border,
 			SDL_Color borderColor, SDL_Color borderGradient);
 
 	private:

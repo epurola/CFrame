@@ -8,6 +8,8 @@ namespace CFrame {
 	{
 		if (width == -1 && parent) width = parent->width;
 		if (height == -1 && parent) height = parent->height;
+		isHeightResizable = true;
+		isWidthResizable = true;
 	}
 
 	void UIElement::SetMargin(int marginleft, int marginRight, int marginTop, int marginBottom)
@@ -28,9 +30,13 @@ namespace CFrame {
 		this->parent = p;
 	}
 
-	void UIElement::SetRadius(int r)
+	void UIElement::SetRadius(float topLeft, float topRight, float bottoLeft, float bottomRight)
 	{
-		properties.radius = r;
+		
+		properties.radius.bottomLeft = bottoLeft;
+		properties.radius.bottomRight = bottomRight;
+		properties.radius.topLeft = topLeft;
+		properties.radius.topRight = topRight;
 	}
 
 	void UIElement::SetHeight(int h)
@@ -51,6 +57,10 @@ namespace CFrame {
 	void UIElement::SetY(int y)
 	{
 		this->y = y;
+	}
+
+	void UIElement::SetAngle(float angle)
+	{
 	}
 
 	void UIElement::SetBorder(float border)

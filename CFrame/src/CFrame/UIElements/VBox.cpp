@@ -134,15 +134,15 @@ namespace CFrame
             {
                 child->SetWidth(width - (properties.padding * 2));
                 child->SetHeight(flexibleHeight);
-                child->SetX(xpos );
-                child->SetY(ypos );
+                child->SetX(xpos);
+                child->SetY(ypos);
                 child->UpdateChildSizes();
             }
 
             if (child->GetElementType() == ElementType::CONTAINER && !child->IsHeightResizable())
             {
-                child->SetX(xpos );
-                child->SetY(ypos );
+                child->SetX(xpos);
+                child->SetY(ypos);
                 child->UpdateChildSizes();
             }
 
@@ -158,15 +158,18 @@ namespace CFrame
 
             if (child->IsWidthResizable())
             {
-                child->SetWidth(width - (properties.padding * 2));
+                child->SetWidth(width - (properties.padding * 2) - (child->GetProperties().marginRight + child->GetProperties().marginLeft));
 
-
+                if (child->GetElementType() == ElementType::CONTAINER)
+                {
+                    child->UpdateChildSizes();
+                }
                 if (xAlign == AlignItems::Center) {
                     child->SetWidth(width - xpos);
                 }
             }
 
-            ypos += child->GetHeight();
+            ypos += child->GetHeight() + child->GetProperties().marginBottom;
             xpos -= child->GetProperties().marginLeft; //Reset so the next element is                                        
             if (i < children.size() - 1)                //relative to the container not the element before it
             {

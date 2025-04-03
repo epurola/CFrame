@@ -4,12 +4,15 @@ layout(location = 0)in vec4 position;
 layout(location = 2) in vec2 texCoord;
 
 uniform mat4 u_MVP;
+uniform float u_Angle;
+uniform vec2 u_Center;
 out vec4 fragPos;
 void main()
 {
    gl_Position = u_MVP * position  ;
    fragPos = position;
 };
+
 
 
 #shader fragment
@@ -26,7 +29,11 @@ uniform float u_BorderThickness;
 uniform vec2 u_RectMin;      
 // Top-right corner of the rectangle (x, y)
 uniform vec2 u_RectMax;       
-uniform float u_Radius;
+//Radius
+uniform float u_BottomRight;
+uniform float u_BottomLeft;
+uniform float u_TopRight;
+uniform float u_TopLeft;
 
 in vec4 fragPos;
 
@@ -50,7 +57,7 @@ void main()
     // Half the width and the height to define rect bound in the new coord system ( Center of the rect = 0,0)
     vec2 b = (u_RectMax - u_RectMin) * 0.5;
     // Radius for all corners
-    vec4 r = vec4(u_Radius, u_Radius, u_Radius, u_Radius); 
+    vec4 r = vec4(u_BottomRight, u_TopRight, u_BottomLeft, u_TopLeft); //Bottom right, top right, bottom left, top left
 
     // Compute signed distance from the fragment to the rounded box
     float dist = sdRoundedBox(p, b, r) + u_BorderThickness;

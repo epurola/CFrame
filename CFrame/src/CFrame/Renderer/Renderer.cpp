@@ -18,7 +18,7 @@ namespace CFrame {
 
     //ToDo: Remove dependecy on SDL color here
 	void Renderer::DrawRectangle(float x, float y, float w, float h, 
-        SDL_Color color,SDL_Color gradient, float angle, int radius, 
+        SDL_Color color,SDL_Color gradient, float angle, Radius radius, 
         float time, float speed, float border, SDL_Color borderColor, SDL_Color borderGradient)
 	{
         float r = color.r / 255.0f;
@@ -55,6 +55,9 @@ namespace CFrame {
             x, y ,              r, g, b, a,        0.0f, 1.0f,          rg, gg, bg, ag
         };
 
+        float centerX = x + (w / 2);
+        float centerY = y - (h / 2);
+
         /*Indecies to draw a rectangle*/
         unsigned int indecies[] = { 0, 1, 2, 2, 3, 0 };
 
@@ -86,9 +89,14 @@ namespace CFrame {
         shader->SetUniformMat4f("u_MVP", proj);
         shader->SetUniform2f("u_RectMin", x, y);  
         shader->SetUniform2f("u_RectMax", x + w, y + h);      
-        shader->SetUniform1f("u_Radius", float(radius));
+        shader->SetUniform1f("u_BottomRight", float(radius.bottomRight));
+        shader->SetUniform1f("u_BottomLeft", float(radius.bottomLeft));
+        shader->SetUniform1f("u_TopRight", float(radius.topRight));
+        shader->SetUniform1f("u_TopLeft", float(radius.topLeft));
         shader->SetUniform1f("u_Time", time);
         shader->SetUniform1f("u_Speed", speed);
+        //shader->SetUniform1f("u_Angle", angle);
+        //shader->SetUniform2f("u_Center", centerX, centerY);
         shader->SetUniform1f("u_BorderThickness", border); // This is currently drawn inside the shape
         shader->SetUniform4f("u_BorderColor1", rb, gb, bb, ab);
         shader->SetUniform4f("u_BorderColor2", rgb, ggb, bgb, agb);
