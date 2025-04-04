@@ -38,6 +38,7 @@ project "CFrame"
 	{
 		"%{prj.name}/vendor/spdlog/include",
 		"%{prj.name}/vendor/glm/glm",
+		"%{prj.name}/vendor/stb",
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.SDL3}"
 	}
@@ -54,8 +55,7 @@ project "CFrame"
 
 		defines
 		{
-			"CF_PLATFORM_WINDOWS",
-			"CF_BUILD_DLL"
+			"CF_PLATFORM_WINDOWS"
 		}
 
 
@@ -95,6 +95,7 @@ project "SandBox"
 		"CFrame/vendor/spdlog/include",
 		"CFrame/src",
 		"%{prj.name}/vendor/glm/glm",
+		"CFrame/vendor/stb",
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.SDL3}"
 	}

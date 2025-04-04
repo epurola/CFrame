@@ -61,6 +61,7 @@ namespace CFrame {
 
 	void UIElement::SetAngle(float angle)
 	{
+		properties.angle = angle;
 	}
 
 	void UIElement::SetBorder(float border)
@@ -78,6 +79,11 @@ namespace CFrame {
 	{
 		this->properties.borderColor1 = color1;
 		this->properties.borderColor2 = color2;
+	}
+
+	void UIElement::SetOpacity(float opacity)
+	{
+		properties.opacity = opacity;
 	}
 
 	void UIElement::SetColor(Color color)

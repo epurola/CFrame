@@ -1,9 +1,11 @@
 #pragma once
 #include <vector>
+#include <cmath>
 #include "../Core.h"
 #include "../Renderer/Renderer.h"
 #include "../CFrameEvent/CFrameEvent.h"
 #include "Color.h"
+
 
 
 namespace CFrame 
@@ -33,9 +35,7 @@ namespace CFrame
         float scaleX = 1;
         float scaleY = 1;
         float angle = 0;
-        float centerX;
-        float centerY;
-
+        float opacity = 1;
     };
 
     struct AnimationProperties {
@@ -78,6 +78,7 @@ namespace CFrame
         void SetBorder(float border);
         void SetBorderColor(Color color1);
         void SetBorderGradient(Color color1, Color color2);
+        void SetOpacity(float opacity);
         /// Sets the color of the UI element.
         /// @param color.
         /// The format is {r,g,b,a}. You can set a custom color using this format.

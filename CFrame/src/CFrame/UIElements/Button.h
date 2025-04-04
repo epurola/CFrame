@@ -3,7 +3,6 @@
 #include <functional>
 #include "UIElement.h"
 #include <memory> 
-
 #include "../Animator/Animator.h"
 
 namespace CFrame 
@@ -36,5 +35,6 @@ namespace CFrame
         std::string text;
         std::unique_ptr<Animator> animator;
         bool hovering = false;
+        /*"C:\Users\eelip\Downloads\arial\ARIAL.TTF"*/
     };
 }

@@ -69,6 +69,7 @@ public:
 						button45->SetOnHover([button45]() {
 							button45->SetColor({ 100, 100, 100, 255 });
 						});
+						
 
 		sideBar->AddChild(button);
 		sideBar->AddChild(button1);
@@ -124,6 +125,7 @@ public:
 							button8->SetBorderGradient(Color::Cyan, Color::Red);
 							button8->AnimateGradient(3.0);
 						});
+						button8->SetOpacity(0.5);
 		CFrame::Button* button9 = new CFrame::Button(-1, 75);
 		                button9->SetColor(Color::DarkGray);
 						button9->SetOnLeave([button9]() { 
@@ -134,6 +136,7 @@ public:
 							button9->SetBorderGradient(Color::Cyan, Color::Red);
 							button9->AnimateGradient(3.0);
 						});
+						button9->SetOpacity(0.5);
 	  
       CFrame::Button* button15 = new CFrame::Button(-1, 3);
 	                  button15->SetColor(Color::DarkGray);
@@ -152,6 +155,7 @@ public:
 		friendList->SetPadding(15);
 		friendList->SetRadius(20, 0, 0, 0);
 		friendList->SetColor(Color::Gray);
+		friendList->SetDragToResize(true);
 
 		CFrame::Button* button10 = new CFrame::Button(50, 50);
 		                button10->SetColor(Color::Gray);

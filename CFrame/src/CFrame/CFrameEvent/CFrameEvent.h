@@ -16,6 +16,7 @@ namespace CFrame
 		MouseMoved,
 		MouseButtonDown,
 		MouseButtonReleased,
+		MouseDragged,
 		WindowResized,
 		WindowClosed
 	};
@@ -113,6 +114,25 @@ namespace CFrame
 		CFrameEventType GetEventType() const override { return CFrameEventType::MouseButtonDown; }
 	private:
 		float mouseX, mouseY;
+	};
+
+	/*Mouse Dragged event*/
+	class CFRAME_API MouseDraggedEvent : public CFrameEvent
+	{
+	public:
+		MouseDraggedEvent(float startX, float startY, float currentX, float currentY)
+			: startX(startX), startY(startY), currentX(currentX), currentY(currentY) {
+		}
+
+		inline float GetStartX() const { return startX; }
+		inline float GetStartY() const { return startY; }
+		inline float GetCurrentX() const { return currentX; }
+		inline float GetCurrentY() const { return currentY; }
+
+		CFrameEventType GetEventType() const override { return CFrameEventType::MouseDragged; }
+	private:
+		float startX, startY;
+		float currentX, currentY;
 	};
 
 	/*Event dispatcher */

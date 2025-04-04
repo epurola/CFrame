@@ -55,9 +55,6 @@ namespace CFrame {
             x, y ,              r, g, b, a,        0.0f, 1.0f,          rg, gg, bg, ag
         };
 
-        float centerX = x + (w / 2);
-        float centerY = y - (h / 2);
-
         /*Indecies to draw a rectangle*/
         unsigned int indecies[] = { 0, 1, 2, 2, 3, 0 };
 
@@ -82,8 +79,10 @@ namespace CFrame {
         glm::mat4 proj = glm::ortho(0.0f, float(windowWidth), // Left, Right
                                     float(windowHeight), 0.0f, // Bottom, Top
                                      -1.0f, 1.0f); // Near, Far
+        float zIndex = 0;
         //Bind the shader and set uniforms
         shader->Bind();
+        shader->SetUniform1f("u_ZIndex", zIndex);
         shader->SetUniform4f("u_Color", r, g, b, a);
         shader->SetUniform4f("u_Color2", rg, gg, bg, ag);
         shader->SetUniformMat4f("u_MVP", proj);

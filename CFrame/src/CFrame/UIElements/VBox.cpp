@@ -8,6 +8,7 @@ namespace CFrame
     {
         isHeightResizable = (h == -1); 
         isWidthResizable = (w == -1);
+        dragToResize = false;
     }
 
     VBox::~VBox()
@@ -36,6 +37,16 @@ namespace CFrame
             if (event.handled)  return; 
 
             child->OnEvent(event);
+        }
+        if (event.GetEventType() == CFrameEventType::MouseDragged ) {
+            auto* mouseEvent = dynamic_cast<MouseDraggedEvent*>(&event);
+            if (mouseEvent->GetStartX() > x + (width - 10) && mouseEvent->GetStartX() < x + width) {
+                CF_CORE_INFO("RESIZE! {0}" , width);
+                if (dragToResize) {
+                    SetWidth(width + (mouseEvent->GetCurrentX() - mouseEvent->GetStartX()));
+                    //toDo: use a different flag so the container does not divide equally
+                }
+            }
         }
     }
 

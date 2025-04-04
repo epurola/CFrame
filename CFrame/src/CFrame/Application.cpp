@@ -31,6 +31,8 @@ Application::Application(int width, int height)
 	eventDispatcher->AddListener(CFrameEventType::MouseMoved,  
 		[this](CFrameEvent& event) { OnEvent(event); });  
 
+	eventDispatcher->AddListener(CFrameEventType::MouseDragged,
+		[this](CFrameEvent& event) { OnEvent(event); });
 }  
 
 Application::~Application()   
@@ -56,16 +58,18 @@ void Application::OnEvent(CFrameEvent& e)
 		rootContainer->SetWidth(dynamic_cast<WindowResizedEvent&>(e).GetWidth());  
 		rootContainer->SetHeight(dynamic_cast<WindowResizedEvent&>(e).GetHeight());  
 
-		rootContainer->UpdateChildSizes(); //Elements must be added to root container 
+		rootContainer->UpdateChildSizes(); 
 		
 		e.handled = true;  
 	}  
 
 	for (auto& element : UIElements) {  
 		if (e.handled) { return; }  
-
-		element->OnEvent(e);  
+		element->OnEvent(e); 
 	}  
+	if (e.GetEventType() == CFrameEventType::MouseDragged) {
+		rootContainer->UpdateChildSizes();
+	 }
 }  
 
 void Application::addElement(UIElement* element)  
@@ -88,6 +92,7 @@ void Application::SetWindowSize(int width, int height)
 	/*Needs to be created after window->Create since there is no 
 	valid GL context before that*/
 	renderer = std::make_unique<Renderer>(*window);
+	
 
 	while (running) {  
 		auto start_time = std::chrono::steady_clock::now();  

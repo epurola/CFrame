@@ -1,5 +1,6 @@
 #include "Button.h"
 #include <cmath>
+#include "../Renderer/FontLoader.h"
 
 namespace CFrame 
 {
@@ -12,6 +13,9 @@ namespace CFrame
         isHeightResizable = (h == -1);
 		SetRadius(15,15,15,15);
         SetColor(Color::Gray);
+
+        FontLoader fontloader("C:/Users/eelip/Downloads/arial/ARIAL.TTF");
+        fontloader.LoadFont();
 	}
 
 	Button::~Button()
@@ -37,15 +41,15 @@ namespace CFrame
         int centeredY = y + (height - renderHeight) / 2;
         
 		renderer.DrawRectangle(centeredX, centeredY, renderWidth, renderHeight, 
-            properties.color1.toSDLColor(255), 
-            properties.color2.toSDLColor(255), 
+            properties.color1.toSDLColor(properties.opacity), 
+            properties.color2.toSDLColor(properties.opacity),
             0.0, 
             properties.radius, 
             animator->GetTime(), 
             animProperties.speed,
             GetBorder(),
-            properties.borderColor1.toSDLColor(255),
-            properties.borderColor2.toSDLColor(255));
+            properties.borderColor1.toSDLColor(1),
+            properties.borderColor2.toSDLColor(1));
 	}
 
     void Button::OnEvent(CFrameEvent& event)
