@@ -156,6 +156,7 @@ public:
 		friendList->SetRadius(20, 0, 0, 0);
 		friendList->SetColor(Color::Gray);
 		friendList->SetDragToResize(true);
+		friendList->SetMaxWidth(600);
 
 		CFrame::Button* button10 = new CFrame::Button(50, 50);
 		                button10->SetColor(Color::Gray);

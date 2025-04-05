@@ -12,6 +12,7 @@
 #include "Texture.h"
 #include "../UIElements/UIElement.h"
 #include <SDL3/SDL.h>
+#include "Fontloader.h"
 
 namespace CFrame {
 
@@ -33,5 +34,8 @@ namespace CFrame {
 		Window& window;
 		SDL_Texture* texture = NULL;
 		std::unique_ptr<Shader> shader;
+		unsigned char* glyph;
+		int width, height, xOffset, yOffset;
+		unsigned int glyphTexture;
 	};
 }

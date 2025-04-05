@@ -47,6 +47,9 @@ namespace CFrame {
 	void UIElement::SetWidth(int w)
 	{
 		this->width = w;
+		if (width > properties.maxWidth && properties.maxWidth != -1) {
+			width = properties.maxWidth;
+		}
 	}
 
 	void UIElement::SetX(int x)
@@ -84,6 +87,11 @@ namespace CFrame {
 	void UIElement::SetOpacity(float opacity)
 	{
 		properties.opacity = opacity;
+	}
+
+	void UIElement::SetMaxWidth(int maxWidth)
+	{
+		properties.maxWidth = maxWidth;
 	}
 
 	void UIElement::SetColor(Color color)

@@ -8,10 +8,13 @@ uniform float u_Angle;
 uniform vec2 u_Center;
 uniform float u_ZIndex;
 out vec4 fragPos;
+out vec2 v_TexCoord;
 void main()
 {
    gl_Position = u_MVP *  vec4(position.x, position.y, u_ZIndex, 1.0);
    fragPos = position;
+   v_TexCoord = texCoord;
+
 };
 
 
@@ -19,6 +22,7 @@ void main()
 #shader fragment
 #version 410 core
 out vec4 color;
+in vec2 v_TexCoord;
 uniform vec4 u_Color;
 uniform vec4 u_Color2;
 uniform vec4 u_BorderColor1;
@@ -35,6 +39,8 @@ uniform float u_BottomRight;
 uniform float u_BottomLeft;
 uniform float u_TopRight;
 uniform float u_TopLeft;
+uniform sampler2D u_Texture;
+
 
 in vec4 fragPos;
 

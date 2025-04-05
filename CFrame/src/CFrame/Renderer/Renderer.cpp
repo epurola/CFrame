@@ -3,12 +3,23 @@
 #include <filesystem>
 
 
+
 namespace CFrame {
 
 	Renderer::Renderer(Window& window)
         :window(window)
 	{
         shader = std::make_unique<Shader>("C:/dev/CFrame/CFrame/src/CFrame/res/shaders/basic.shader");
+        FontLoader fontloader("C:/Users/eelip/Downloads/arial/ARIAL.TTF");
+        fontloader.LoadFont();
+        glyph = fontloader.GetGlyphBitMap('A', 1.0f, 1.0f, width, height, xOffset, yOffset);
+        glGenTextures(1, &glyphTexture);
+        glBindTexture(GL_TEXTURE_2D, glyphTexture);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, width, height, 0, GL_RED, GL_UNSIGNED_BYTE, glyph);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	}
 
 	Renderer::~Renderer()
@@ -99,6 +110,7 @@ namespace CFrame {
         shader->SetUniform1f("u_BorderThickness", border); // This is currently drawn inside the shape
         shader->SetUniform4f("u_BorderColor1", rb, gb, bb, ab);
         shader->SetUniform4f("u_BorderColor2", rgb, ggb, bgb, agb);
+       // shader->SetUniform1i("u_Texture", 0);
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 

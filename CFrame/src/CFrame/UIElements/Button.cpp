@@ -2,6 +2,7 @@
 #include <cmath>
 #include "../Renderer/FontLoader.h"
 
+
 namespace CFrame 
 {
 	Button::Button(int x, int y, int w, int h, const std::string& text, 
@@ -13,9 +14,6 @@ namespace CFrame
         isHeightResizable = (h == -1);
 		SetRadius(15,15,15,15);
         SetColor(Color::Gray);
-
-        FontLoader fontloader("C:/Users/eelip/Downloads/arial/ARIAL.TTF");
-        fontloader.LoadFont();
 	}
 
 	Button::~Button()

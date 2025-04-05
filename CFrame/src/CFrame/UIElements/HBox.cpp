@@ -118,7 +118,7 @@ namespace CFrame {
         {
             UIElement* child = children[i];
 
-            xpos = xpos + child->GetProperties().marginLeft;
+            xpos = xpos + child->GetProperties().marginLeft; //Todo: Remove the need to constantly call GetProperties
             ypos = ypos + child->GetProperties().marginTop;
 
             child->SetX(xpos);
@@ -126,6 +126,9 @@ namespace CFrame {
 
             if (child->GetElementType() == ElementType::CONTAINER && child->IsWidthResizable())
             {
+                if (flexWidth > child->GetProperties().maxWidth) {
+                    flexWidth = child->GetProperties().maxWidth;
+                }
                 child->SetWidth(flexWidth);
                 child->SetHeight(height - (properties.padding * 2));
                 child->SetX(xpos);
