@@ -14,6 +14,7 @@ namespace CFrame
         isHeightResizable = (h == -1);
 		SetRadius(15,15,15,15);
         SetColor(Color::Gray);
+        //labelTexture =  std::make_unique<Label>(x, y, w ,h,  "Button", this);
 	}
 
 	Button::~Button()
@@ -48,6 +49,10 @@ namespace CFrame
             GetBorder(),
             properties.borderColor1.toSDLColor(1),
             properties.borderColor2.toSDLColor(1));
+
+        if (labelTexture) {
+            labelTexture->Render(renderer);
+        }
 	}
 
     void Button::OnEvent(CFrameEvent& event)

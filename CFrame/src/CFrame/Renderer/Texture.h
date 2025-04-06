@@ -16,6 +16,8 @@ namespace CFrame {
 
     public:
         Texture(const std::string& filePath);
+        Texture(unsigned char* buffer, int width, int height);
+        Texture();
         ~Texture();
 
         void Bind(unsigned int slot = 0);

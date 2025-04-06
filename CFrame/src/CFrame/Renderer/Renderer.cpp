@@ -13,13 +13,18 @@ namespace CFrame {
         FontLoader fontloader("C:/Users/eelip/Downloads/arial/ARIAL.TTF");
         fontloader.LoadFont();
         glyph = fontloader.GetGlyphBitMap('A', 1.0f, 1.0f, width, height, xOffset, yOffset);
-        glGenTextures(1, &glyphTexture);
-        glBindTexture(GL_TEXTURE_2D, glyphTexture);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, width, height, 0, GL_RED, GL_UNSIGNED_BYTE, glyph);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        CF_CORE_INFO("Width: {0}", width);
+        if (glyph) {
+            glGenTextures(1, &glyphTexture);
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, glyphTexture);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RED, GL_UNSIGNED_BYTE, glyph);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            
+        }
 	}
 
 	Renderer::~Renderer()
@@ -52,7 +57,7 @@ namespace CFrame {
         float bgb = borderGradient.b / 255.0f;
         float agb = borderGradient.a / 255.0f;
 
-        int windowWidth, windowHeight;
+        int windowWidth, windowHeight; //Todo: Not here
         SDL_GetWindowSize(window.GetWindow(), &windowWidth, &windowHeight);
         
 
@@ -60,10 +65,10 @@ namespace CFrame {
         float vertices[] = {
             /* x, y,        r, g, b, a         texture coordinates      Gradient color
             location = 0    location = 1       location = 2             location = 3*/
-            x, y + h,           r, g, b, a,        0.0f, 0.0f,          rg, gg, bg, ag,        // Top-left
-            x + w, y + h,       r, g, b, a,        1.0f, 0.0f,          rg, gg, bg, ag,       // Top-right
-            x + w, y ,          r, g, b, a,        1.0f, 1.0f,          rg, gg, bg, ag,       // Bottom-right
-            x, y ,              r, g, b, a,        0.0f, 1.0f,          rg, gg, bg, ag
+            x, y + h,           r, g, b, a,        0.0f, 1.0f,          rg, gg, bg, ag,        // Top-left
+            x + w, y + h,       r, g, b, a,        1.0f, 1.0f,          rg, gg, bg, ag,       // Top-right
+            x + w, y ,          r, g, b, a,        1.0f, 0.0f,          rg, gg, bg, ag,       // Bottom-right
+            x, y ,              r, g, b, a,        0.0f, 0.0f,          rg, gg, bg, ag
         };
 
         /*Indecies to draw a rectangle*/
@@ -110,7 +115,7 @@ namespace CFrame {
         shader->SetUniform1f("u_BorderThickness", border); // This is currently drawn inside the shape
         shader->SetUniform4f("u_BorderColor1", rb, gb, bb, ab);
         shader->SetUniform4f("u_BorderColor2", rgb, ggb, bgb, agb);
-       // shader->SetUniform1i("u_Texture", 0);
+        shader->SetUniform1i("u_Texture", 0);
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
@@ -118,5 +123,41 @@ namespace CFrame {
         vb.Unbind();
         shader->UnBind();
 	}
+
+    void Renderer::DrawTexture(float x, float y, float w, float h)
+    {
+        float vertices[] = {
+            /* x, y,           texture coordinates     
+            location = 0       location = 2     */       
+            x, y + h,              0.0f, 1.0f,              // Top-left
+            x + w, y + h,          1.0f, 1.0f,              // Top-right
+            x + w, y ,             1.0f, 0.0f,           // Bottom-right
+            x, y ,                 0.0f, 0.0f,        
+        };
+
+        unsigned int indecies[] = { 0, 1, 2, 2, 3, 0 };
+
+        VertexBuffer vb(vertices, 4 * 12 * sizeof(float));
+        IndexBuffer ib(indecies, 6);
+
+        VertexArray va;
+        VertexBufferLayout layout;
+        layout.Push<float>(2); // Position x, y
+        layout.Push<float>(2); // Texture coordinates
+      
+        va.AddBuffer(vb, layout);
+
+        int windowWidth, windowHeight;
+        SDL_GetWindowSize(window.GetWindow(), &windowWidth, &windowHeight);
+        glm::mat4 proj = glm::ortho(0.0f, float(windowWidth), // Left, Right
+            float(windowHeight), 0.0f, // Bottom, Top
+            -1.0f, 1.0f); // Near, Far
+
+        shader->SetUniform1i("u_Texture", 0);
+
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+
+    }
+    
 }
 

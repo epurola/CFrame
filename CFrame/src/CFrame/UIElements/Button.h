@@ -4,7 +4,7 @@
 #include "UIElement.h"
 #include <memory> 
 #include "../Animator/Animator.h"
-
+#include "Label.h"
 namespace CFrame 
 {
     class CFRAME_API Button : public UIElement 
@@ -35,5 +35,6 @@ namespace CFrame
         std::string text;
         std::unique_ptr<Animator> animator;
         bool hovering = false;
+        std::unique_ptr<Label> labelTexture;
     };
 }

@@ -30,9 +30,11 @@ namespace CFrame {
 			float angle, Radius radius, float time, float speed, float border,
 			SDL_Color borderColor, SDL_Color borderGradient);
 
+		void DrawTexture(float x, float y, float w, float h);
+		
+
 	private:
 		Window& window;
-		SDL_Texture* texture = NULL;
 		std::unique_ptr<Shader> shader;
 		unsigned char* glyph;
 		int width, height, xOffset, yOffset;

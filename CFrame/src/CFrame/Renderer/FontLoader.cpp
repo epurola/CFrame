@@ -45,7 +45,9 @@ namespace CFrame {
 
 		float scale_x = scaleX;
 		float scale_y = scaleY;
-		unsigned char* bitmap = stbtt_GetGlyphBitmap(&fontInfo, scale_x, scale_y, charCode, &width, &height, &xOffset, &yOffset);
+
+		int glyphIndex = stbtt_FindGlyphIndex(&fontInfo, charCode);
+		unsigned char* bitmap = stbtt_GetGlyphBitmap(&fontInfo, scale_x, scale_y, glyphIndex, &width, &height, &xOffset, &yOffset);
 
 		glyphCache[charCode] = bitmap;
 

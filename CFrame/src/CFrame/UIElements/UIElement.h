@@ -50,7 +50,8 @@ namespace CFrame
     enum ElementType
     {
         CONTAINER,
-        BUTTON
+        BUTTON,
+        LABEL
     };
 
     class CFRAME_API UIElement {

@@ -17,8 +17,6 @@ void main()
 
 };
 
-
-
 #shader fragment
 #version 410 core
 out vec4 color;
@@ -83,10 +81,13 @@ void main()
     vec4 gradientColor = mix(color1, color2, gradient);
     vec4 gradientBorderColor = mix(borderColor1, borderColor2, gradient);
 
+    float alpha = texture(u_Texture, v_TexCoord).r;
+    vec4 texColor = vec4(1.0, 1.0, 1.0, alpha);
+
     // If the distance is negative or zero, we're inside the box, color the fragment
      if (dist < -u_BorderThickness) {
         // Inside the shape
-        color = gradientColor;
+        color = mix(gradientColor, vec4(1.0, 1.0, 1.0, texColor.a), texColor.a);
     } else if (dist < u_BorderThickness) {
         // Border area
         color = gradientBorderColor;
