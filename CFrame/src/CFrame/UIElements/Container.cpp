@@ -38,11 +38,5 @@ namespace CFrame
 		this->xAlign = xAlign;
 		this->yAlign = yAlign;
 	}
-
-	void Container::SetDragToResize(bool b)
-	{
-		dragToResize = b;
-		isWidthResizable = false;
-	}
 }
 

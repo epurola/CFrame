@@ -21,30 +21,34 @@ namespace CFrame
 
     struct ElementProperties 
     {
-        int marginLeft = 0;
-        int marginRight = 0;
-        int marginTop = 0;
-        int marginBottom = 0;
-        int padding = 0;
+        int marginLeft     = 0;
+        int marginRight    = 0;
+        int marginTop      = 0;
+        int marginBottom   = 0;
+        int padding        = 0;
         Radius radius;
-        float border = 0;
+        float border       = 0;
+        float borderTop    = 0;
+        float borderBottom = 0;
+        float borderLeft   = 0;
+        float borderRight  = 0;
         Color borderColor1;
         Color borderColor2;
         Color color1;
         Color color2;
-        float scaleX = 1;
-        float scaleY = 1;
-        float angle = 0;
-        float opacity = 1;
-        int maxWidth = -1;
+        float scaleX       = 1;
+        float scaleY       = 1;
+        float angle        = 0;
+        float opacity      = 1;
+        int maxWidth       = -1;
     };
 
     struct AnimationProperties {
-        float animScaleX = 1.2;
-        float animScaleY = 1.2;
-        float duration = 1.0f;
-        bool isAnimatedElement = false;
-        float speed = 0;
+        float animScaleX        = 1.2;
+        float animScaleY        = 1.2;
+        float duration          = 1.0f;
+        bool isAnimatedElement  = false;
+        float speed             = 0;
     };
 
     enum ElementType
@@ -61,11 +65,8 @@ namespace CFrame
         virtual ~UIElement() = default;
 
         virtual void Render(Renderer& renderer) = 0;
-
         virtual void UpdateChildSizes() {}
-
         virtual void OnEvent(CFrameEvent& event) = 0;
-
         virtual ElementType GetElementType() const = 0;
 
         void SetMargin(int marginleft, int marginRight, int marginTop, int marginBottom);
@@ -88,23 +89,31 @@ namespace CFrame
         void SetColor(Color color);
         void SetGradient(Color color1, Color color2);
         void SetScale(float scaleX, float scaleY);
+        void SetVisibility(bool visibility);
+        void SetDragToResize(bool b);
+        void SetWidthResizable(bool is) { isWidthResizable = is; };
+
         void AnimateScale(float scaleX, float scaleY);
         void AnimateGradient(float speed);
 
-        inline int GetX() const { return x; }
-        inline int GetY() const { return y; }
-        inline float GetAngle() const { return properties.angle; }
-        inline int GetWidth() const { return width; }
-        inline int GetHeight() const { return height; }
-        inline float GetBorder() const { return properties.border; }
-        inline bool IsWidthResizable() const { return isWidthResizable; }
-        inline bool IsHeightResizable() const { return isHeightResizable; }
-        inline bool IsElementWithAnimation() const { return animProperties.isAnimatedElement; }
-        inline ElementProperties& GetProperties() { return properties; };
-        inline AnimationProperties& GetAnimProperties() { return animProperties; };
+        int    GetX()       const  { return x; }
+        int    GetY()       const  { return y; }
+        float  GetAngle()   const  { return properties.angle; }
+        int    GetWidth()   const  { return width; }
+        int    GetHeight()  const  { return height; }
+        float  GetBorder()  const  { return properties.border; }
 
-        void SetOnHover(std::function<void()> onHover);
-        void SetOnLeave(std::function<void()> onLeave);
+        bool  IsWidthResizable()        const  { return isWidthResizable; }
+        bool  IsHeightResizable()       const  { return isHeightResizable; }
+        bool  IsVisible()               const  { return isVisible; }
+        bool  IsDraggable()             const  { return dragToResize; };
+        bool  IsElementWithAnimation()  const  { return animProperties.isAnimatedElement; }
+
+        ElementProperties&    GetProperties()      { return properties; };
+        AnimationProperties&  GetAnimProperties()  { return animProperties; };
+
+        void  SetOnHover(std::function<void()> onHover);
+        void  SetOnLeave(std::function<void()> onLeave);
         
 
     protected:
@@ -112,6 +121,8 @@ namespace CFrame
         int x, y, width, height;
         bool isWidthResizable;
         bool isHeightResizable;
+        bool isVisible;
+        bool dragToResize;
         ElementProperties properties;
         AnimationProperties animProperties;
      

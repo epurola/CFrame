@@ -23,8 +23,8 @@ namespace CFrame {
         void Bind(unsigned int slot = 0);
         void UnBind();
 
-        inline int getWidth() const { return width; };
-        inline int getHeight() const { return height; };
+        inline int GetWidth()  const { return width; };
+        inline int GetHeight() const { return height; };
     };
 
 }

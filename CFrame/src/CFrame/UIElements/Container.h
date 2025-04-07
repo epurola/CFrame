@@ -20,7 +20,6 @@ namespace CFrame {
 		void Render(Renderer& renderer) override;
 
 		void SetAlignment(AlignItems xAlign, AlignItems yAlign );
-		void SetDragToResize(bool b);
 
 		inline int GetSpacing() const { return spacing; }
 		inline ElementType GetElementType() const override { return ElementType::CONTAINER; };
@@ -28,7 +27,6 @@ namespace CFrame {
 
 	protected:
 		int spacing = 0;
-		bool dragToResize;
 		AlignItems xAlign, yAlign;
 	};
 

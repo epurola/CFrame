@@ -22,6 +22,7 @@ namespace CFrame
         void Render(Renderer& renderer) override;
         void CreateTexture(const std::string& text, int width, int height);
         void OnEvent(CFrameEvent& event) override;
+        inline Texture* GetTexture() { return sdfTexture; };
         inline ElementType GetElementType() const override { return ElementType::LABEL; };
 
   
@@ -29,6 +30,7 @@ namespace CFrame
     private:
         //Color color;
         std::string text;
-        Texture sdfTexture;
+        Texture* sdfTexture = nullptr;
+        unsigned char* textTexture;
     };
 }

@@ -3,6 +3,7 @@
 namespace CFrame 
 {
 	Label::Label(int x, int y, int w, int h, const std::string& text, UIElement* parent)
+		:UIElement(x,y,w,h,nullptr)
 	{
 		CreateTexture(text, w, h);
 	}
@@ -13,14 +14,20 @@ namespace CFrame
 	}
 	void Label::Render(Renderer& renderer)
 	{
-		renderer.DrawTexture(100, 100, 100, 100);
+		if (sdfTexture == nullptr) {
+			sdfTexture = new Texture(textTexture, width, height);
+		}
 	}
+
 	void Label::CreateTexture(const std::string& text, int w, int h)
 	{
+		if (w == -1 || h == -1) {
+			return;
+		}
 		FontLoader fontloader("C:/Users/eelip/Downloads/arial/ARIAL.TTF");
 		fontloader.LoadFont();
-
-		unsigned char* textTexture = new unsigned char[w * h];
+		
+	    textTexture = new unsigned char[w * h];
 		memset(textTexture, 0, w * h);
 
 		int penX = 0, penY = 0;
@@ -42,7 +49,6 @@ namespace CFrame
 			}
 			penX += width;
 		}
-		//sdfTexture = Texture(textTexture, w, h);
 	    
 	}
 	void Label::OnEvent(CFrameEvent& event)

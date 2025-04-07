@@ -18,13 +18,15 @@ namespace CFrame
 
     void VBox::Render(Renderer& renderer)
     {
+        if (!IsVisible()) return;
+
         renderer.DrawRectangle(x, y, width, height, 
-            properties.color1.toSDLColor(255), 
-            properties.color1.toSDLColor(255), 
+            properties.color1.toSDLColor(properties.opacity),
+            properties.color1.toSDLColor(properties.opacity),
             0.0, 
             properties.radius, 1.0f, 1.0f,0.0, 
             properties.color1.toSDLColor(255),
-            properties.color1.toSDLColor(255));
+            properties.color1.toSDLColor(255), nullptr);
 
         for (auto& child : children) {
             child->Render(renderer);
@@ -33,6 +35,8 @@ namespace CFrame
 
     void VBox::OnEvent(CFrameEvent& event)
     {
+        if (!IsVisible()) return;
+
         for (auto& child : children) {
             if (event.handled)  return; 
 
@@ -40,11 +44,11 @@ namespace CFrame
         }
         if (event.GetEventType() == CFrameEventType::MouseDragged ) {
             auto* mouseEvent = dynamic_cast<MouseDraggedEvent*>(&event);
-            if (mouseEvent->GetStartX() > x + (width - 10) && mouseEvent->GetStartX() < x + width) {
-                CF_CORE_INFO("RESIZE! {0}" , width);
+            if (mouseEvent->GetStartX() > x + (width - 15) && mouseEvent->GetStartX() < x + width) {
                 if (dragToResize) {
                     SetWidth(width + (mouseEvent->GetCurrentX() - mouseEvent->GetStartX()));
                     //toDo: use a different flag so the container does not divide equally
+                    CF_CORE_INFO("RESIZE! {0}", width + (mouseEvent->GetCurrentX() - mouseEvent->GetStartX()));
                 }
             }
         }
@@ -66,6 +70,9 @@ namespace CFrame
 
         for (auto* child : children)
         {
+            if (!child->IsVisible()) {
+                continue;
+            }
             if (child->IsHeightResizable())
             {
                 flexibleCount++;
@@ -133,7 +140,9 @@ namespace CFrame
         for (size_t i = 0; i < children.size(); i++)
         {
             UIElement* child = children[i];
-
+            if (!child->IsVisible()) {
+                continue;
+            }
            
             xpos = xpos + child->GetProperties().marginLeft;
             ypos = ypos + child->GetProperties().marginTop;

@@ -43,7 +43,7 @@ namespace CFrame {
 
     private:
         unsigned int CompileShader(unsigned int type, const std::string& source);
-        int GetuniformLocation(const std::string& name);
+        int          GetuniformLocation(const std::string& name);
         unsigned int CreateShaderProgram(const std::string& vertexShaderSource,
             const std::string& fragmentShaderSource);
 

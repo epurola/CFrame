@@ -122,6 +122,11 @@ namespace CFrame {
 		this->properties.scaleY = scaleY;
 	}
 
+	void UIElement::SetVisibility(bool visibility)
+	{
+		this->isVisible = visibility;
+	}
+
 	void UIElement::AnimateScale(float scaleX, float scaleY)
 	{
 		this->properties.scaleX = scaleX;
@@ -131,6 +136,11 @@ namespace CFrame {
 	void UIElement::AnimateGradient(float speed)
 	{
 		this->animProperties.speed = speed;
+	}
+
+	void UIElement::SetDragToResize(bool b)
+	{
+		dragToResize = b;
 	}
 
 

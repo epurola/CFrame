@@ -16,15 +16,18 @@ namespace CFrame {
 
 	void HBox::Render(Renderer& renderer)
 	{
+        if (!IsVisible()) return;
+
 		renderer.DrawRectangle(x, y, width, 
             height, properties.color1.toSDLColor(255), 
             properties.color1.toSDLColor(255),0.0, 
             properties.radius, 
             1.0f, 1.0f, 0.0,
             properties.color1.toSDLColor(255),
-            properties.color1.toSDLColor(255));
+            properties.color1.toSDLColor(255), nullptr);
 
 		for (auto& child : children) {
+            
 			child->Render(renderer);
 		}
 	}
@@ -45,6 +48,9 @@ namespace CFrame {
 
         for (auto* child : children)
         {
+            if (!child->IsVisible()) {
+                continue;
+            }
             if (child->IsWidthResizable())
             {
                 flexibleCount++;
@@ -117,16 +123,19 @@ namespace CFrame {
         for (size_t i = 0; i < children.size(); i++)
         {
             UIElement* child = children[i];
+            if (!child->IsVisible()) {
+                continue;
+            }
 
             xpos = xpos + child->GetProperties().marginLeft; //Todo: Remove the need to constantly call GetProperties
             ypos = ypos + child->GetProperties().marginTop;
 
             child->SetX(xpos);
             child->SetY(ypos);
-
-            if (child->GetElementType() == ElementType::CONTAINER && child->IsWidthResizable())
+            
+            if (child->GetElementType() == ElementType::CONTAINER && child->IsWidthResizable())//todo: Fix isDraggable 
             {
-                if (flexWidth > child->GetProperties().maxWidth) {
+                if (flexWidth > child->GetProperties().maxWidth && child->GetProperties().maxWidth > 0) {
                     flexWidth = child->GetProperties().maxWidth;
                 }
                 child->SetWidth(flexWidth);
@@ -135,6 +144,7 @@ namespace CFrame {
                 child->SetY(ypos);
                 child->UpdateChildSizes();
             }
+          
 
             if (child->GetElementType() == ElementType::CONTAINER && !child->IsWidthResizable())
             {

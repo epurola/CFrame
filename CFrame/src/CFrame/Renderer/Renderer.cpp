@@ -10,21 +10,6 @@ namespace CFrame {
         :window(window)
 	{
         shader = std::make_unique<Shader>("C:/dev/CFrame/CFrame/src/CFrame/res/shaders/basic.shader");
-        FontLoader fontloader("C:/Users/eelip/Downloads/arial/ARIAL.TTF");
-        fontloader.LoadFont();
-        glyph = fontloader.GetGlyphBitMap('A', 1.0f, 1.0f, width, height, xOffset, yOffset);
-        CF_CORE_INFO("Width: {0}", width);
-        if (glyph) {
-            glGenTextures(1, &glyphTexture);
-            glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, glyphTexture);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RED, GL_UNSIGNED_BYTE, glyph);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-            
-        }
 	}
 
 	Renderer::~Renderer()
@@ -35,8 +20,13 @@ namespace CFrame {
     //ToDo: Remove dependecy on SDL color here
 	void Renderer::DrawRectangle(float x, float y, float w, float h, 
         SDL_Color color,SDL_Color gradient, float angle, Radius radius, 
-        float time, float speed, float border, SDL_Color borderColor, SDL_Color borderGradient)
+        float time, float speed, float border, SDL_Color borderColor, SDL_Color borderGradient,
+        Texture* texture)
 	{
+        if (texture != nullptr) {
+            texture->Bind();
+        }
+
         float r = color.r / 255.0f;
         float g = color.g / 255.0f;
         float b = color.b / 255.0f;
@@ -122,42 +112,10 @@ namespace CFrame {
         va.UnBind();
         vb.Unbind();
         shader->UnBind();
+        texture->UnBind();
 	}
 
-    void Renderer::DrawTexture(float x, float y, float w, float h)
-    {
-        float vertices[] = {
-            /* x, y,           texture coordinates     
-            location = 0       location = 2     */       
-            x, y + h,              0.0f, 1.0f,              // Top-left
-            x + w, y + h,          1.0f, 1.0f,              // Top-right
-            x + w, y ,             1.0f, 0.0f,           // Bottom-right
-            x, y ,                 0.0f, 0.0f,        
-        };
-
-        unsigned int indecies[] = { 0, 1, 2, 2, 3, 0 };
-
-        VertexBuffer vb(vertices, 4 * 12 * sizeof(float));
-        IndexBuffer ib(indecies, 6);
-
-        VertexArray va;
-        VertexBufferLayout layout;
-        layout.Push<float>(2); // Position x, y
-        layout.Push<float>(2); // Texture coordinates
-      
-        va.AddBuffer(vb, layout);
-
-        int windowWidth, windowHeight;
-        SDL_GetWindowSize(window.GetWindow(), &windowWidth, &windowHeight);
-        glm::mat4 proj = glm::ortho(0.0f, float(windowWidth), // Left, Right
-            float(windowHeight), 0.0f, // Bottom, Top
-            -1.0f, 1.0f); // Near, Far
-
-        shader->SetUniform1i("u_Texture", 0);
-
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
-
-    }
+ 
     
 }
 

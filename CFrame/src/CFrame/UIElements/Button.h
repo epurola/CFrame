@@ -35,6 +35,6 @@ namespace CFrame
         std::string text;
         std::unique_ptr<Animator> animator;
         bool hovering = false;
-        std::unique_ptr<Label> labelTexture;
+        std::unique_ptr<Texture> labelTexture;
     };
 }

@@ -63,9 +63,16 @@ public:
 						});
 	    CFrame::Button* button45 = new CFrame::Button(90, 90);
 		                button45->SetRadius(20,20,20,20);
-						button45->SetOnLeave([button45]() {
+						button45->SetOnLeave([button45, friendList,content]() {
 							button45->SetColor(Color::Gray);
+							
 						});
+						button45->SetOnClick([friendList, content]() {
+							bool currentVisibility = friendList->IsVisible();
+							friendList->SetVisibility(!currentVisibility);
+							content->UpdateChildSizes();
+							CF_CORE_WARN("Visibility false");
+							});
 						button45->SetOnHover([button45]() {
 							button45->SetColor({ 100, 100, 100, 255 });
 						});
@@ -128,8 +135,9 @@ public:
 						button8->SetOpacity(0.5);
 		CFrame::Button* button9 = new CFrame::Button(-1, 75);
 		                button9->SetColor(Color::DarkGray);
-						button9->SetOnLeave([button9]() { 
+						button9->SetOnLeave([button9, friendList]() { 
 							button9->SetBorder(0.0f);
+							
 						});
 						button9->SetOnHover([button9]() {
 							button9->SetBorder(1.5f);
@@ -175,6 +183,12 @@ public:
 		header->SetColor(Color::DarkGray);
 
 		messageBox->SetColor(Color::LightGray);
+		CFrame::Button* button16 = new CFrame::Button(300, 300);
+		button16->SetColor(Color::Gold);
+		button16->SetMargin(20, 20, 20, 20);
+		messageBox->AddChild(button16);
+		
+		
 		
 		rootContainer->SetColor(Color::White);
 		rootContainer->AddChild(vbox);
