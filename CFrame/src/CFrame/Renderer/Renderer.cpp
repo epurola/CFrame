@@ -19,47 +19,56 @@ namespace CFrame {
 
     //ToDo: Remove dependecy on SDL color here
 	void Renderer::DrawRectangle(float x, float y, float w, float h, 
-        SDL_Color color,SDL_Color gradient, float angle, Radius radius, 
-        float time, float speed, float border, SDL_Color borderColor, SDL_Color borderGradient,
+        ElementProperties p, float speed, float time,
         Texture* texture)
 	{
         if (texture != nullptr) {
             texture->Bind();
         }
 
-        float r = color.r / 255.0f;
-        float g = color.g / 255.0f;
-        float b = color.b / 255.0f;
-        float a = color.a / 255.0f;
+        SDL_Color c = p.color1.toSDLColor(p.opacity);
+        SDL_Color c1 = p.color1.toSDLColor(p.opacity);
 
-        float rg = gradient.r / 255.0f;
-        float gg = gradient.g / 255.0f;
-        float bg = gradient.b / 255.0f;
-        float ag = gradient.a / 255.0f;
+        float r = c.r / 255.0f;
+        float g = c.g / 255.0f;
+        float b = c.b / 255.0f;
+        float a = c.a / 255.0f;
 
-        float rb = borderColor.r / 255.0f;
-        float gb = borderColor.g / 255.0f;
-        float bb = borderColor.b / 255.0f;
-        float ab = borderColor.a / 255.0f;
+        float rg = c1.r / 255.0f;
+        float gg = c1.g / 255.0f;
+        float bg = c1.b / 255.0f;
+        float ag = c1.a / 255.0f;
 
-        float rgb = borderGradient.r / 255.0f;
-        float ggb = borderGradient.g / 255.0f;
-        float bgb = borderGradient.b / 255.0f;
-        float agb = borderGradient.a / 255.0f;
+        float rb = p.borderColor1.r / 255.0f;
+        float gb = p.borderColor1.g / 255.0f;
+        float bb = p.borderColor1.b / 255.0f;
+        float ab = p.borderColor1.a / 255.0f;
+
+        float rgb = p.borderColor2.r / 255.0f;
+        float ggb = p.borderColor2.g / 255.0f;
+        float bgb = p.borderColor2.b / 255.0f;
+        float agb = p.borderColor2.a / 255.0f;
 
         int windowWidth, windowHeight; //Todo: Not here
         SDL_GetWindowSize(window.GetWindow(), &windowWidth, &windowHeight);
         
+        float ro = p.borderRight;
+        float l = p.borderLeft;
+        float u = p.borderTop;
+        float bo = p.borderBottom;
 
         /*Vertices of the rectangle. Calculates the top left as the origin*/
         float vertices[] = {
             /* x, y,        r, g, b, a         texture coordinates      Gradient color
             location = 0    location = 1       location = 2             location = 3*/
-            x, y + h,           r, g, b, a,        0.0f, 1.0f,          rg, gg, bg, ag,        // Top-left
-            x + w, y + h,       r, g, b, a,        1.0f, 1.0f,          rg, gg, bg, ag,       // Top-right
-            x + w, y ,          r, g, b, a,        1.0f, 0.0f,          rg, gg, bg, ag,       // Bottom-right
-            x, y ,              r, g, b, a,        0.0f, 0.0f,          rg, gg, bg, ag
+           x , y + h ,       r, g, b, a,        0.0f, 1.0f,          rg, gg, bg, ag,        // Top-left
+           x + w, y + h,     r, g, b, a,        1.0f, 1.0f,          rg, gg, bg, ag,       // Top-right
+           x + w , y ,       r, g, b, a,        1.0f, 0.0f,          rg, gg, bg, ag,       // Bottom-right
+           x, y,             r, g, b, a,        0.0f, 0.0f,          rg, gg, bg, ag
         };
+
+           
+        
 
         /*Indecies to draw a rectangle*/
         unsigned int indecies[] = { 0, 1, 2, 2, 3, 0 };
@@ -85,24 +94,28 @@ namespace CFrame {
         glm::mat4 proj = glm::ortho(0.0f, float(windowWidth), // Left, Right
                                     float(windowHeight), 0.0f, // Bottom, Top
                                      -1.0f, 1.0f); // Near, Far
-        float zIndex = 0;
+        
         //Bind the shader and set uniforms
         shader->Bind();
-        shader->SetUniform1f("u_ZIndex", zIndex);
+        shader->SetUniform1f("u_ZIndex", p.zIndex);
         shader->SetUniform4f("u_Color", r, g, b, a);
         shader->SetUniform4f("u_Color2", rg, gg, bg, ag);
         shader->SetUniformMat4f("u_MVP", proj);
         shader->SetUniform2f("u_RectMin", x, y);  
         shader->SetUniform2f("u_RectMax", x + w, y + h);      
-        shader->SetUniform1f("u_BottomRight", float(radius.bottomRight));
-        shader->SetUniform1f("u_BottomLeft", float(radius.bottomLeft));
-        shader->SetUniform1f("u_TopRight", float(radius.topRight));
-        shader->SetUniform1f("u_TopLeft", float(radius.topLeft));
+        shader->SetUniform1f("u_BottomRight", float(p.radius.bottomRight));
+        shader->SetUniform1f("u_BottomLeft", float(p.radius.bottomLeft));
+        shader->SetUniform1f("u_TopRight", float(p.radius.topRight));
+        shader->SetUniform1f("u_TopLeft", float(p.radius.topLeft));
         shader->SetUniform1f("u_Time", time);
         shader->SetUniform1f("u_Speed", speed);
         //shader->SetUniform1f("u_Angle", angle);
         //shader->SetUniform2f("u_Center", centerX, centerY);
-        shader->SetUniform1f("u_BorderThickness", border); // This is currently drawn inside the shape
+        //shader->SetUniform1f("u_BorderThickness", p.border ); // This is currently drawn inside the shape
+        shader->SetUniform1f("u_BorderTop", p.borderTop);
+        shader->SetUniform1f("u_BorderBottom", p.borderBottom);
+        shader->SetUniform1f("u_BorderLeft", p.borderLeft);
+        shader->SetUniform1f("u_BorderRight", p.borderRight);
         shader->SetUniform4f("u_BorderColor1", rb, gb, bb, ab);
         shader->SetUniform4f("u_BorderColor2", rgb, ggb, bgb, agb);
         shader->SetUniform1i("u_Texture", 0);

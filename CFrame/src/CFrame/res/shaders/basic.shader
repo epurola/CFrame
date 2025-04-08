@@ -37,8 +37,11 @@ uniform float u_BottomRight;
 uniform float u_BottomLeft;
 uniform float u_TopRight;
 uniform float u_TopLeft;
+uniform float u_BorderRight;
+uniform float u_BorderLeft;
+uniform float u_BorderTop;
+uniform float u_BorderBottom;
 uniform sampler2D u_Texture;
-
 
 in vec4 fragPos;
 
@@ -54,6 +57,20 @@ float sdRoundedBox(in vec2 p, in vec2 b, in vec4 r)
     return min(max(q.x, q.y), 0.0) + length(max(q, 0.0)) - r.x;
 }
 
+ float selectBorderThickness(vec2 p, vec2 b) {
+    float dx = abs(p.x) - b.x;
+    float dy = abs(p.y) - b.y;
+
+    // Determine which edge we're nearest
+    if (dx > dy) {
+        // Closer to LEFT or RIGHT
+        return (p.x > 0.0) ?  u_BorderLeft : u_BorderRight;
+    } else {
+        // Closer to TOP or BOTTOM
+        return (p.y > 0.0) ? u_BorderBottom: u_BorderTop;
+    }
+}
+
 void main()
 {
     // Transform the coordinate space  relative to the rect ( Center of the rect = 0,0)
@@ -62,10 +79,12 @@ void main()
     // Half the width and the height to define rect bound in the new coord system ( Center of the rect = 0,0)
     vec2 b = (u_RectMax - u_RectMin) * 0.5;
     // Radius for all corners
-    vec4 r = vec4(u_BottomRight, u_TopRight, u_BottomLeft, u_TopLeft); //Bottom right, top right, bottom left, top left
+    vec4 r = vec4(u_BottomRight , u_TopRight, u_BottomLeft, u_TopLeft); //Bottom right, top right, bottom left, top left
 
     // Compute signed distance from the fragment to the rounded box
-    float dist = sdRoundedBox(p, b, r) + u_BorderThickness;
+
+    float thickness = selectBorderThickness(p, b);
+    float dist = sdRoundedBox(p, b, r) + thickness ;
 
      // Normalize the coordinate for gradient effect 
     float gradient = (p.x + b.x + sin(u_Time * u_Speed) * b.x * 0.5) / (2.0 * b.x); // Horizontal gradient
@@ -76,7 +95,6 @@ void main()
     vec4 borderColor1 = u_BorderColor1;
     vec4 borderColor2 = u_BorderColor2;
 
-
     // Interpolate between the colors
     vec4 gradientColor = mix(color1, color2, gradient);
     vec4 gradientBorderColor = mix(borderColor1, borderColor2, gradient);
@@ -85,10 +103,10 @@ void main()
     vec4 texColor = vec4(1.0, 1.0, 1.0, alpha);
 
     // If the distance is negative or zero, we're inside the box, color the fragment
-     if (dist < -u_BorderThickness) {
+     if (dist < 0.0) {
         // Inside the shape
         color = mix(gradientColor, vec4(1.0, 1.0, 1.0, texColor.a), texColor.a);
-    } else if (dist < u_BorderThickness) {
+    } else if (dist <  thickness) {
         // Border area
         color = gradientBorderColor;
     } else {

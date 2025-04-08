@@ -41,6 +41,7 @@ namespace CFrame
         float angle        = 0;
         float opacity      = 1;
         int maxWidth       = -1;
+        float zIndex       = 0.0;
     };
 
     struct AnimationProperties {
@@ -79,10 +80,12 @@ namespace CFrame
         void SetY(int y);
         void SetAngle(float angle);
         void SetBorder(float border);
+        void SetBorder(float t, float b, float r, float l);
         void SetBorderColor(Color color1);
         void SetBorderGradient(Color color1, Color color2);
         void SetOpacity(float opacity);
         void SetMaxWidth(int maxWidth);
+        void SetZindex(float index);
         /// Sets the color of the UI element.
         /// @param color.
         /// The format is {r,g,b,a}. You can set a custom color using this format.

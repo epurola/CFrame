@@ -53,6 +53,7 @@ public:
 						button3->SetOnHover([button3]() {
 							button3->SetColor({ 100, 100, 100, 255 });
 						});
+						
 		CFrame::Button* button4 = new CFrame::Button(90, 90);
 		                button4->SetRadius(20,20,20,20);
 						button4->SetOnLeave([button4]() {
@@ -89,12 +90,14 @@ public:
 		sideBar->SetColor(Color::DarkGray);
 
 		CFrame::Button* button5 = new CFrame::Button(-1, 75);
-		                button5->SetColor(Color::DarkGray);
+		                button5->SetColor(Color::Gray);
 						button5->SetOnLeave([button5]() { 
 							button5->SetBorder(0.0f);
+							button5->SetScale(1.0f, 1.0f);
 						});
 						button5->SetOnHover([button5]() {
-							button5->SetBorder(1.5f);
+							button5->SetBorder(2.5f);
+							button5->SetScale(1.05f, 1.05f);
 						    button5->SetBorderGradient(Color::Cyan, Color::Red);
 						    button5->AnimateGradient(3.0);
 						});
@@ -103,68 +106,67 @@ public:
 							button5->StartAnimation();
 						});
 		CFrame::Button* button6  = new CFrame::Button(-1, 75);
-		                button6->SetColor(Color::DarkGray);
+		                button6->SetColor(Color::Gray);
 						button6->SetOnLeave([button6]() { 
 							button6->SetBorder(0.0f);
 						});
 						button6->SetOnHover([button6]() {
-							button6->SetBorder(1.5f);
+							button6->SetBorder(2.5f);
 							button6->SetBorderGradient(Color::Cyan, Color::Red);
 							button6->AnimateGradient(3.0);
 						});
 		CFrame::Button* button7  = new CFrame::Button(-1, 75);
-		                button7->SetColor(Color::DarkGray);
+		                button7->SetColor(Color::Gray);
 						button7->SetOnLeave([button7]() { 
 							button7->SetBorder(0.0f);
 						});
 						button7->SetOnHover([button7]() {
-							button7->SetBorder(1.5f);
+							button7->SetBorder(2.5f);
 							button7->SetBorderGradient(Color::Cyan, Color::Red);
 							button7->AnimateGradient(3.0);
 						});
 		CFrame::Button* button8  = new CFrame::Button(-1, 75);
-	                    button8->SetColor(Color::DarkGray); 
+	                    button8->SetColor(Color::Gray); 
 						button8->SetOnLeave([button8]() { 
 							button8->SetBorder(0.0f);
 							});
 						button8->SetOnHover([button8]() {
-							button8->SetBorder(1.5f);
+							button8->SetBorder(2.5f);
 							button8->SetBorderGradient(Color::Cyan, Color::Red);
 							button8->AnimateGradient(3.0);
 						});
 						button8->SetOpacity(0.5);
 		CFrame::Button* button9 = new CFrame::Button(-1, 75);
-		                button9->SetColor(Color::DarkGray);
+		                button9->SetColor(Color::Gray);
 						button9->SetOnLeave([button9, friendList]() { 
 							button9->SetBorder(0.0f);
 							
 						});
 						button9->SetOnHover([button9]() {
-							button9->SetBorder(1.5f);
+							button9->SetBorder(2.5f);
 							button9->SetBorderGradient(Color::Cyan, Color::Red);
 							button9->AnimateGradient(3.0);
 						});
 						button9->SetOpacity(0.5);
 	  
-      CFrame::Button* button15 = new CFrame::Button(-1, 3);
-	                  button15->SetColor(Color::DarkGray);
-					  button15->SetMargin(20, 20, 20, 20);
 						
 						
 
 		friendList->AddChild(button5);
 		friendList->AddChild(button6);
 		friendList->AddChild(button7);
-		friendList->AddChild(button15);
 		friendList->AddChild(button8);
 		friendList->AddChild(button9);
 
 		friendList->SetSpacing(25);
 		friendList->SetPadding(15);
 		friendList->SetRadius(20, 0, 0, 0);
-		friendList->SetColor(Color::Gray);
+		friendList->SetColor(Color::DarkGray);
 		friendList->SetDragToResize(true);
 		friendList->SetMaxWidth(600);
+		friendList->SetBorder(0.7);
+		friendList->SetBorderColor(Color::Gray);
+		friendList->SetBorder(2,0,2,2);
 
 		CFrame::Button* button10 = new CFrame::Button(50, 50);
 		                button10->SetColor(Color::Gray);
@@ -182,7 +184,9 @@ public:
 		header->SetPadding(10);
 		header->SetColor(Color::DarkGray);
 
-		messageBox->SetColor(Color::LightGray);
+		messageBox->SetColor(Color::DarkGray);
+		messageBox->SetBorder(2, 0, 0, 0);
+		messageBox->SetBorderColor(Color::Gray);
 		CFrame::Button* button16 = new CFrame::Button(300, 300);
 		button16->SetColor(Color::Gold);
 		button16->SetMargin(20, 20, 20, 20);
@@ -190,7 +194,7 @@ public:
 		
 		
 		
-		rootContainer->SetColor(Color::White);
+		rootContainer->SetColor(Color::Red);
 		rootContainer->AddChild(vbox);
 	}
 	~SandBox() 

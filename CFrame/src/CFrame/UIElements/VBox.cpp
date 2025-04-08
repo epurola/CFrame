@@ -21,12 +21,7 @@ namespace CFrame
         if (!IsVisible()) return;
 
         renderer.DrawRectangle(x, y, width, height, 
-            properties.color1.toSDLColor(properties.opacity),
-            properties.color1.toSDLColor(properties.opacity),
-            0.0, 
-            properties.radius, 1.0f, 1.0f,0.0, 
-            properties.color1.toSDLColor(255),
-            properties.color1.toSDLColor(255), nullptr);
+            GetProperties(), 1.0f, 1.0f, nullptr);
 
         for (auto& child : children) {
             child->Render(renderer);

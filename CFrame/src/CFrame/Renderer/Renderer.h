@@ -16,7 +16,7 @@
 
 namespace CFrame {
 
-	struct Radius;
+	struct ElementProperties;
 
 	class Renderer
 	{
@@ -26,9 +26,7 @@ namespace CFrame {
 		~Renderer();
 
 		void DrawRectangle(float x, float y, float w, float h,
-			SDL_Color color, SDL_Color gradient,
-			float angle, Radius radius, float time, float speed, float border,
-			SDL_Color borderColor, SDL_Color borderGradient, Texture* texture );
+			ElementProperties p, float speed, float time, Texture* texture );
 		
 
 	private:

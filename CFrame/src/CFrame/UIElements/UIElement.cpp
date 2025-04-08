@@ -70,6 +70,18 @@ namespace CFrame {
 	void UIElement::SetBorder(float border)
 	{
 		this->properties.border = border;
+		this->properties.borderBottom = border;
+		this->properties.borderTop = border;
+		this->properties.borderRight = border;
+		this->properties.borderLeft = border;
+	}
+
+	void UIElement::SetBorder(float t, float b, float r, float l)
+	{
+		this->properties.borderBottom = b;
+		this->properties.borderTop = t;
+		this->properties.borderRight = r;
+		this->properties.borderLeft = l;
 	}
 
 	void UIElement::SetBorderColor(Color color1)
@@ -92,6 +104,11 @@ namespace CFrame {
 	void UIElement::SetMaxWidth(int maxWidth)
 	{
 		properties.maxWidth = maxWidth;
+	}
+
+	void UIElement::SetZindex(float index)
+	{
+		properties.zIndex = index;
 	}
 
 	void UIElement::SetColor(Color color)
