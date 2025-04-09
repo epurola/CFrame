@@ -22,10 +22,10 @@ namespace CFrame
 
 		~VBox();
 
-		void Render(Renderer& renderer) override;
+		void Render(Renderer& renderer) override; //ToDo: Move to container
 		void UpdateChildSizes() override;
 
-		void OnEvent(CFrameEvent& event) override;
+		
 		inline ElementType GetElementType() const override { return ElementType::CONTAINER; };
 
 	private:

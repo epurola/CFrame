@@ -12,6 +12,11 @@ namespace CFrame {
 		isWidthResizable = true;
 	}
 
+	void UIElement::OnEvent(CFrameEvent& event)
+	{
+		//Default
+	}
+
 	void UIElement::SetMargin(int marginleft, int marginRight, int marginTop, int marginBottom)
 	{
 		properties.marginBottom = marginBottom;
@@ -109,6 +114,11 @@ namespace CFrame {
 	void UIElement::SetZindex(float index)
 	{
 		properties.zIndex = index;
+	}
+
+	void UIElement::SetPositionAbsolute(bool b)
+	{
+		this->positionAbsolute = b;
 	}
 
 	void UIElement::SetColor(Color color)

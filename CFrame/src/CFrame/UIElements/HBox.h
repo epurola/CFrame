@@ -23,10 +23,10 @@ namespace CFrame
 
 		~HBox();
 
-		void Render(Renderer& renderer) override;
+		void Render(Renderer& renderer) override; //ToDo: Move to container
 		void UpdateChildSizes() override;
 
-		void OnEvent(CFrameEvent& event) override;
+		
 		ElementType GetElementType() const override { return ElementType::CONTAINER; };
 
 	private:

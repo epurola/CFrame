@@ -6,8 +6,6 @@
 #include "../CFrameEvent/CFrameEvent.h"
 #include "Color.h"
 
-
-
 namespace CFrame 
 {
     class Renderer;
@@ -67,7 +65,7 @@ namespace CFrame
 
         virtual void Render(Renderer& renderer) = 0;
         virtual void UpdateChildSizes() {}
-        virtual void OnEvent(CFrameEvent& event) = 0;
+        virtual void OnEvent(CFrameEvent& event);
         virtual ElementType GetElementType() const = 0;
 
         void SetMargin(int marginleft, int marginRight, int marginTop, int marginBottom);
@@ -86,6 +84,7 @@ namespace CFrame
         void SetOpacity(float opacity);
         void SetMaxWidth(int maxWidth);
         void SetZindex(float index);
+        void SetPositionAbsolute(bool b);
         /// Sets the color of the UI element.
         /// @param color.
         /// The format is {r,g,b,a}. You can set a custom color using this format.
@@ -109,6 +108,7 @@ namespace CFrame
         bool  IsWidthResizable()        const  { return isWidthResizable; }
         bool  IsHeightResizable()       const  { return isHeightResizable; }
         bool  IsVisible()               const  { return isVisible; }
+        bool  IsPositionAbsolute()             const { return positionAbsolute; };
         bool  IsDraggable()             const  { return dragToResize; };
         bool  IsElementWithAnimation()  const  { return animProperties.isAnimatedElement; }
 
@@ -126,6 +126,7 @@ namespace CFrame
         bool isHeightResizable;
         bool isVisible;
         bool dragToResize;
+        bool positionAbsolute = false;
         ElementProperties properties;
         AnimationProperties animProperties;
      

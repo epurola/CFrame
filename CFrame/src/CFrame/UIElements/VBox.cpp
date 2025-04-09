@@ -28,29 +28,9 @@ namespace CFrame
         }
     }
 
-    void VBox::OnEvent(CFrameEvent& event)
-    {
-        if (!IsVisible()) return;
-
-        for (auto& child : children) {
-            if (event.handled)  return; 
-
-            child->OnEvent(event);
-        }
-        if (event.GetEventType() == CFrameEventType::MouseDragged ) {
-            auto* mouseEvent = dynamic_cast<MouseDraggedEvent*>(&event);
-            if (mouseEvent->GetStartX() > x + (width - 15) && mouseEvent->GetStartX() < x + width) {
-                if (dragToResize) {
-                    SetWidth(width + (mouseEvent->GetCurrentX() - mouseEvent->GetStartX()));
-                    //toDo: use a different flag so the container does not divide equally
-                    CF_CORE_INFO("RESIZE! {0}", width + (mouseEvent->GetCurrentX() - mouseEvent->GetStartX()));
-                }
-            }
-        }
-    }
 
     void VBox::UpdateChildSizes()
-	{
+    {
         if (children.empty())
             return;
 
@@ -60,12 +40,14 @@ namespace CFrame
         int flexibleHeight = 0;
         int totalMargins = 0;
 
+        
+
         int xpos = GetX() + properties.padding + properties.marginLeft; // add margin
         int ypos = GetY() + properties.padding + properties.marginTop;
 
         for (auto* child : children)
         {
-            if (!child->IsVisible()) {
+            if (!child->IsVisible() || child->IsPositionAbsolute()) {
                 continue;
             }
             if (child->IsHeightResizable())
@@ -132,32 +114,39 @@ namespace CFrame
             xpos;
         }
 
+
         for (size_t i = 0; i < children.size(); i++)
         {
             UIElement* child = children[i];
             if (!child->IsVisible()) {
                 continue;
             }
-           
+
             xpos = xpos + child->GetProperties().marginLeft;
             ypos = ypos + child->GetProperties().marginTop;
-            
-            child->SetX(xpos);
-            child->SetY(ypos);
+
+            if (!child->IsPositionAbsolute()) {
+                child->SetX(xpos);
+                child->SetY(ypos);
+            }
             
             if (child->GetElementType() == ElementType::CONTAINER && child->IsHeightResizable())
             {
                 child->SetWidth(width - (properties.padding * 2));
                 child->SetHeight(flexibleHeight);
-                child->SetX(xpos);
-                child->SetY(ypos);
+                if (!child->IsPositionAbsolute()) {
+                    child->SetX(xpos);
+                    child->SetY(ypos);
+                }
                 child->UpdateChildSizes();
             }
 
             if (child->GetElementType() == ElementType::CONTAINER && !child->IsHeightResizable())
             {
-                child->SetX(xpos);
-                child->SetY(ypos);
+                if (!child->IsPositionAbsolute()) {
+                    child->SetX(xpos);
+                    child->SetY(ypos);
+                }
                 child->UpdateChildSizes();
             }
 

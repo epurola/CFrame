@@ -11,11 +11,11 @@ namespace CFrame
 
 	Container::~Container()
 	{
-		for (auto& child : children) 
-		{
+		
+		for (auto& child : children)
 			delete child;
-		}
 	}
+
 	void Container::SetSpacing(int spacing)
 	{
 		this->spacing = spacing;
@@ -37,6 +37,30 @@ namespace CFrame
 	{
 		this->xAlign = xAlign;
 		this->yAlign = yAlign;
+	}
+
+	void Container::OnEvent(CFrameEvent& event)
+	{
+		if (!IsVisible()) return;
+
+		for (auto& child : children) {
+			if (event.handled)  return;
+			child->OnEvent(event);
+		}
+	
+		if (event.GetEventType() == CFrameEventType::MouseDragged) {
+			auto* mouseEvent = dynamic_cast<MouseDraggedEvent*>(&event);
+			if (mouseEvent->GetStartX() > x + (width - 15) && mouseEvent->GetStartX() < x + width) {
+				if (dragToResize) {
+					SetWidth(width + (mouseEvent->GetCurrentX() - mouseEvent->GetStartX()));
+					//event.handled = true;
+					//toDo: use a different flag so the container does not divide equally
+					CF_CORE_INFO("RESIZE! {0}", width + (mouseEvent->GetCurrentX() - mouseEvent->GetStartX()));
+				}
+			}
+		}
+		
+
 	}
 }
 

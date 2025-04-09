@@ -45,9 +45,10 @@ namespace CFrame {
 
         for (auto* child : children)
         {
-            if (!child->IsVisible()) {
+            if (!child->IsVisible() || child->IsPositionAbsolute()) {
                 continue;
             }
+
             if (child->IsWidthResizable())
             {
                 flexibleCount++;
@@ -116,19 +117,30 @@ namespace CFrame {
             break;
         }
 
+        
+
         // Assign positions to each child
         for (size_t i = 0; i < children.size(); i++)
         {
             UIElement* child = children[i];
-            if (!child->IsVisible()) {
+            if (!child->IsVisible() ) {
                 continue;
             }
 
             xpos = xpos + child->GetProperties().marginLeft; //Todo: Remove the need to constantly call GetProperties
             ypos = ypos + child->GetProperties().marginTop;
 
-            child->SetX(xpos);
-            child->SetY(ypos);
+            if (!child->IsPositionAbsolute()) {
+                child->SetX(xpos);
+                child->SetY(ypos);
+            }
+
+            if (child->IsPositionAbsolute()) {
+                if (child->IsWidthResizable()) {
+                    child->SetHeight(this->GetHeight());
+                }
+                continue;
+            }
             
             if (child->GetElementType() == ElementType::CONTAINER && child->IsWidthResizable())//todo: Fix isDraggable 
             {
@@ -137,16 +149,20 @@ namespace CFrame {
                 }
                 child->SetWidth(flexWidth);
                 child->SetHeight(height - (properties.padding * 2));
-                child->SetX(xpos);
-                child->SetY(ypos);
+                if (!child->IsPositionAbsolute()) {
+                    child->SetX(xpos);
+                    child->SetY(ypos);
+                }
                 child->UpdateChildSizes();
             }
           
 
             if (child->GetElementType() == ElementType::CONTAINER && !child->IsWidthResizable())
             {
-                child->SetX(xpos);
-                child->SetY(ypos);
+                if (!child->IsPositionAbsolute()) {
+                    child->SetX(xpos);
+                    child->SetY(ypos);
+                }
                 child->UpdateChildSizes();
             }
 
@@ -173,7 +189,7 @@ namespace CFrame {
                 child->SetHeight(height - (properties.padding * 2));
             }
 
-            xpos += child->GetWidth();
+            xpos += child->GetWidth() + child->GetProperties().marginRight;
             if (i < children.size() - 1)
             {
                 xpos += spacing;
@@ -182,14 +198,6 @@ namespace CFrame {
         }
 	}
 
-	void HBox::OnEvent(CFrameEvent& event)
-	{
-        for (auto& child : children) {
-            if (event.handled)  return;
-
-            child->OnEvent(event);
-        }
-
-	}
+	
 }
 

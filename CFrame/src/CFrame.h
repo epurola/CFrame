@@ -8,6 +8,10 @@
 
 #include "CFrame/UIElements/VBox.h"
 
+#include "CFrame/UIElements/UIElement.h"
+
+#include "CFrame/Renderer/Renderer.h"
+
 #include "CFrame/UIElements/HBox.h"
 
 #include "CFrame/UIElements/Color.h"

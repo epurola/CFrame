@@ -1,23 +1,30 @@
 #include <CFrame.h>
+#include "../ServerInfoBox.h"
 
 class SandBox : public CFrame::Application 
 {
 public:
 	SandBox() : CFrame::Application(2000, 1500)
 	{
-		CFrame::VBox* vbox = new CFrame::VBox();
-		CFrame::HBox* header = new CFrame::HBox(-1, 75);
-		CFrame::HBox* content = new CFrame::HBox();
-		CFrame::VBox* sideBar = new CFrame::VBox(150,-1);
-		CFrame::VBox* friendList = new CFrame::VBox(500,-1);
-		CFrame::VBox* messageBox = new CFrame::VBox(-1, -1);
+		CFrame::VBox* vbox        = new CFrame::VBox();
+		CFrame::HBox* header      = new CFrame::HBox(-1, 75);
+		CFrame::HBox* content     = new CFrame::HBox();
+		CFrame::VBox* sideBar     = new CFrame::VBox(150,-1);
+		CFrame::VBox* friendList  = new CFrame::VBox(500,-1);
+		CFrame::VBox* messageBox  = new CFrame::VBox(-1, -1);
+		ServerInfoBox* info       = new ServerInfoBox(20, 1180, 650, 300);
 		
 		content->AddChild(sideBar);
 		content->AddChild(friendList);
 		content->AddChild(messageBox);
+
 		vbox->AddChild(header);
 		vbox->AddChild(content);
 
+		info->SetPositionAbsolute(true);
+		info->SetDragToResize(true);
+		vbox->AddChild(info);
+		
 		content->SetColor(Color::DarkGray);
 
 		CFrame::Button* button  = new CFrame::Button(90, 90);
@@ -68,11 +75,18 @@ public:
 							button45->SetColor(Color::Gray);
 							
 						});
-						button45->SetOnClick([friendList, content]() {
+						button45->SetOnClick([friendList, content, messageBox]() {
 							bool currentVisibility = friendList->IsVisible();
 							friendList->SetVisibility(!currentVisibility);
 							content->UpdateChildSizes();
-							CF_CORE_WARN("Visibility false");
+							if (!currentVisibility) {
+								messageBox->SetRadius(0, 0, 0, 0);
+								messageBox->SetBorder(2, 0, 0, 0);
+							}
+							else {
+								messageBox->SetRadius(15, 0, 0, 0);
+								messageBox->SetBorder(2, 0, 2, 2);
+							}
 							});
 						button45->SetOnHover([button45]() {
 							button45->SetColor({ 100, 100, 100, 255 });
@@ -88,6 +102,7 @@ public:
 		sideBar->SetSpacing(20);
 		sideBar->SetAlignment(CFrame::AlignItems::Center, CFrame::AlignItems::Start);
 		sideBar->SetColor(Color::DarkGray);
+		
 
 		CFrame::Button* button5 = new CFrame::Button(-1, 75);
 		                button5->SetColor(Color::Gray);
@@ -179,10 +194,11 @@ public:
 		header->AddChild(button10);
 		header->AddChild(button11);
 		header->AddChild(button12);
-		header->SetAlignment(CFrame::AlignItems::End, CFrame::AlignItems::Center);
+		
 		header->SetSpacing(15);
 		header->SetPadding(10);
 		header->SetColor(Color::DarkGray);
+		header->SetAlignment(CFrame::AlignItems::End, CFrame::AlignItems::Center);
 
 		messageBox->SetColor(Color::DarkGray);
 		messageBox->SetBorder(2, 0, 0, 0);
@@ -193,9 +209,9 @@ public:
 		messageBox->AddChild(button16);
 		
 		
-		
 		rootContainer->SetColor(Color::Red);
 		rootContainer->AddChild(vbox);
+		
 	}
 	~SandBox() 
 	{

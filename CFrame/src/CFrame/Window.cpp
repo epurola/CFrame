@@ -20,7 +20,8 @@ Window::~Window()
 
 void Window::OnUpdate()  
 {  
-   SDL_Event event; 
+   SDL_Event event;
+   bool isDragging;
    while (SDL_PollEvent(&event)) {  
        switch (event.type) {  
        case SDL_EVENT_MOUSE_BUTTON_DOWN: 
@@ -39,11 +40,11 @@ void Window::OnUpdate()
 	   {
 		   MouseMovedEvent mouseMovedEvent(event.motion.x, event.motion.y);
 		   dispatcher.Dispatch(mouseMovedEvent);
-
-		   if (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON_MASK(SDL_BUTTON_LEFT)) {
-			   MouseDraggedEvent dragEvent(event.motion.x - event.motion.xrel, event.motion.y - event.motion.yrel, event.motion.x, event.motion.y);
-			   dispatcher.Dispatch(dragEvent);
-		   }
+			   if (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON_MASK(SDL_BUTTON_LEFT)) {
+				   isDragging = true;
+				   MouseDraggedEvent dragEvent(event.motion.x - event.motion.xrel, event.motion.y - event.motion.yrel, event.motion.x, event.motion.y);
+				   dispatcher.Dispatch(dragEvent);
+			   }
 		   break;
 	   }
 	   case SDL_EVENT_WINDOW_RESIZED:

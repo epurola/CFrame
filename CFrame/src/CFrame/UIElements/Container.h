@@ -11,13 +11,14 @@ namespace CFrame {
 	class CFRAME_API Container : public UIElement
 	{
 	public:
-		Container(int x, int y, int w, int h, UIElement* parent);
+		Container(int x, int y, int w, int h, UIElement* parent = nullptr);
 		virtual ~Container();
 		void SetSpacing(int spacing);
 		virtual void UpdateChildSizes() = 0;
 		void AddChild(UIElement* child);
 
 		void Render(Renderer& renderer) override;
+		void OnEvent(CFrameEvent& event) override;
 
 		void SetAlignment(AlignItems xAlign, AlignItems yAlign );
 

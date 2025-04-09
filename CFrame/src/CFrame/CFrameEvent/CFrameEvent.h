@@ -124,10 +124,11 @@ namespace CFrame
 			: startX(startX), startY(startY), currentX(currentX), currentY(currentY) {
 		}
 
-		inline float GetStartX() const { return startX; }
-		inline float GetStartY() const { return startY; }
+		inline float GetStartX()   const { return startX; }
+		inline float GetStartY()   const { return startY; }
 		inline float GetCurrentX() const { return currentX; }
 		inline float GetCurrentY() const { return currentY; }
+		
 
 		CFrameEventType GetEventType() const override { return CFrameEventType::MouseDragged; }
 	private:
