@@ -36,9 +36,9 @@ project "CFrame"
 
 	includedirs
 	{
+		"%{prj.name}/vendor/stb",
 		"%{prj.name}/vendor/spdlog/include",
 		"%{prj.name}/vendor/glm/glm",
-		"%{prj.name}/vendor/stb",
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.SDL3}"
 	}

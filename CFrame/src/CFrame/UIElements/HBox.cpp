@@ -14,21 +14,6 @@ namespace CFrame {
 
 	}
 
-	void HBox::Render(Renderer& renderer)
-	{
-        if (!IsVisible()) return;
-
-		renderer.DrawRectangle(x, y, width, 
-            height, GetProperties(), 
-            1.0f, 1.0f
-            ,nullptr);
-
-		for (auto& child : children) {
-            
-			child->Render(renderer);
-		}
-	}
-
 	void HBox::UpdateChildSizes()
 	{
         if (children.empty())

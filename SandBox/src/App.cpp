@@ -1,5 +1,5 @@
 #include <CFrame.h>
-#include "../ServerInfoBox.h"
+#include "ServerInfoBox.h"
 
 class SandBox : public CFrame::Application 
 {
@@ -12,17 +12,18 @@ public:
 		CFrame::VBox* sideBar     = new CFrame::VBox(150,-1);
 		CFrame::VBox* friendList  = new CFrame::VBox(500,-1);
 		CFrame::VBox* messageBox  = new CFrame::VBox(-1, -1);
-		ServerInfoBox* info       = new ServerInfoBox(20, 1180, 650, 300);
+		ServerInfoBox* info       = new ServerInfoBox(20, 1180, 650, 300); //ToDo: Make position absolute relative to parent
 		
 		content->AddChild(sideBar);
 		content->AddChild(friendList);
 		content->AddChild(messageBox);
+		content->ToFront(friendList);
 
 		vbox->AddChild(header);
 		vbox->AddChild(content);
-
+		
 		info->SetPositionAbsolute(true);
-		info->SetDragToResize(true);
+		info->SetDragToResize(true); //Some other layer handles the event before so this does not currently work
 		vbox->AddChild(info);
 		
 		content->SetColor(Color::DarkGray);
@@ -85,7 +86,7 @@ public:
 							}
 							else {
 								messageBox->SetRadius(15, 0, 0, 0);
-								messageBox->SetBorder(2, 0, 2, 2);
+								messageBox->SetBorder(2, 0, 2, 0); //Wrong order in the function
 							}
 							});
 						button45->SetOnHover([button45]() {

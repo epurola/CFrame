@@ -1,5 +1,6 @@
 #include "FontLoader.h"
 #include "../Log.h"
+#include <cstdint> 
 
 
 namespace CFrame {
@@ -37,21 +38,38 @@ namespace CFrame {
 		return true;
 	}
 
-	unsigned char* FontLoader::GetGlyphBitMap(int charCode, float scaleX, float scaleY, int& width, int& height, int& xOffset, int& yOffset)
-	{
+   
+
+	uint8_t* FontLoader::GetGlyphBitMap(int charCode, float scaleX, float scaleY, int& width, int& height, int& xOffset, int& yOffset)
+    {
 		if (glyphCache.find(charCode) != glyphCache.end()) {
 			return glyphCache[charCode];
 		}
 
-		float scale_x = scaleX;
-		float scale_y = scaleY;
+		// Compute pixel height scale (this replaces scaleX/scaleY with a proper font size scale)
+		float scale = stbtt_ScaleForPixelHeight(&fontInfo, fontSize);  // fontSize should be a member variable
+		float finalScaleX = scale * scaleX;
+		float finalScaleY = scale * scaleY;
 
-		int glyphIndex = stbtt_FindGlyphIndex(&fontInfo, charCode);
-		unsigned char* bitmap = stbtt_GetGlyphBitmap(&fontInfo, scale_x, scale_y, glyphIndex, &width, &height, &xOffset, &yOffset);
+		// Use stbtt_GetCodepointBitmap directly 
+		uint8_t* bitmap = stbtt_GetCodepointBitmap(
+			&fontInfo,
+			finalScaleX,
+			finalScaleY,
+			charCode,
+			&width,
+			&height,
+			&xOffset,
+			&yOffset
+		);
 
-		glyphCache[charCode] = bitmap;
+		size_t bitmapSize = static_cast<size_t>(width) * static_cast<size_t>(height);
+		uint8_t* bitmapCopy = new uint8_t[bitmapSize];
+		memcpy(bitmapCopy, bitmap, bitmapSize);
+		stbtt_FreeBitmap(bitmap, nullptr);
 
-		return bitmap;
-	}
+		glyphCache[charCode] = bitmapCopy;
+		return bitmapCopy;
+    }
 
 }

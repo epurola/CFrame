@@ -10,7 +10,6 @@ class ServerInfoBox : public CFrame::VBox
 {
 public:
 	ServerInfoBox(int x , int y , int w, int h);
-	
 
 private:
 	CFrame::HBox* topPart;

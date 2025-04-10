@@ -117,6 +117,8 @@ namespace CFrame
 
         void  SetOnHover(std::function<void()> onHover);
         void  SetOnLeave(std::function<void()> onLeave);
+
+        int index;
         
 
     protected:
@@ -127,6 +129,7 @@ namespace CFrame
         bool isVisible;
         bool dragToResize;
         bool positionAbsolute = false;
+        
         ElementProperties properties;
         AnimationProperties animProperties;
      

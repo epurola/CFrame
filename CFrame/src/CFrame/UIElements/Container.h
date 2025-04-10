@@ -20,11 +20,15 @@ namespace CFrame {
 		void Render(Renderer& renderer) override;
 		void OnEvent(CFrameEvent& event) override;
 
+		void ToFront(UIElement* child);
+		void ToBack(UIElement* child);
+
 		void SetAlignment(AlignItems xAlign, AlignItems yAlign );
 
 		inline int GetSpacing() const { return spacing; }
 		inline ElementType GetElementType() const override { return ElementType::CONTAINER; };
 		std::vector<UIElement*> children;
+		std::vector<UIElement*> renderChildren;
 
 	protected:
 		int spacing = 0;

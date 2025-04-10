@@ -22,7 +22,6 @@ namespace CFrame
 
 		~VBox();
 
-		void Render(Renderer& renderer) override; //ToDo: Move to container
 		void UpdateChildSizes() override;
 
 		

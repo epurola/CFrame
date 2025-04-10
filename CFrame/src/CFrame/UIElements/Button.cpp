@@ -14,8 +14,7 @@ namespace CFrame
         isHeightResizable = (h == -1);
 		SetRadius(15,15,15,15);
         SetColor(Color::Gray);
-       
-
+ 
 	}
 
 	Button::~Button()
@@ -25,8 +24,9 @@ namespace CFrame
 
 	void Button::Render(Renderer& renderer)
 	{
+        //"C:/Users/eelip/MyGraphics/res/textures/white-queen.png"
         if (!labelTexture && GetElementType() == ElementType::BUTTON){
-            labelTexture = std::make_unique<Texture>("C:/Users/eelip/MyGraphics/res/textures/white-queen.png");
+            labelTexture = std::make_unique<Texture>();
         }
         int renderWidth = width;
         int renderHeight = height;

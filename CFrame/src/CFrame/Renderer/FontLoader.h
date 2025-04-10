@@ -16,13 +16,14 @@ namespace CFrame {
 
 
 		bool LoadFont();
-		unsigned char* GetGlyphBitMap(int charCode, float scaleX, float scaleY, int& width, int& height, int& xOffset, int& yOffset);
+		uint8_t* GetGlyphBitMap(int charCode, float scaleX, float scaleY, int& width, int& height, int& xOffset, int& yOffset);
 
 	private:
 		std::string fontPath;
 		std::vector<unsigned char> fontBuffer;
 		stbtt_fontinfo fontInfo;
 		float fontSize;
+		unsigned char* buffer;
 
 		std::unordered_map<int, unsigned char*> glyphCache;
 

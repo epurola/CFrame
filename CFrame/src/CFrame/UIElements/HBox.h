@@ -23,7 +23,6 @@ namespace CFrame
 
 		~HBox();
 
-		void Render(Renderer& renderer) override; //ToDo: Move to container
 		void UpdateChildSizes() override;
 
 		
