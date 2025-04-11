@@ -119,6 +119,8 @@ namespace CFrame {
 	void UIElement::SetPositionAbsolute(bool b)
 	{
 		this->positionAbsolute = b;
+		localX = x;
+		localY = y;
 	}
 
 	void UIElement::SetColor(Color color)

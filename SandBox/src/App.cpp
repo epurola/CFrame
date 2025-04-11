@@ -1,6 +1,7 @@
 #include <CFrame.h>
 #include "ServerInfoBox.h"
 
+
 class SandBox : public CFrame::Application 
 {
 public:
@@ -10,21 +11,28 @@ public:
 		CFrame::HBox* header      = new CFrame::HBox(-1, 75);
 		CFrame::HBox* content     = new CFrame::HBox();
 		CFrame::VBox* sideBar     = new CFrame::VBox(150,-1);
-		CFrame::VBox* friendList  = new CFrame::VBox(500,-1);
+		CFrame::VBox* friendList  = new CFrame::VBox(-1,-1);
 		CFrame::VBox* messageBox  = new CFrame::VBox(-1, -1);
-		ServerInfoBox* info       = new ServerInfoBox(20, 1180, 650, 300); //ToDo: Make position absolute relative to parent
+		CFrame::HBox* contentLeft = new CFrame::HBox(500,-1);
+		ServerInfoBox* info       = new ServerInfoBox(20, 1100, -1, 300); //ToDo: Make position absolute relative to parent
+		info->SetMargin(0,20,0,0);
 		
-		content->AddChild(sideBar);
-		content->AddChild(friendList);
+		contentLeft->AddChild(sideBar);
+		contentLeft->AddChild(friendList);
+		content->AddChild(contentLeft);
 		content->AddChild(messageBox);
-		content->ToFront(friendList);
+		content->ToFront(contentLeft);
 
 		vbox->AddChild(header);
 		vbox->AddChild(content);
 		
 		info->SetPositionAbsolute(true);
-		info->SetDragToResize(true); //Some other layer handles the event before so this does not currently work
-		vbox->AddChild(info);
+		contentLeft->SetMaxWidth(800);
+		contentLeft->SetColor(Color::DarkGray);
+		contentLeft->SetDragToResize(true); //Some other layer handles the event before so this does not currently work
+		
+
+		contentLeft->AddChild(info);
 		
 		content->SetColor(Color::DarkGray);
 
@@ -178,8 +186,6 @@ public:
 		friendList->SetPadding(15);
 		friendList->SetRadius(20, 0, 0, 0);
 		friendList->SetColor(Color::DarkGray);
-		friendList->SetDragToResize(true);
-		friendList->SetMaxWidth(600);
 		friendList->SetBorder(0.7);
 		friendList->SetBorderColor(Color::Gray);
 		friendList->SetBorder(2,0,2,2);
@@ -200,6 +206,7 @@ public:
 		header->SetPadding(10);
 		header->SetColor(Color::DarkGray);
 		header->SetAlignment(CFrame::AlignItems::End, CFrame::AlignItems::Center);
+		
 
 		messageBox->SetColor(Color::DarkGray);
 		messageBox->SetBorder(2, 0, 0, 0);
@@ -212,6 +219,8 @@ public:
 		
 		rootContainer->SetColor(Color::Red);
 		rootContainer->AddChild(vbox);
+		
+		
 		
 	}
 	~SandBox() 

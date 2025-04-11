@@ -100,6 +100,8 @@ namespace CFrame
 
         int    GetX()       const  { return x; }
         int    GetY()       const  { return y; }
+        int    GetLocalX()       const { return localX; }
+        int    GetLocalY()       const { return localY; }
         float  GetAngle()   const  { return properties.angle; }
         int    GetWidth()   const  { return width; }
         int    GetHeight()  const  { return height; }
@@ -124,6 +126,7 @@ namespace CFrame
     protected:
         UIElement* parent;  // toDo dont use a raw pointer
         int x, y, width, height;
+        int localX, localY;
         bool isWidthResizable;
         bool isHeightResizable;
         bool isVisible;

@@ -5,6 +5,9 @@
 #include <memory> 
 #include "../Animator/Animator.h"
 #include "Label.h"
+
+
+
 namespace CFrame 
 {
     class CFRAME_API Button : public UIElement 
@@ -36,5 +39,6 @@ namespace CFrame
         std::unique_ptr<Animator> animator;
         bool hovering = false;
         std::unique_ptr<Texture> labelTexture;
+        //std::map<char, fontInfo> glyphs;
     };
 }

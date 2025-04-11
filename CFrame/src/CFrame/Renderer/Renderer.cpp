@@ -1,6 +1,8 @@
 #include "Renderer.h"
 #include <iostream>
 #include <filesystem>
+#include "FontLoader.h"
+
 
 
 
@@ -10,6 +12,9 @@ namespace CFrame {
         :window(window)
 	{
         shader = std::make_unique<Shader>("C:/dev/CFrame/CFrame/src/CFrame/res/shaders/basic.shader");
+
+        FontLoader fontLoader("C:/dev/CFrame/CFrame/src/CFrame/res/fonts/arial.ttf");
+        fontLoader.LoadFont();
 	}
 
 	Renderer::~Renderer()

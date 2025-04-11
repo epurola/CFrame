@@ -122,7 +122,13 @@ namespace CFrame {
 
             if (child->IsPositionAbsolute()) {
                 if (child->IsWidthResizable()) {
-                    child->SetHeight(this->GetHeight());
+                    child->SetWidth(width -child->GetLocalX() - properties.padding * 2 - child->GetProperties().marginRight);
+                }
+                child->SetX(GetX() + child->GetLocalX());
+                child->SetY(GetY() + child->GetLocalY());
+
+                if (child->GetElementType() == ElementType::CONTAINER) {
+                    child->UpdateChildSizes();
                 }
                 continue;
             }

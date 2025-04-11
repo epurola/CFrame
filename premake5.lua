@@ -40,13 +40,20 @@ project "CFrame"
 		"%{prj.name}/vendor/spdlog/include",
 		"%{prj.name}/vendor/glm/glm",
 		"%{IncludeDir.Glad}",
-		"%{IncludeDir.SDL3}"
+		"%{IncludeDir.SDL3}",
+		"CFrame/vendor/freetype/include/",
+		"CFrame/vendor/freetype/include/freetype"
 	}
+
+	libdirs {
+        "CFrame/vendor/freetype/lib"   
+    }
 
 	links
 	{
 		"Glad",
-		"SDL3"
+		"SDL3",
+		"freetype"
 	}
 
 	filter "system:windows"
@@ -97,7 +104,9 @@ project "SandBox"
 		"%{prj.name}/vendor/glm/glm",
 		"CFrame/vendor/stb",
 		"%{IncludeDir.Glad}",
-		"%{IncludeDir.SDL3}"
+		"%{IncludeDir.SDL3}",
+		"CFrame/vendor/freetype/include/",
+		"CFrame/vendor/freetype/include/freetype"
 	}
 	links
 	{
