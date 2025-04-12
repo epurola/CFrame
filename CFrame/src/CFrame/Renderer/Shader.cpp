@@ -1,4 +1,5 @@
 #include "Shader.h"
+#include "../Log.h"
 namespace CFrame
 {
     Shader::Shader(const std::string filePath)

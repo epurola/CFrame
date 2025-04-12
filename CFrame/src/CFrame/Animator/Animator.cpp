@@ -15,7 +15,7 @@ namespace CFrame
 
 		elapsedTime += deltaTime;
 
-		float t = (animationDuration > 0) ? elapsedTime / animationDuration : 1.0f;
+		float t = (animationDuration > 0) ? (float)elapsedTime / animationDuration : 1.0f;
 		if (t > 1.0f) t = 1.0f;
 
 

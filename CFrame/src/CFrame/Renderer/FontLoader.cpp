@@ -32,7 +32,7 @@ namespace CFrame {
 			return false;
 		}
 
-		FT_Set_Pixel_Sizes(face, 0, fontSize);
+		FT_Set_Pixel_Sizes(face, 0, (FT_UInt)fontSize);
 
 		CF_CORE_INFO("Font init OK!");
 
@@ -54,6 +54,8 @@ namespace CFrame {
 		int cellH  = maxH;
 		int atlasW = cols * cellW;
 		int atlasH = rows * cellH;
+		atlasWidth = atlasW;
+		atlasHeight = atlasH;
 
 		fontBuffer.resize(atlasW * atlasH, 0);
 
@@ -68,10 +70,10 @@ namespace CFrame {
 			int y   = row * cellH;
 
 			//write the glyph to the atlas
-			for (int j = 0; j < bmp.rows; j++) {
-				for (int i = 0; i < bmp.width; i++) {
-					int dstIndex = (y + j) * atlasW + (x + i);
-					int srcIndex = j * bmp.pitch + i;
+			for (unsigned int j = 0; j < bmp.rows; j++) {
+				for (unsigned int i = 0; i < bmp.width; i++) {
+					unsigned int dstIndex = (y + j) * atlasW + (x + i);
+					unsigned int srcIndex = j * bmp.pitch + i;
 					fontBuffer[dstIndex] = bmp.buffer[srcIndex];
 				}
 			}

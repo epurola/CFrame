@@ -43,8 +43,8 @@ namespace CFrame
     };
 
     struct AnimationProperties {
-        float animScaleX        = 1.2;
-        float animScaleY        = 1.2;
+        float animScaleX        = 1.2f;
+        float animScaleY        = 1.2f;
         float duration          = 1.0f;
         bool isAnimatedElement  = false;
         float speed             = 0;

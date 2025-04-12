@@ -23,9 +23,15 @@ namespace CFrame {
 
 
 		bool LoadFont();
-		std::vector<uint8_t>  GetFontAtlas();
+		std::vector<uint8_t>     GetFontAtlas();
+		std::map<char, fontInfo> GetGlyphs() { return glyphs; }
+
+		int GetAtlasWidth()  const { return atlasWidth; }
+		int GetAtlasHeight() const { return atlasHeight; }
+
 
 	private:
+		int atlasWidth, atlasHeight;
 		std::string fontPath;
 		std::vector<uint8_t> fontBuffer;
 		FT_Library ft;

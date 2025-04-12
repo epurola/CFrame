@@ -3,6 +3,7 @@
 bin-int/
 x64/
 CFrame/vendor/freetype/
+CFrame/src/CFrame/res/fonts/
 
 
 # Visual Studio files and folder

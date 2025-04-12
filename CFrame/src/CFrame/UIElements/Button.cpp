@@ -26,14 +26,14 @@ namespace CFrame
 	{
         //"C:/Users/eelip/MyGraphics/res/textures/white-queen.png"
         if (!labelTexture && GetElementType() == ElementType::BUTTON){
-            labelTexture = std::make_unique<Texture>();
+            //labelTexture = std::make_unique<Texture>();
         }
-        int renderWidth = width;
+        int renderWidth  = width;
         int renderHeight = height;
 
         if (!animProperties.isAnimatedElement) {
-             renderWidth = width * properties.scaleX;
-             renderHeight = height * properties.scaleY;
+             renderWidth  = static_cast<int>(width * properties.scaleX);
+             renderHeight = static_cast<int>(height * properties.scaleY);
         }
        
         if (animator->IsAnimating()) {
@@ -43,11 +43,11 @@ namespace CFrame
         int centeredX = x + (width - renderWidth) / 2;
         int centeredY = y + (height - renderHeight) / 2;
         
-		renderer.DrawRectangle(centeredX, centeredY, renderWidth, renderHeight, 
+		renderer.DrawRectangle((float)centeredX, (float)centeredY, (float)renderWidth, (float)renderHeight, 
             GetProperties(),
             animator->GetTime(), 
             animProperties.speed,
-            labelTexture.get());
+            nullptr);
 	}
 
     void Button::OnEvent(CFrameEvent& event)
@@ -65,8 +65,8 @@ namespace CFrame
                 return; // Early return if the event is not a MouseButtonDownEvent
             }
 
-            int xPos = mouseEvent->GetX();
-            int yPos = mouseEvent->GetY();
+            int xPos = static_cast<int>(mouseEvent->GetX());
+            int yPos = static_cast<int>(mouseEvent->GetY());
 
             // Check if the mouse position is inside the button's bounds
             if (xPos < x || xPos >(x + width) || yPos < y || yPos >(y + height)) {
@@ -87,8 +87,8 @@ namespace CFrame
                 return; // Early return if the event is not a MouseButtonDownEvent
             }
 
-            int xPos = mouseEvent->GetX();
-            int yPos = mouseEvent->GetY();
+            int xPos = static_cast<int>(mouseEvent->GetX());
+            int yPos = static_cast<int>(mouseEvent->GetY());
 
             // Check if the mouse position is inside the button's bounds
             if (xPos < x || xPos >(x + width) || yPos < y || yPos >(y + height)) {

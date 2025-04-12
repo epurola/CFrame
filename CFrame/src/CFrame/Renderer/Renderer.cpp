@@ -13,23 +13,28 @@ namespace CFrame {
 	{
         shader = std::make_unique<Shader>("C:/dev/CFrame/CFrame/src/CFrame/res/shaders/basic.shader");
 
-        FontLoader fontLoader("C:/dev/CFrame/CFrame/src/CFrame/res/fonts/arial.ttf");
-        fontLoader.LoadFont();
+        textShader = std::make_unique<Shader>("C:/dev/CFrame/CFrame/src/CFrame/res/shaders/textShader.shader");
+
+        fontLoader = new FontLoader("C:/dev/CFrame/CFrame/src/CFrame/res/fonts/arial.ttf");
+        fontLoader->LoadFont();
+        std::vector<uint8_t>atlas = fontLoader->GetFontAtlas();
+        glyphs = fontLoader->GetGlyphs();
+        texture = new Texture(atlas.data(), fontLoader->GetAtlasWidth(), fontLoader->GetAtlasHeight());
 	}
 
 	Renderer::~Renderer()
 	{
-
-	}
+        delete texture;
+        delete fontLoader;
+    }
+        
 
     //ToDo: Remove dependecy on SDL color here
 	void Renderer::DrawRectangle(float x, float y, float w, float h, 
         ElementProperties p, float speed, float time,
         Texture* texture)
 	{
-        if (texture != nullptr) {
-            texture->Bind();
-        }
+       
 
         SDL_Color c = p.color1.toSDLColor(p.opacity);
         SDL_Color c1 = p.color1.toSDLColor(p.opacity);
@@ -57,29 +62,23 @@ namespace CFrame {
         int windowWidth, windowHeight; //Todo: Not here
         SDL_GetWindowSize(window.GetWindow(), &windowWidth, &windowHeight);
         
-        float ro = p.borderRight;
-        float l = p.borderLeft;
-        float u = p.borderTop;
-        float bo = p.borderBottom;
-
+       
         /*Vertices of the rectangle. Calculates the top left as the origin*/
         float vertices[] = {
             /* x, y,        r, g, b, a         texture coordinates      Gradient color
             location = 0    location = 1       location = 2             location = 3*/
-           x , y + h ,       r, g, b, a,        0.0f, 1.0f,          rg, gg, bg, ag,        // Top-left
-           x + w, y + h,     r, g, b, a,        1.0f, 1.0f,          rg, gg, bg, ag,       // Top-right
-           x + w , y ,       r, g, b, a,        1.0f, 0.0f,          rg, gg, bg, ag,       // Bottom-right
-           x, y,             r, g, b, a,        0.0f, 0.0f,          rg, gg, bg, ag
+           x , y + h ,       r, g, b, a,        0.0f, 1.0f,           rg, gg, bg, ag,     // Top-left
+           x + w, y + h,     r, g, b, a,        1.0f, 1.0f,           rg, gg, bg, ag,     // Top-right
+           x + w , y ,       r, g, b, a,        1.0f, 0.0f,           rg, gg, bg, ag,     // Bottom-right
+           x, y,             r, g, b, a,        0.0f, 0.0f,           rg, gg, bg, ag,  
         };
 
            
-        
-
         /*Indecies to draw a rectangle*/
         unsigned int indecies[] = { 0, 1, 2, 2, 3, 0 };
 
         /*create vertex buffer with the vertices and the size of the data
-        4 vertices with 6 data point that are floats.
+        4 vertices with 12 data point that are floats.
         Will also automaticaaly bind it*/
         VertexBuffer vb(vertices, 4 * 12 * sizeof(float));
 
@@ -96,9 +95,9 @@ namespace CFrame {
         IndexBuffer ib(indecies, 6);
 
         /*Define ortho protection matrix*/
-        glm::mat4 proj = glm::ortho(0.0f, float(windowWidth), // Left, Right
+        glm::mat4 proj = glm::ortho(0.0f, float(windowWidth),  // Left, Right
                                     float(windowHeight), 0.0f, // Bottom, Top
-                                     -1.0f, 1.0f); // Near, Far
+                                     -1.0f, 1.0f);             // Near, Far
         
         //Bind the shader and set uniforms
         shader->Bind();
@@ -116,7 +115,6 @@ namespace CFrame {
         shader->SetUniform1f("u_Speed", speed);
         //shader->SetUniform1f("u_Angle", angle);
         //shader->SetUniform2f("u_Center", centerX, centerY);
-        //shader->SetUniform1f("u_BorderThickness", p.border ); // This is currently drawn inside the shape
         shader->SetUniform1f("u_BorderTop", p.borderTop);
         shader->SetUniform1f("u_BorderBottom", p.borderBottom);
         shader->SetUniform1f("u_BorderLeft", p.borderLeft);
@@ -127,11 +125,107 @@ namespace CFrame {
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
+        shader->UnBind();
+        
+
+        RenderText("Hello World!", x, y);
+	}
+
+    //write a different shader for this.
+    void Renderer::RenderText(const std::string& text, float x, float y) 
+    {
+        
+         this->texture->Bind();
+        
+        int windowWidth, windowHeight; //Todo: Not here
+        SDL_GetWindowSize(window.GetWindow(), &windowWidth, &windowHeight);
+        std::vector<float> vertices;
+        std::vector<unsigned int> indices;
+        float offsetX = 50.0f;
+
+
+        for (char c : text) {
+            //Store the current glyph info
+            fontInfo glyph = glyphs[c];
+
+            //texture coordinates for the character
+            float texX1 =  glyph.x / (float)fontLoader->GetAtlasWidth(); // width
+            float texY1 =  glyph.y / (float)fontLoader->GetAtlasHeight(); //height
+            float texX2 = (glyph.x + glyph.width)  / (float)fontLoader->GetAtlasWidth();
+            float texY2 = (glyph.y + glyph.height) / (float)fontLoader->GetAtlasHeight();
+
+            float charWidth  = glyph.width;
+            float charHeight = glyph.height;
+
+            //Define 4 vertices for the current character
+            vertices.push_back(x + offsetX);             //top-Left x
+            vertices.push_back(y + charHeight);          //Top-Left y
+            vertices.push_back(texX1);                   //Texture coord x1
+            vertices.push_back(texY2);                   //Texture coord y2
+
+            vertices.push_back(x + offsetX + charWidth); //Top-Right x
+            vertices.push_back(y + charHeight);          //Top-Right y
+            vertices.push_back(texX2);                   //texture coord x2
+            vertices.push_back(texY2);                   //texture coord y2
+
+            vertices.push_back(x + offsetX + charWidth); //Bottom-Right x
+            vertices.push_back(y);
+            vertices.push_back(texX2);                   //texture coord x2
+            vertices.push_back(texY1);                   //texture coord y1
+
+            vertices.push_back(x + offsetX);             //Bottom-Right x
+            vertices.push_back(y);                       //bottom-Right y
+            vertices.push_back(texX1);                   //Texture coord x1
+            vertices.push_back(texY1);                   //Texture coord y1
+
+            unsigned int baseIndex = (vertices.size() / 4) - 4;
+            indices.push_back(baseIndex);                // 0
+            indices.push_back(baseIndex + 1);            // 1
+            indices.push_back(baseIndex + 2);            // 2
+            indices.push_back(baseIndex + 2);            // 2
+            indices.push_back(baseIndex + 3);            // 3
+            indices.push_back(baseIndex);                // 0
+
+            offsetX += charWidth;
+        }
+        
+        
+        VertexBuffer vb(vertices.data(), vertices.size() * sizeof(float));
+
+        IndexBuffer ib(indices.data(), indices.size());
+
+        VertexArray va;
+        VertexBufferLayout layout;
+        layout.Push<float>(2);
+        layout.Push<float>(2);
+
+        va.AddBuffer(vb, layout);
+
+        va.Bind();
+        vb.Bind();
+        ib.Bind();
+       
+
+        textShader->Bind(); //write a diffferent shader for thi
+
+        glm::mat4 proj = glm::ortho(0.0f, float(windowWidth), // Left, Right
+                                  float(windowHeight), 0.0f, // Bottom, Top
+                                                -1.0f, 1.0f); // Near, Far
+        textShader->SetUniformMat4f("u_MVP", proj);
+        textShader->SetUniform1i("u_Texture", 0); // Texture slot
+
+        CF_CORE_INFO("Indecies size: {0}", indices.size());
+        CF_CORE_INFO("Vertices size: {0}", vertices.size());
+
+        glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, nullptr);
+
         va.UnBind();
         vb.Unbind();
-        shader->UnBind();
+        ib.Unbind();
+        textShader->UnBind();
         texture->UnBind();
-	}
+        
+    }
 
  
     

@@ -33,7 +33,7 @@ namespace CFrame
 	{
 		if (!IsVisible()) return;
 
-		renderer.DrawRectangle(x, y, width, height,
+		renderer.DrawRectangle((float)x, (float)y, (float)width, (float)height,
 			GetProperties(), 1.0f, 1.0f, nullptr);
 
 		for (auto& child : renderChildren) {
