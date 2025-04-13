@@ -18,7 +18,7 @@ namespace CFrame {
 	class FontLoader {
 
 	public:
-		FontLoader(const std::string& fontPath);
+		FontLoader(const std::string& fontPath, float fontSize);
 		~FontLoader();
 
 

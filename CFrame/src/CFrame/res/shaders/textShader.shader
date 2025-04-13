@@ -20,6 +20,8 @@ void main()
 
 in vec2 v_TexCoord;
 
+uniform float u_Opacity;
+
 out vec4 color;
 
 uniform sampler2D u_Texture;
@@ -27,5 +29,5 @@ uniform sampler2D u_Texture;
 void main()
 {
     float alpha = texture(u_Texture, v_TexCoord).r;
-    color = vec4(1.0, 1.0, 1.0, alpha); 
+    color = vec4(1.0, 1.0, 1.0, alpha * u_Opacity); 
 }

@@ -36,7 +36,10 @@ public:
 		
 		content->SetColor(Color::DarkGray);
 
-		CFrame::Button* button  = new CFrame::Button(90, 90);
+		CFrame::Button* button = new CFrame::Button(90, 90);
+		                button->SetText("S");
+						button->setTextOpacity(0.8);
+						button->SetFontSize(34.0);
 		                button->SetMargin(0, 0, 50, 0);				 
 		                button->SetRadius(20,20,20,20);
 						button->SetOnLeave([button]() {
@@ -46,6 +49,8 @@ public:
 							button->SetColor({ 100, 100, 100, 255 });
 						});
 		CFrame::Button* button1 = new CFrame::Button(90, 90);
+						button1->SetText("Wz");
+						button1->SetFontSize(34.0);
 		                button1->SetRadius(20, 20, 20, 20);
 						button1->SetOnLeave([button1]() {
 							button1->SetColor(Color::Gray);
@@ -54,6 +59,8 @@ public:
 							button1->SetColor({ 100, 100, 100, 255 });
 							});
 		CFrame::Button* button2 = new CFrame::Button(90, 90);
+						button2->SetText("Eeli");
+						button2->SetFontSize(34.0);
 		                button2->SetRadius(20,20,20,20);
 						button2->SetOnLeave([button2]() {
 							button2->SetColor(Color::Gray);
@@ -62,6 +69,8 @@ public:
 							button2->SetColor({ 100, 100, 100, 255 });
 						});
 		CFrame::Button* button3 = new CFrame::Button(90, 90);
+						button3->SetText("GRM");
+						button3->SetFontSize(34.0);
 		                button3->SetRadius(20,20,20,20);
 						button3->SetOnLeave([button3]() {
 							button3->SetColor(Color::Gray);
@@ -71,6 +80,8 @@ public:
 						});
 						
 		CFrame::Button* button4 = new CFrame::Button(90, 90);
+						button4->SetFontSize(34.0);
+						button4->SetText("E.m");
 		                button4->SetRadius(20,20,20,20);
 						button4->SetOnLeave([button4]() {
 							button4->SetColor(Color::Gray);
@@ -79,6 +90,8 @@ public:
 							button4->SetColor({ 100, 100, 100, 255 });
 						});
 	    CFrame::Button* button45 = new CFrame::Button(90, 90);
+						button45->SetText("Il");
+						button45->SetFontSize(34.0);
 		                button45->SetRadius(20,20,20,20);
 						button45->SetOnLeave([button45, friendList,content]() {
 							button45->SetColor(Color::Gray);
@@ -114,31 +127,40 @@ public:
 		
 
 		CFrame::Button* button5 = new CFrame::Button(-1, 75);
-		                button5->SetColor(Color::Gray);
+		                button5->SetColor(Color::DarkGray);
+						button5->SetText("Kaverit");
 						button5->SetOnLeave([button5]() { 
 							button5->SetBorder(0.0f);
 							button5->SetScale(1.0f, 1.0f);
+							button5->SetColor(Color::DarkGray);
 						});
 						button5->SetOnHover([button5]() {
 							button5->SetBorder(2.5f);
 							button5->SetScale(1.05f, 1.05f);
 						    button5->SetBorderGradient(Color::Cyan, Color::Red);
 						    button5->AnimateGradient(3.0);
+							button5->SetOpacity(0.2);
+							button5->SetColor(Color::Gray);
 						});
 						button5->SetOnClick([button5](){
 							button5->SetScale(1.5f, 1.5f); 
 							button5->StartAnimation();
 						});
 		CFrame::Button* button6  = new CFrame::Button(-1, 75);
-		                button6->SetColor(Color::Gray);
+						button6->SetText("Kirjasto");
+		                button6->SetColor(Color::DarkGray);
 						button6->SetOnLeave([button6]() { 
 							button6->SetBorder(0.0f);
+							button6->SetColor(Color::DarkGray);
 						});
 						button6->SetOnHover([button6]() {
 							button6->SetBorder(2.5f);
 							button6->SetBorderGradient(Color::Cyan, Color::Red);
 							button6->AnimateGradient(3.0);
+							button6->SetOpacity(0.2);
+							button6->SetColor(Color::Gray);
 						});
+						
 		CFrame::Button* button7  = new CFrame::Button(-1, 75);
 		                button7->SetColor(Color::Gray);
 						button7->SetOnLeave([button7]() { 

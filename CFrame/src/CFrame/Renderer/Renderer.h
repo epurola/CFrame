@@ -14,9 +14,11 @@
 #include <SDL3/SDL.h>
 #include "Fontloader.h"
 
+
 namespace CFrame {
 
 	struct ElementProperties;
+	struct TextProperties;
 
 	class Renderer
 	{
@@ -28,7 +30,8 @@ namespace CFrame {
 		void DrawRectangle(float x, float y, float w, float h,
 			ElementProperties p, float speed, float time, Texture* texture );
 
-		void RenderText(const std::string& text, float x, float y);
+		void RenderText(const std::string& text, float x, float y, TextProperties t, Texture* atlas );
+        
 		
 
 	private:
@@ -37,9 +40,6 @@ namespace CFrame {
 		std::unique_ptr<Shader> textShader;
 		unsigned char* glyph;
 		int width, height, xOffset, yOffset;
-		unsigned int glyphTexture;
-		Texture* texture = nullptr;
-		std::map<char, fontInfo> glyphs;
-		FontLoader*  fontLoader = nullptr ;
+		
 	};
 }

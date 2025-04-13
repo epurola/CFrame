@@ -17,6 +17,17 @@ namespace CFrame
         float bottomRight = 0;
     };
 
+    struct TextProperties
+    {
+        std::vector<float> vertices;
+        std::vector<unsigned int> indices;
+        float offsetX, offsetY;
+        int textWidth = 0, textHeight = 0;
+        float opacity = 1;
+        float fontSize = 24;
+    };
+
+
     struct ElementProperties 
     {
         int marginLeft     = 0;

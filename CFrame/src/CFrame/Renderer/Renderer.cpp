@@ -1,9 +1,6 @@
 #include "Renderer.h"
 #include <iostream>
 #include <filesystem>
-#include "FontLoader.h"
-
-
 
 
 namespace CFrame {
@@ -14,18 +11,11 @@ namespace CFrame {
         shader = std::make_unique<Shader>("C:/dev/CFrame/CFrame/src/CFrame/res/shaders/basic.shader");
 
         textShader = std::make_unique<Shader>("C:/dev/CFrame/CFrame/src/CFrame/res/shaders/textShader.shader");
-
-        fontLoader = new FontLoader("C:/dev/CFrame/CFrame/src/CFrame/res/fonts/arial.ttf");
-        fontLoader->LoadFont();
-        std::vector<uint8_t>atlas = fontLoader->GetFontAtlas();
-        glyphs = fontLoader->GetGlyphs();
-        texture = new Texture(atlas.data(), fontLoader->GetAtlasWidth(), fontLoader->GetAtlasHeight());
 	}
 
 	Renderer::~Renderer()
 	{
-        delete texture;
-        delete fontLoader;
+       
     }
         
 
@@ -126,73 +116,19 @@ namespace CFrame {
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
         shader->UnBind();
-        
-
-        RenderText("Hello World!", x, y);
 	}
 
     //write a different shader for this.
-    void Renderer::RenderText(const std::string& text, float x, float y) 
+    void Renderer::RenderText(const std::string& text, float x, float y, TextProperties t, Texture* atlas)
     {
-        
-         this->texture->Bind();
         
         int windowWidth, windowHeight; //Todo: Not here
         SDL_GetWindowSize(window.GetWindow(), &windowWidth, &windowHeight);
-        std::vector<float> vertices;
-        std::vector<unsigned int> indices;
-        float offsetX = 50.0f;
-
-
-        for (char c : text) {
-            //Store the current glyph info
-            fontInfo glyph = glyphs[c];
-
-            //texture coordinates for the character
-            float texX1 =  glyph.x / (float)fontLoader->GetAtlasWidth(); // width
-            float texY1 =  glyph.y / (float)fontLoader->GetAtlasHeight(); //height
-            float texX2 = (glyph.x + glyph.width)  / (float)fontLoader->GetAtlasWidth();
-            float texY2 = (glyph.y + glyph.height) / (float)fontLoader->GetAtlasHeight();
-
-            float charWidth  = glyph.width;
-            float charHeight = glyph.height;
-
-            //Define 4 vertices for the current character
-            vertices.push_back(x + offsetX);             //top-Left x
-            vertices.push_back(y + charHeight);          //Top-Left y
-            vertices.push_back(texX1);                   //Texture coord x1
-            vertices.push_back(texY2);                   //Texture coord y2
-
-            vertices.push_back(x + offsetX + charWidth); //Top-Right x
-            vertices.push_back(y + charHeight);          //Top-Right y
-            vertices.push_back(texX2);                   //texture coord x2
-            vertices.push_back(texY2);                   //texture coord y2
-
-            vertices.push_back(x + offsetX + charWidth); //Bottom-Right x
-            vertices.push_back(y);
-            vertices.push_back(texX2);                   //texture coord x2
-            vertices.push_back(texY1);                   //texture coord y1
-
-            vertices.push_back(x + offsetX);             //Bottom-Right x
-            vertices.push_back(y);                       //bottom-Right y
-            vertices.push_back(texX1);                   //Texture coord x1
-            vertices.push_back(texY1);                   //Texture coord y1
-
-            unsigned int baseIndex = (vertices.size() / 4) - 4;
-            indices.push_back(baseIndex);                // 0
-            indices.push_back(baseIndex + 1);            // 1
-            indices.push_back(baseIndex + 2);            // 2
-            indices.push_back(baseIndex + 2);            // 2
-            indices.push_back(baseIndex + 3);            // 3
-            indices.push_back(baseIndex);                // 0
-
-            offsetX += charWidth;
-        }
         
         
-        VertexBuffer vb(vertices.data(), vertices.size() * sizeof(float));
+        VertexBuffer vb(t.vertices.data(), t.vertices.size() * sizeof(float));
 
-        IndexBuffer ib(indices.data(), indices.size());
+        IndexBuffer ib(t.indices.data(), t.indices.size());
 
         VertexArray va;
         VertexBufferLayout layout;
@@ -201,29 +137,29 @@ namespace CFrame {
 
         va.AddBuffer(vb, layout);
 
+        if (atlas != nullptr) {
+            atlas->Bind();
+        }
         va.Bind();
         vb.Bind();
         ib.Bind();
-       
-
-        textShader->Bind(); //write a diffferent shader for thi
+      
+        textShader->Bind(); 
 
         glm::mat4 proj = glm::ortho(0.0f, float(windowWidth), // Left, Right
                                   float(windowHeight), 0.0f, // Bottom, Top
                                                 -1.0f, 1.0f); // Near, Far
         textShader->SetUniformMat4f("u_MVP", proj);
-        textShader->SetUniform1i("u_Texture", 0); // Texture slot
+        textShader->SetUniform1i("u_Texture", 0); 
+        textShader->SetUniform1f("u_Opacity", t.opacity);
 
-        CF_CORE_INFO("Indecies size: {0}", indices.size());
-        CF_CORE_INFO("Vertices size: {0}", vertices.size());
-
-        glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, nullptr);
+        glDrawElements(GL_TRIANGLES, t.indices.size(), GL_UNSIGNED_INT, nullptr);
 
         va.UnBind();
         vb.Unbind();
         ib.Unbind();
         textShader->UnBind();
-        texture->UnBind();
+        atlas->UnBind();
         
     }
 

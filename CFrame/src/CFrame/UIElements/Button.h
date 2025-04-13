@@ -4,7 +4,7 @@
 #include "UIElement.h"
 #include <memory> 
 #include "../Animator/Animator.h"
-#include "Label.h"
+#include <map>
 
 
 
@@ -28,6 +28,10 @@ namespace CFrame
         void OnEvent(CFrameEvent& event) override;
         void SetOnClick(std::function<void()> onClick);
         void StartAnimation();
+
+        void SetText(std::string text);
+        void setTextOpacity(float opacity);
+        void SetFontSize(float size);
         
 
         inline ElementType GetElementType() const override { return ElementType::BUTTON; };
@@ -39,6 +43,7 @@ namespace CFrame
         std::unique_ptr<Animator> animator;
         bool hovering = false;
         std::unique_ptr<Texture> labelTexture;
-        //std::map<char, fontInfo> glyphs;
+        TextProperties textProps;
+        std::map<char, fontInfo> glyphs;
     };
 }

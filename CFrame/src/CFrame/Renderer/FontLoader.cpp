@@ -7,8 +7,8 @@
 
 namespace CFrame {
 
-	FontLoader::FontLoader(const std::string& fontPath)
-		:fontPath(fontPath),  fontSize(48.0f)
+	FontLoader::FontLoader(const std::string& fontPath, float fontSize)
+		:fontPath(fontPath),  fontSize(fontSize)
 	{
 		
 	}
@@ -66,6 +66,7 @@ namespace CFrame {
 
 			int col = c % cols;
 			int row = c / cols;
+
 			int x   = col * cellW;
 			int y   = row * cellH;
 
