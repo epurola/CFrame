@@ -36,10 +36,17 @@ namespace CFrame {
 
 	private:
 		Window& window;
-		std::unique_ptr<Shader> shader;
-		std::unique_ptr<Shader> textShader;
-		unsigned char* glyph;
 		int width, height, xOffset, yOffset;
-		
+		std::unique_ptr<Shader> shader;
+		std::unique_ptr<VertexArray> rectVA;
+		std::unique_ptr<VertexBuffer> rectVB;
+		std::unique_ptr<VertexBufferLayout> rectLayout;
+		std::unique_ptr<IndexBuffer> rectIndices;
+
+		std::unique_ptr<Shader> textShader;
+		std::unique_ptr<VertexArray> textVA;
+		std::unique_ptr<VertexBuffer> textVB;
+		std::unique_ptr<VertexBufferLayout> textLayout;
+		std::unique_ptr<IndexBuffer> textIndices;
 	};
 }

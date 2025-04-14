@@ -7,7 +7,7 @@ namespace CFrame
     {
         glGenBuffers(1, &RendererId);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, RendererId);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(unsigned int), data, GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(unsigned int), data, GL_DYNAMIC_DRAW);
     }
 
     IndexBuffer::~IndexBuffer()
@@ -18,6 +18,17 @@ namespace CFrame
     void IndexBuffer::Bind() const
     {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, RendererId);
+    }
+
+    void IndexBuffer::SetData(const unsigned int* data, unsigned int count)
+    {
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, RendererId); 
+        if (this->count < count) {
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(unsigned int), data, GL_DYNAMIC_DRAW);
+        }
+        else {
+            glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, count * sizeof(unsigned int), data);
+        }
     }
 
     void IndexBuffer::Unbind() const

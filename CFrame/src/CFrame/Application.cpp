@@ -11,6 +11,7 @@ Application::Application(int width, int height)
 {  
 	eventDispatcher = std::make_unique<EventDispatcher>();  
 	window = std::make_unique<Window>(*eventDispatcher);  
+	window->Create(windowWidth, windowHeight, "CFrame");
 	
 	window->SetHeight(windowHeight);  
 	window->SetWidth(windowWidth);  
@@ -50,13 +51,13 @@ void Application::OnEvent(CFrameEvent& e)
 	}  
 	if (CFrameEventType::WindowResized == e.GetEventType())  
 	{  
-		CF_CORE_INFO("Resized window {0}, {1}",   
-            dynamic_cast<WindowResizedEvent&>(e).GetWidth(),   
-            dynamic_cast<WindowResizedEvent&>(e).GetHeight());  
-
 		//The main pane should be updated  
-		rootContainer->SetWidth(dynamic_cast<WindowResizedEvent&>(e).GetWidth());  
-		rootContainer->SetHeight(dynamic_cast<WindowResizedEvent&>(e).GetHeight());  
+		int width  = dynamic_cast<WindowResizedEvent&>(e).GetWidth();
+		int height = dynamic_cast<WindowResizedEvent&>(e).GetHeight();
+		rootContainer->SetWidth(width);  
+		rootContainer->SetHeight(height);  
+		window->SetWidth(width);
+		window->SetHeight(height);
 
 		rootContainer->UpdateChildSizes(); 
 		
@@ -85,10 +86,8 @@ void Application::SetWindowSize(int width, int height)
 
    void Application::run()  
 {  
-	constexpr double target_fps = 60.0;  
-	constexpr std::chrono::milliseconds frame_duration(static_cast<int>(1000.0 / target_fps));  
-
-	window->Create(windowWidth, windowHeight, "CFrame");  
+	constexpr double target_fps = 50.0;  
+	constexpr std::chrono::milliseconds frame_duration(static_cast<int>(1000.0 / target_fps));    
 	/*Needs to be created after window->Create since there is no 
 	valid GL context before that*/
 	renderer = std::make_unique<Renderer>(*window);

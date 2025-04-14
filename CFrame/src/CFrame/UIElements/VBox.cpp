@@ -142,6 +142,7 @@ namespace CFrame
             if (child->IsHeightResizable())
             {
                 child->SetHeight(flexibleHeight);
+                child->UpdateChildSizes();
             }
 
             if (xAlign == AlignItems::Stretch)
@@ -153,13 +154,17 @@ namespace CFrame
             {
                 child->SetWidth(width - (properties.padding * 2) - (child->GetProperties().marginRight + child->GetProperties().marginLeft));
 
-                if (child->GetElementType() == ElementType::CONTAINER)
+                if (child->GetElementType() == ElementType::CONTAINER )
                 {
                     child->UpdateChildSizes();
                 }
                 if (xAlign == AlignItems::Center) {
                     child->SetWidth(width - xpos);
                 }
+            }
+
+            if (child->GetElementType() == ElementType::BUTTON) {
+                child->UpdateChildSizes();
             }
 
             ypos += child->GetHeight() + child->GetProperties().marginBottom;

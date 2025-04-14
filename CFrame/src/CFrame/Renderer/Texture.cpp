@@ -43,7 +43,7 @@ namespace CFrame {
     }
 
     Texture::Texture(unsigned char* buffer, int width, int height)
-        : RendererId(0)
+        : RendererId(0), width(width), height(height)
     {
         glGenTextures(1, &RendererId);
         glBindTexture(GL_TEXTURE_2D, RendererId);

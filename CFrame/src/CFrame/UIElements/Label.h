@@ -1,12 +1,13 @@
 #pragma once
-#pragma once
 #include <string>
 #include "../Renderer/Texture.h"
 #include "../Renderer/FontLoader.h"
+#include "UIElement.h"
 
 
 namespace CFrame
 {
+
     class CFRAME_API Label : public UIElement
     {
     public:
@@ -21,16 +22,20 @@ namespace CFrame
 
         void Render(Renderer& renderer) override;
         void CreateTexture(const std::string& text, int width, int height);
+        void UpdateChildSizes() override;
         void OnEvent(CFrameEvent& event) override;
-        inline Texture* GetTexture() { return sdfTexture; };
+        inline Texture* GetTexture() { return labelTexture.get(); };
         inline ElementType GetElementType() const override { return ElementType::LABEL; };
 
   
 
     private:
-        //Color color;
+        Color color;
         std::string text;
-        Texture* sdfTexture = nullptr;
         unsigned char* textTexture;
+        std::unique_ptr<Texture> labelTexture;
+        TextProperties textProps;
+        std::map<char, fontInfo> glyphs;
+        std::unique_ptr<FontLoader> fontLoader;
     };
 }

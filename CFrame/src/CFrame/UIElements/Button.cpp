@@ -1,6 +1,7 @@
 #include "Button.h"
 #include <algorithm>
 #include "../Renderer/FontLoader.h"
+#include "../Renderer/FontManager.h"
 
 
 namespace CFrame 
@@ -25,40 +26,79 @@ namespace CFrame
     //For everytime button change change font size and position not everyframe.
 	void Button::Render(Renderer& renderer)
 	{
-        if (!labelTexture && GetElementType() == ElementType::BUTTON){
-            FontLoader fontLoader("C:/dev/CFrame/CFrame/src/CFrame/res/fonts/arial.ttf", textProps.fontSize);
-            fontLoader.LoadFont();
-            std::vector<uint8_t>atlas = fontLoader.GetFontAtlas();
-            glyphs = fontLoader.GetGlyphs();
-            labelTexture = std::make_unique<Texture>(atlas.data(), fontLoader.GetAtlasWidth(), fontLoader.GetAtlasHeight());
+        int renderWidth  = width;
+        int renderHeight = height;
+
+        if (!animProperties.isAnimatedElement) {
+             renderWidth  = static_cast<int>(width * properties.scaleX);
+             renderHeight = static_cast<int>(height * properties.scaleY);
+        }
+       
+        if (animator->IsAnimating()) {
+            animator->Update(0.016f); //60fps
+        }
+
+        int centeredX = x + (width - renderWidth) / 2;
+        int centeredY = y + (height - renderHeight) / 2;
+        
+		renderer.DrawRectangle((float)centeredX, (float)centeredY, (float)renderWidth, (float)renderHeight, 
+            GetProperties(),
+            animator->GetTime(), 
+            animProperties.speed,
+            nullptr);
+
+
+       renderer.RenderText(text, centeredX, centeredY, textProps, labelTexture.get() );
+	}
+
+    void Button::UpdateChildSizes()
+    {
+        if (!labelTexture) {
+            FontKey key = { Font::Arial, textProps.fontSize };
+            FontManager& fm = FontManager::GetInstance();
+            std::pair<std::shared_ptr<Texture>, std::map<char, fontInfo>> font = fm.GetFont(key);
+            glyphs = font.second;
+            labelTexture = font.first;
+        }
+          
             float offsetX = 0.0f, offsetY = 0.0f;
             int textWidth = 0, textHeight = 0;
             textProps.textWidth = 0;
             textProps.textHeight = 0;
             textProps.vertices.clear();
             textProps.indices.clear();
-            
+
             for (char c : text) {
                 fontInfo glyph = glyphs[c];
-                
+
                 float charWidth = glyph.width;
                 float charHeight = glyph.height;
-                textProps.textWidth += glyph.advance ;
+                textProps.textWidth += glyph.advance;
                 textProps.textHeight = std::max((float)textProps.textHeight, charHeight);
- 
             }
-            offsetX = (width / 2)  - (textProps.textWidth / 2);
-            offsetY = (height / 2.0f) + (textProps.textHeight / 2.0f); //OpneGl goes from down up and screen up down so flip this
-            
+
+            if (textProps.textAlign == TextAlign::Center) {
+                offsetX = (width / 2) - (textProps.textWidth / 2);
+                offsetY = (height / 2.0f) + (textProps.textHeight / 2.0f); //OpneGl goes from down up and screen up down so flip this
+            }
+            else if (textProps.textAlign == TextAlign::Start) {
+                offsetX = properties.padding;
+                offsetY = (height / 2.0f) + (textProps.textHeight / 2.0f);
+            }
+            else {
+                offsetX = width - textProps.textWidth - properties.padding;
+                offsetY = (height / 2.0f) + (textProps.textHeight / 2.0f);
+            }
+
             for (char c : text) {
                 //Store the current glyph info
                 fontInfo glyph = glyphs[c];
 
                 //texture coordinates for the character
-                float texX1 = glyph.x / (float)fontLoader.GetAtlasWidth(); // width
-                float texY1 = glyph.y / (float)fontLoader.GetAtlasHeight(); //height
-                float texX2 = (glyph.x + glyph.width) / (float)fontLoader.GetAtlasWidth();
-                float texY2 = (glyph.y + glyph.height) / (float)fontLoader.GetAtlasHeight();
+                float texX1 = glyph.x / (float)labelTexture->GetWidth(); // width
+                float texY1 = glyph.y / (float)labelTexture->GetHeight(); //height
+                float texX2 = (glyph.x + glyph.width) / (float)labelTexture->GetWidth();
+                float texY2 = (glyph.y + glyph.height) / (float)labelTexture->GetHeight();
 
                 float charWidth = glyph.width;
                 float charHeight = glyph.height;
@@ -73,7 +113,7 @@ namespace CFrame
                 float rightX = xpos + w;
                 float topY = ypos;
                 float bottomY = ypos - h;
-              
+
                 //Define 4 vertices for the current character
                 textProps.vertices.push_back(leftX);                   //top-Left x
                 textProps.vertices.push_back(topY);                    //Top-Left y
@@ -105,33 +145,7 @@ namespace CFrame
 
                 offsetX += glyph.advance;
             }
-        }
-        
-
-        int renderWidth  = width;
-        int renderHeight = height;
-
-        if (!animProperties.isAnimatedElement) {
-             renderWidth  = static_cast<int>(width * properties.scaleX);
-             renderHeight = static_cast<int>(height * properties.scaleY);
-        }
-       
-        if (animator->IsAnimating()) {
-            animator->Update(0.016f); //60fps
-        }
-
-        int centeredX = x + (width - renderWidth) / 2;
-        int centeredY = y + (height - renderHeight) / 2;
-        
-		renderer.DrawRectangle((float)centeredX, (float)centeredY, (float)renderWidth, (float)renderHeight, 
-            GetProperties(),
-            animator->GetTime(), 
-            animProperties.speed,
-            nullptr);
-
-
-        renderer.RenderText(text, centeredX, centeredY, textProps, labelTexture.get() );
-	}
+    }
 
     void Button::OnEvent(CFrameEvent& event)
     {
@@ -217,6 +231,11 @@ namespace CFrame
     void Button::SetFontSize(float size)
     {
         textProps.fontSize = size;
+    }
+
+    void Button::SetTextAlign(TextAlign alignX)
+    {
+        textProps.textAlign = alignX;
     }
 
 }

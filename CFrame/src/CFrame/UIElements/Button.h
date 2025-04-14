@@ -25,6 +25,7 @@ namespace CFrame
         ~Button();
 
         void Render(Renderer& renderer) override;
+        void UpdateChildSizes() override; 
         void OnEvent(CFrameEvent& event) override;
         void SetOnClick(std::function<void()> onClick);
         void StartAnimation();
@@ -32,18 +33,20 @@ namespace CFrame
         void SetText(std::string text);
         void setTextOpacity(float opacity);
         void SetFontSize(float size);
+        void SetTextAlign(TextAlign alignX);
         
 
         inline ElementType GetElementType() const override { return ElementType::BUTTON; };
-      
+       
     private:
-        //Color color;
+        
         std::function<void()> onClick;
         std::string text;
         std::unique_ptr<Animator> animator;
         bool hovering = false;
-        std::unique_ptr<Texture> labelTexture;
+        std::shared_ptr<Texture> labelTexture;
         TextProperties textProps;
         std::map<char, fontInfo> glyphs;
+        std::unique_ptr<FontLoader> fontLoader;
     };
 }

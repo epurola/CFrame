@@ -180,6 +180,10 @@ namespace CFrame {
                 child->SetHeight(height - (properties.padding * 2));
             }
 
+            if (child->GetElementType() == ElementType::BUTTON) {
+                child->UpdateChildSizes();
+            }
+
             xpos += child->GetWidth() + child->GetProperties().marginRight;
             if (i < children.size() - 1)
             {

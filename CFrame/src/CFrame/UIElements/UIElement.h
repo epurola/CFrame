@@ -10,6 +10,19 @@ namespace CFrame
 {
     class Renderer;
 
+    enum ElementType
+    {
+        CONTAINER,
+        BUTTON,
+        LABEL
+    };
+
+    enum TextAlign {
+        Start,
+        Center,
+        End
+    };
+
     struct Radius {
         float topRight    = 0;
         float topLeft     = 0;
@@ -17,14 +30,16 @@ namespace CFrame
         float bottomRight = 0;
     };
 
-    struct TextProperties
-    {
-        std::vector<float> vertices;
-        std::vector<unsigned int> indices;
-        float offsetX, offsetY;
-        int textWidth = 0, textHeight = 0;
-        float opacity = 1;
-        float fontSize = 24;
+    struct TextProperties  
+    {  
+       std::vector<float> vertices;  
+       std::vector<unsigned int> indices;  
+       float offsetX = 0.0f; 
+       float offsetY = 0.0f; 
+       int textWidth = 0, textHeight = 0;  
+       float opacity = 1;  
+       float fontSize = 24;  
+       TextAlign textAlign = TextAlign::Center;  
     };
 
 
@@ -59,13 +74,6 @@ namespace CFrame
         float duration          = 1.0f;
         bool isAnimatedElement  = false;
         float speed             = 0;
-    };
-
-    enum ElementType
-    {
-        CONTAINER,
-        BUTTON,
-        LABEL
     };
 
     class CFRAME_API UIElement {

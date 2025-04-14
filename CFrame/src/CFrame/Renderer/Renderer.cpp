@@ -25,7 +25,6 @@ namespace CFrame {
         Texture* texture)
 	{
        
-
         SDL_Color c = p.color1.toSDLColor(p.opacity);
         SDL_Color c1 = p.color1.toSDLColor(p.opacity);
 
@@ -49,10 +48,9 @@ namespace CFrame {
         float bgb = p.borderColor2.b / 255.0f;
         float agb = p.borderColor2.a / 255.0f;
 
-        int windowWidth, windowHeight; //Todo: Not here
-        SDL_GetWindowSize(window.GetWindow(), &windowWidth, &windowHeight);
+        int windowWidth  = window.GetWidth();
+        int windowHeight = window.GetHeight();
         
-       
         /*Vertices of the rectangle. Calculates the top left as the origin*/
         float vertices[] = {
             /* x, y,        r, g, b, a         texture coordinates      Gradient color
@@ -70,24 +68,27 @@ namespace CFrame {
         /*create vertex buffer with the vertices and the size of the data
         4 vertices with 12 data point that are floats.
         Will also automaticaaly bind it*/
-        VertexBuffer vb(vertices, 4 * 12 * sizeof(float));
+        if (!rectVA) {
+            /*Create Vertex Array*/
+            rectVA = std::make_unique<VertexArray>();
+            rectLayout = std::make_unique<VertexBufferLayout>();
+            rectVB = std::make_unique<VertexBuffer>(vertices, 4 * 12 * sizeof(float));
+            /*creates index buffer with 6 indecies.*/
+            rectIndices = std::make_unique<IndexBuffer>(indecies, 6);
+            rectLayout->Push<float>(2); // Position x, y
+            rectLayout->Push<float>(4); // Color Data r, g, b, a
+            rectLayout->Push<float>(2); // Texture coordinates
+            rectLayout->Push<float>(4); // Gradient Color Data r, g, b, a
+        }
 
-        /*Create Vertex Array*/
-        VertexArray va;
-        VertexBufferLayout layout;
-        layout.Push<float>(2); // Position x, y
-        layout.Push<float>(4); // Color Data r, g, b, a
-        layout.Push<float>(2); // Texture coordinates
-        layout.Push<float>(4); // Gradient Color Data r, g, b, a
-        va.AddBuffer(vb, layout);
+        rectVA->Bind();
+        rectVB->SetData(vertices, 4 * 12 * sizeof(float));
+        rectVA->AddBuffer(*rectVB, *rectLayout);
+        rectIndices->Bind();
 
-        /*creates index buffer with 6 indecies.*/
-        IndexBuffer ib(indecies, 6);
-
-        /*Define ortho protection matrix*/
         glm::mat4 proj = glm::ortho(0.0f, float(windowWidth),  // Left, Right
                                     float(windowHeight), 0.0f, // Bottom, Top
-                                     -1.0f, 1.0f);             // Near, Far
+                                   -1.0f, 1.0f);
         
         //Bind the shader and set uniforms
         shader->Bind();
@@ -115,55 +116,46 @@ namespace CFrame {
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
-        shader->UnBind();
 	}
 
-    //write a different shader for this.
     void Renderer::RenderText(const std::string& text, float x, float y, TextProperties t, Texture* atlas)
     {
         
-        int windowWidth, windowHeight; //Todo: Not here
-        SDL_GetWindowSize(window.GetWindow(), &windowWidth, &windowHeight);
-        
-        
-        VertexBuffer vb(t.vertices.data(), t.vertices.size() * sizeof(float));
+        int windowWidth = window.GetWidth();
+        int windowHeight = window.GetHeight();
 
-        IndexBuffer ib(t.indices.data(), t.indices.size());
+        if (!textVA) {
+            textVA      = std::make_unique<VertexArray>();
+            textLayout  = std::make_unique<VertexBufferLayout>();
+            textVB      = std::make_unique<VertexBuffer>(t.vertices.data(), t.vertices.size() * sizeof(float));
+            textIndices = std::make_unique<IndexBuffer>(t.indices.data(), t.indices.size());
 
-        VertexArray va;
-        VertexBufferLayout layout;
-        layout.Push<float>(2);
-        layout.Push<float>(2);
+            textLayout->Push<float>(2); // Position x, y
+            textLayout->Push<float>(2); // Texture coordinates
+        }
 
-        va.AddBuffer(vb, layout);
+        textVA->Bind();
+        textVB->SetData(t.vertices.data(), t.vertices.size() * sizeof(float));
+        textIndices->SetData(t.indices.data(), t.indices.size());
+        textVA->AddBuffer(*textVB, *textLayout);
 
         if (atlas != nullptr) {
             atlas->Bind();
         }
-        va.Bind();
-        vb.Bind();
-        ib.Bind();
-      
-        textShader->Bind(); 
 
         glm::mat4 proj = glm::ortho(0.0f, float(windowWidth), // Left, Right
-                                  float(windowHeight), 0.0f, // Bottom, Top
-                                                -1.0f, 1.0f); // Near, Far
+                                   float(windowHeight), 0.0f,  // Bottom, Top
+                                                -1.0f, 1.0f); 
+
+        textShader->Bind();
         textShader->SetUniformMat4f("u_MVP", proj);
         textShader->SetUniform1i("u_Texture", 0); 
         textShader->SetUniform1f("u_Opacity", t.opacity);
 
         glDrawElements(GL_TRIANGLES, t.indices.size(), GL_UNSIGNED_INT, nullptr);
 
-        va.UnBind();
-        vb.Unbind();
-        ib.Unbind();
-        textShader->UnBind();
         atlas->UnBind();
-        
     }
 
- 
-    
 }
 
