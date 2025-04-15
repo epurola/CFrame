@@ -8,8 +8,7 @@ namespace CFrame {
 	{
 		if (width == -1 && parent) width = parent->width;
 		if (height == -1 && parent) height = parent->height;
-		isHeightResizable = true;
-		isWidthResizable = true;
+		
 	}
 
 	void UIElement::OnEvent(CFrameEvent& event)
@@ -47,6 +46,9 @@ namespace CFrame {
 	void UIElement::SetHeight(int h)
 	{
 		this->height = h;
+		if (height < properties.minHeight && properties.minHeight != 0) {
+			height = properties.minHeight;
+		}
 	}
 
 	void UIElement::SetWidth(int w)
@@ -111,6 +113,12 @@ namespace CFrame {
 		properties.maxWidth = maxWidth;
 	}
 
+	void UIElement::SetMinHeight(int minHeight)
+	{
+		properties.minHeight = minHeight;
+		height = minHeight;
+	}
+
 	void UIElement::SetZindex(float index)
 	{
 		properties.zIndex = index;
@@ -121,6 +129,11 @@ namespace CFrame {
 		this->positionAbsolute = b;
 		localX = x;
 		localY = y;
+	}
+
+	void UIElement::SetBackgroundImage(std::string path)
+	{
+		imageTexture = std::make_unique<Texture>(path);
 	}
 
 	void UIElement::SetColor(Color color)
@@ -170,6 +183,11 @@ namespace CFrame {
 	void UIElement::SetDragToResize(bool b)
 	{
 		dragToResize = b;
+	}
+
+	void UIElement::SetAnchorPoint(PositionMode mode)
+	{
+		pMode = mode;
 	}
 
 

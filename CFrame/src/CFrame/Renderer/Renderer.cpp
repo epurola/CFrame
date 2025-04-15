@@ -24,6 +24,11 @@ namespace CFrame {
         ElementProperties p, float speed, float time,
         Texture* texture)
 	{
+        bool hasTexture = false;
+        if (texture != nullptr) {
+            texture->Bind();
+            hasTexture = true;
+        }
        
         SDL_Color c = p.color1.toSDLColor(p.opacity);
         SDL_Color c1 = p.color1.toSDLColor(p.opacity);
@@ -90,6 +95,7 @@ namespace CFrame {
                                     float(windowHeight), 0.0f, // Bottom, Top
                                    -1.0f, 1.0f);
         
+        
         //Bind the shader and set uniforms
         shader->Bind();
         shader->SetUniform1f("u_ZIndex", p.zIndex);
@@ -113,8 +119,10 @@ namespace CFrame {
         shader->SetUniform4f("u_BorderColor1", rb, gb, bb, ab);
         shader->SetUniform4f("u_BorderColor2", rgb, ggb, bgb, agb);
         shader->SetUniform1i("u_Texture", 0);
+        shader->SetUniform1i("u_HasTexture", hasTexture);
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+        texture->UnBind();
 
 	}
 

@@ -14,6 +14,8 @@ namespace CFrame {
 
 	}
 
+
+    //ToDo; Refactor this mess wtf
 	void HBox::UpdateChildSizes()
 	{
         if (children.empty())
@@ -124,22 +126,32 @@ namespace CFrame {
                 if (child->IsWidthResizable()) {
                     child->SetWidth(width -child->GetLocalX() - properties.padding * 2 - child->GetProperties().marginRight);
                 }
-                child->SetX(GetX() + child->GetLocalX());
-                child->SetY(GetY() + child->GetLocalY());
-
-                if (child->GetElementType() == ElementType::CONTAINER) {
-                    child->UpdateChildSizes();
+          
+                if (child->GetAnchor() == PositionMode::BottomLeft) {
+                    child->SetX(GetX() + child->GetLocalX());
+                    child->SetY(GetY() + GetHeight() - child->GetHeight() - child->GetProperties().marginBottom - child->GetLocalY());
                 }
+                else {
+                    child->SetX(GetX() + child->GetLocalX());
+                    child->SetY(GetY() + child->GetLocalY());
+                }
+                
+                child->UpdateChildSizes();
+                
                 continue;
             }
             
-            if (child->GetElementType() == ElementType::CONTAINER && child->IsWidthResizable())//todo: Fix isDraggable 
+            if (child->GetElementType() == ElementType::CONTAINER && child->IsWidthResizable())
             {
                 if (flexWidth > child->GetProperties().maxWidth && child->GetProperties().maxWidth > 0) {
                     flexWidth = child->GetProperties().maxWidth;
                 }
+
                 child->SetWidth(flexWidth);
+              
                 child->SetHeight(height - (properties.padding * 2));
+                
+
                 if (!child->IsPositionAbsolute()) {
                     child->SetX(xpos);
                     child->SetY(ypos);
@@ -175,10 +187,10 @@ namespace CFrame {
                 child->SetY(ypos + child->GetProperties().marginTop);
                 child->UpdateChildSizes();
             }
-
+            /*
             if (child->GetHeight() > height) {
                 child->SetHeight(height - (properties.padding * 2));
-            }
+            }*/
 
             if (child->GetElementType() == ElementType::BUTTON) {
                 child->UpdateChildSizes();

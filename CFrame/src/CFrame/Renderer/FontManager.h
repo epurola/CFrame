@@ -6,7 +6,21 @@
 
 namespace CFrame {
 	enum Font {
-		Arial
+		Arial,
+		ArialBold,
+		TimesNewRoman,
+		CourierNew,
+		Calibri,
+		Cambria,
+		Consolas,
+		SegoeUI,
+		Tahoma,
+		Verdana,
+		VerdanaBold,
+		// Icon Fonts
+		SegoeMDL2Assets,
+		Wingdings,
+		Webdings
 	};
 
 	struct FontKey {
@@ -45,6 +59,7 @@ namespace CFrame {
 		FontManager& operator=(const FontManager&) = delete;
 
 		std::pair <std::shared_ptr<Texture>, std::map<char, fontInfo>>& GetFont(FontKey key);
+		std::string FontManager::GetFontPath(Font font);
 
 
 	private:

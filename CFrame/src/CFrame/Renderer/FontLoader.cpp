@@ -36,8 +36,6 @@ namespace CFrame {
 
 		CF_CORE_INFO("Font init OK!");
 
-		const int startChar = 0xE000;  // Start of the PUA range
-		const int endChar = 0xF8FF;
 
 		const int numChars = 128;
 		const int cols     = 16;

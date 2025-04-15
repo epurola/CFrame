@@ -2,6 +2,8 @@
 #include "UIElement.h"
 #include "../Renderer/Renderer.h"
 
+
+
 namespace CFrame {
 
 	enum class FlexDirection { Row, Column };
@@ -33,6 +35,7 @@ namespace CFrame {
 	protected:
 		int spacing = 0;
 		AlignItems xAlign, yAlign;
+		
 	};
 
 }

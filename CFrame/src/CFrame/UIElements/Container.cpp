@@ -25,7 +25,6 @@ namespace CFrame
 		children.push_back(child);
 		renderChildren.push_back(child);
 		child->SetParent(this);
-		child->index = static_cast<int>(children.size()) - 1;
 		UpdateChildSizes();
     }
 

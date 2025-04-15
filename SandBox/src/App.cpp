@@ -14,9 +14,12 @@ public:
 		CFrame::VBox* friendList  = new CFrame::VBox(-1,-1);
 		CFrame::VBox* messageBox  = new CFrame::VBox(-1, -1);
 		CFrame::HBox* contentLeft = new CFrame::HBox(500,-1);
-		ServerInfoBox* info       = new ServerInfoBox(20, 1100, -1, 300); //ToDo: Make position absolute relative to parent
+		ServerInfoBox* info       = new ServerInfoBox(20, 20, -1, -1); //H = 110;
 		info->SetMargin(0,20,0,0);
-		
+		info->SetPositionAbsolute(true);
+		info->SetAnchorPoint(CFrame::PositionMode::BottomLeft); // Set the origin where absolute positioning is calculated from
+	                                                            //BottomLeft allows it to stay 20px (x) 20px(y) from the bottom
+		                                                        //even when window size changes
 		contentLeft->AddChild(sideBar);
 		contentLeft->AddChild(friendList);
 		content->AddChild(contentLeft);
@@ -26,22 +29,23 @@ public:
 		vbox->AddChild(header);
 		vbox->AddChild(content);
 		
-		info->SetPositionAbsolute(true);
+		
 		contentLeft->SetMaxWidth(800);
 		contentLeft->SetColor(Color::DarkGray);
 		contentLeft->SetDragToResize(true); //Some other layer handles the event before so this does not currently work
 		
-
 		contentLeft->AddChild(info);
 		
 		content->SetColor(Color::DarkGray);
 
 		CFrame::Button* button = new CFrame::Button(90, 90);
 		                button->SetText("S");
+						button->SetFont(CFrame::Font::Arial);
 						button->setTextOpacity(0.8);
 						button->SetFontSize(34.0);
 		                button->SetMargin(0, 0, 50, 0);				 
 		                button->SetRadius(20,20,20,20);
+						
 						button->SetOnLeave([button]() {
 							button->SetColor(Color::Gray);
 						});
@@ -50,6 +54,7 @@ public:
 						});
 		CFrame::Button* button1 = new CFrame::Button(90, 90);
 						button1->SetText("Wz");
+						button1->SetFont(CFrame::Font::Arial);
 						button1->SetFontSize(34.0);
 		                button1->SetRadius(20, 20, 20, 20);
 						button1->SetOnLeave([button1]() {
@@ -60,6 +65,7 @@ public:
 							});
 		CFrame::Button* button2 = new CFrame::Button(90, 90);
 						button2->SetText("Eeli");
+						button2->SetFont(CFrame::Font::Arial);
 						button2->SetFontSize(34.0);
 		                button2->SetRadius(20,20,20,20);
 						button2->SetOnLeave([button2]() {
@@ -70,6 +76,7 @@ public:
 						});
 		CFrame::Button* button3 = new CFrame::Button(90, 90);
 						button3->SetText("GRM");
+						button3->SetFont(CFrame::Font::TimesNewRoman);
 						button3->SetFontSize(34.0);
 		                button3->SetRadius(20,20,20,20);
 						button3->SetOnLeave([button3]() {
@@ -133,21 +140,26 @@ public:
 						button5->SetTextAlign(CFrame::TextAlign::Start);
 						button5->SetOnLeave([button5]() { 
 							button5->SetBorder(0.0f);
-							button5->SetScale(1.0f, 1.0f);
 							button5->SetColor(Color::DarkGray);
 						});
+						button5->SetOnClick([info, contentLeft]() {
+							bool isExpanded = info->GetHeight() == 120 ? true : false;
+							if (!isExpanded) {
+								info->SetHeight(110);
+							}
+							else {
+								info->SetHeight(300);
+							}
+							contentLeft->UpdateChildSizes();
+							});
 						button5->SetOnHover([button5]() {
 							button5->SetBorder(2.5f);
-							button5->SetScale(1.05f, 1.05f);
 						    button5->SetBorderGradient(Color::Cyan, Color::Red);
 						    button5->AnimateGradient(3.0);
 							button5->SetOpacity(0.2);
 							button5->SetColor(Color::Gray);
 						});
-						button5->SetOnClick([button5](){
-							button5->SetScale(1.5f, 1.5f); 
-							button5->StartAnimation();
-						});
+						
 		CFrame::Button* button6  = new CFrame::Button(-1, 75);
 						button6->SetText("Kirjasto");
 		                button6->SetColor(Color::DarkGray);
@@ -240,6 +252,7 @@ public:
 		                button11->SetColor(Color::Gray);
 		CFrame::Button* button12 = new CFrame::Button(50, 50);
 		                button12->SetText("X");
+						button12->SetFont(CFrame::Font::VerdanaBold);
 						button12->SetFontSize(24);
 		                button12->SetColor(Color::Gray);
 		
@@ -254,13 +267,14 @@ public:
 		header->SetAlignment(CFrame::AlignItems::End, CFrame::AlignItems::Center);
 		
 
-		messageBox->SetColor(Color::DarkGray);
+		//messageBox->SetColor(Color::DarkGray);
 		messageBox->SetBorder(2, 0, 0, 0);
 		messageBox->SetBorderColor(Color::Gray);
 		CFrame::Button* button16 = new CFrame::Button(300, 300);
 		button16->SetColor(Color::Gold);
 		button16->SetMargin(20, 20, 20, 20);
 		messageBox->AddChild(button16);
+		messageBox->SetOpacity(0.3);
 		
 		
 		rootContainer->SetColor(Color::Red);

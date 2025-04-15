@@ -33,13 +33,13 @@ namespace CFrame
         void SetText(std::string text);
         void setTextOpacity(float opacity);
         void SetFontSize(float size);
+        void SetFont(Font font);
         void SetTextAlign(TextAlign alignX);
         
 
         inline ElementType GetElementType() const override { return ElementType::BUTTON; };
        
     private:
-        
         std::function<void()> onClick;
         std::string text;
         std::unique_ptr<Animator> animator;
@@ -47,6 +47,6 @@ namespace CFrame
         std::shared_ptr<Texture> labelTexture;
         TextProperties textProps;
         std::map<char, fontInfo> glyphs;
-        std::unique_ptr<FontLoader> fontLoader;
+     
     };
 }

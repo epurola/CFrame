@@ -3,6 +3,7 @@
 #include <cmath>
 #include "../Core.h"
 #include "../Renderer/Renderer.h"
+#include "../Renderer/FontManager.h"
 #include "../CFrameEvent/CFrameEvent.h"
 #include "Color.h"
 
@@ -23,6 +24,14 @@ namespace CFrame
         End
     };
 
+    enum class PositionMode {
+        TopLeft,
+        TopRight, // Not used
+        BottomLeft,
+        BottomRight,// Not used
+
+    };
+
     struct Radius {
         float topRight    = 0;
         float topLeft     = 0;
@@ -39,7 +48,8 @@ namespace CFrame
        int textWidth = 0, textHeight = 0;  
        float opacity = 1;  
        float fontSize = 24;  
-       TextAlign textAlign = TextAlign::Center;  
+       TextAlign textAlign = TextAlign::Center;
+       Font font = Font::Verdana;
     };
 
 
@@ -65,6 +75,9 @@ namespace CFrame
         float angle        = 0;
         float opacity      = 1;
         int maxWidth       = -1;
+        int maxHeight      = 0;
+        int minHeight      = 0;
+        int minWidth       = -1;
         float zIndex       = 0.0;
     };
 
@@ -102,8 +115,10 @@ namespace CFrame
         void SetBorderGradient(Color color1, Color color2);
         void SetOpacity(float opacity);
         void SetMaxWidth(int maxWidth);
+        void SetMinHeight(int minHeight);
         void SetZindex(float index);
         void SetPositionAbsolute(bool b);
+        void SetBackgroundImage(std::string path);
         /// Sets the color of the UI element.
         /// @param color.
         /// The format is {r,g,b,a}. You can set a custom color using this format.
@@ -113,6 +128,7 @@ namespace CFrame
         void SetVisibility(bool visibility);
         void SetDragToResize(bool b);
         void SetWidthResizable(bool is) { isWidthResizable = is; };
+        void SetAnchorPoint(PositionMode mode);
 
         void AnimateScale(float scaleX, float scaleY);
         void AnimateGradient(float speed);
@@ -135,6 +151,7 @@ namespace CFrame
 
         ElementProperties&    GetProperties()      { return properties; };
         AnimationProperties&  GetAnimProperties()  { return animProperties; };
+        PositionMode GetAnchor() { return pMode; }
 
         void  SetOnHover(std::function<void()> onHover);
         void  SetOnLeave(std::function<void()> onLeave);
@@ -143,7 +160,7 @@ namespace CFrame
         
 
     protected:
-        UIElement* parent;  // toDo dont use a raw pointer
+        UIElement* parent;  // Todo: dont use a raw pointer
         int x, y, width, height;
         int localX, localY;
         bool isWidthResizable;
@@ -151,6 +168,8 @@ namespace CFrame
         bool isVisible;
         bool dragToResize;
         bool positionAbsolute = false;
+        PositionMode pMode = PositionMode::TopLeft;
+        std::unique_ptr<Texture> imageTexture;
         
         ElementProperties properties;
         AnimationProperties animProperties;

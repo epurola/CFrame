@@ -42,6 +42,7 @@ uniform float u_BorderLeft;
 uniform float u_BorderTop;
 uniform float u_BorderBottom;
 uniform sampler2D u_Texture;
+uniform bool u_HasTexture;
 
 in vec4 fragPos;
 
@@ -98,14 +99,18 @@ void main()
     // Interpolate between the colors
     vec4 gradientColor = mix(color1, color2, gradient);
     vec4 gradientBorderColor = mix(borderColor1, borderColor2, gradient);
-
-    float alpha = texture(u_Texture, v_TexCoord).r;
-    vec4 texColor = vec4(1.0, 1.0, 1.0, alpha);
-
+    vec4 texColor = texture(u_Texture, v_TexCoord);
+    
+    
     // If the distance is negative or zero, we're inside the box, color the fragment
      if (dist < 0.0) {
         // Inside the shape
-        color = mix(gradientColor, vec4(1.0, 1.0, 1.0, texColor.a), texColor.a);
+        if(u_HasTexture){
+            color = texColor;
+        }else{
+            color = gradientColor;
+        }
+        
     } else if (dist <  thickness) {
         // Border area
         color = gradientBorderColor;

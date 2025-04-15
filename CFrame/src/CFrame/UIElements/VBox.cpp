@@ -9,6 +9,7 @@ namespace CFrame
         isHeightResizable = (h == -1); 
         isWidthResizable = (w == -1);
         dragToResize = false;
+
     }
 
     VBox::~VBox()
@@ -28,8 +29,6 @@ namespace CFrame
         int maxChildWidth = 0;
         int flexibleHeight = 0;
         int totalMargins = 0;
-
-        
 
         int xpos = GetX() + properties.padding + properties.marginLeft; // add margin
         int ypos = GetY() + properties.padding + properties.marginTop;
@@ -117,6 +116,25 @@ namespace CFrame
             if (!child->IsPositionAbsolute()) {
                 child->SetX(xpos);
                 child->SetY(ypos);
+            }
+
+            if (child->IsPositionAbsolute()) {
+
+                if (child->IsWidthResizable()) {
+                    child->SetWidth(width - (properties.padding * 2) - (GetX() + child->GetLocalX()));
+                }
+                
+                if (child->GetAnchor() == PositionMode::BottomLeft) {
+                    child->SetX(GetX() + child->GetLocalX());
+                    child->SetY(GetY() + GetHeight() - child->GetHeight() - child->GetProperties().marginBottom - child->GetLocalY());
+                }
+                else {
+                    child->SetX(GetX() + child->GetLocalX());
+                    child->SetY(GetY() + child->GetLocalY());
+                }
+               child->UpdateChildSizes();
+               
+                continue;
             }
             
             if (child->GetElementType() == ElementType::CONTAINER && child->IsHeightResizable())

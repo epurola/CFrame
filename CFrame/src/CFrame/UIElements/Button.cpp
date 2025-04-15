@@ -14,7 +14,7 @@ namespace CFrame
         isWidthResizable = (w == -1);
         isHeightResizable = (h == -1);
 		SetRadius(15,15,15,15);
-        SetColor(Color::Gray);
+        //SetColor(Color::Gray);
 
 	}
 
@@ -41,11 +41,12 @@ namespace CFrame
         int centeredX = x + (width - renderWidth) / 2;
         int centeredY = y + (height - renderHeight) / 2;
         
+
 		renderer.DrawRectangle((float)centeredX, (float)centeredY, (float)renderWidth, (float)renderHeight, 
             GetProperties(),
             animator->GetTime(), 
             animProperties.speed,
-            nullptr);
+            imageTexture.get());
 
 
        renderer.RenderText(text, centeredX, centeredY, textProps, labelTexture.get() );
@@ -54,12 +55,13 @@ namespace CFrame
     void Button::UpdateChildSizes()
     {
         if (!labelTexture) {
-            FontKey key = { Font::Arial, textProps.fontSize };
+            FontKey key = { textProps.font, textProps.fontSize };
             FontManager& fm = FontManager::GetInstance();
             std::pair<std::shared_ptr<Texture>, std::map<char, fontInfo>> font = fm.GetFont(key);
             glyphs = font.second;
             labelTexture = font.first;
         }
+
           
             float offsetX = 0.0f, offsetY = 0.0f;
             int textWidth = 0, textHeight = 0;
@@ -103,8 +105,8 @@ namespace CFrame
                 float charWidth = glyph.width;
                 float charHeight = glyph.height;
 
-                float xpos = x + offsetX + glyph.bearingX;
-                float ypos = y + offsetY + (charHeight - glyph.bearingY);
+                float xpos = GetX() + offsetX + glyph.bearingX;
+                float ypos = GetY() + offsetY + (charHeight - glyph.bearingY);
 
                 float w = glyph.width;   // actual width of the glyph quad
                 float h = glyph.height;  // actual height of the glyph quad
@@ -231,6 +233,11 @@ namespace CFrame
     void Button::SetFontSize(float size)
     {
         textProps.fontSize = size;
+    }
+
+    void Button::SetFont(Font font)
+    {
+        textProps.font = font;
     }
 
     void Button::SetTextAlign(TextAlign alignX)
