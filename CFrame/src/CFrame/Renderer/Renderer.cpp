@@ -126,11 +126,15 @@ namespace CFrame {
 
 	}
 
-    void Renderer::RenderText(const std::string& text, float x, float y, TextProperties t, Texture* atlas)
+    void Renderer::RenderText(const std::string& text, float x, float y, TextProperties t, Texture* atlas, OverFlowProperties o)
     {
         
         int windowWidth = window.GetWidth();
         int windowHeight = window.GetHeight();
+
+        if (!o.overflow) {
+            ClipOverflow(o.clipX, o.clipY, o.clipWidth, o.clipHeight, windowHeight);
+        }
 
         if (!textVA) {
             textVA      = std::make_unique<VertexArray>();
@@ -163,6 +167,22 @@ namespace CFrame {
         glDrawElements(GL_TRIANGLES, t.indices.size(), GL_UNSIGNED_INT, nullptr);
 
         atlas->UnBind();
+
+        if (!o.overflow) {
+            DisableOverflow();
+        }
+    }
+
+    void Renderer::ClipOverflow(int x, int y, int width, int height, int windowHeight)
+    {
+        int flippedY = windowHeight - y - height;
+        glEnable(GL_SCISSOR_TEST);
+        glScissor(x, flippedY, width, height);
+    }
+
+    void Renderer::DisableOverflow()
+    {
+        glDisable(GL_SCISSOR_TEST);
     }
 
 }

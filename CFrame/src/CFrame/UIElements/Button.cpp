@@ -49,7 +49,7 @@ namespace CFrame
             imageTexture.get());
 
 
-       renderer.RenderText(text, centeredX, centeredY, textProps, labelTexture.get() );
+       renderer.RenderText(text, centeredX, centeredY, textProps, labelTexture.get(), overflow );
 	}
 
     void Button::UpdateChildSizes()
@@ -60,6 +60,12 @@ namespace CFrame
             std::pair<std::shared_ptr<Texture>, std::map<char, fontInfo>> font = fm.GetFont(key);
             glyphs = font.second;
             labelTexture = font.first;
+        }
+        if (!overflow.overflow) {
+            overflow.clipHeight = height;
+            overflow.clipWidth  = width;
+            overflow.clipX      = x;
+            overflow.clipY      = y;
         }
 
           

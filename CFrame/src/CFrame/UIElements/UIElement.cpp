@@ -190,5 +190,10 @@ namespace CFrame {
 		pMode = mode;
 	}
 
+	void UIElement::SetOverflow(bool allow)
+	{
+		overflow.overflow = allow;
+	} 
+	
 
 }

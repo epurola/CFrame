@@ -19,6 +19,7 @@ namespace CFrame {
 
 	struct ElementProperties;
 	struct TextProperties;
+	struct OverFlowProperties;
 
 	class Renderer
 	{
@@ -30,7 +31,9 @@ namespace CFrame {
 		void DrawRectangle(float x, float y, float w, float h,
 			ElementProperties p, float speed, float time, Texture* texture );
 
-		void RenderText(const std::string& text, float x, float y, TextProperties t, Texture* atlas );
+		void RenderText(const std::string& text, float x, float y, TextProperties t, Texture* atlas, OverFlowProperties o);
+		void ClipOverflow(int x, int y, int width, int height, int windowHeight);
+		void DisableOverflow();
         
 		
 

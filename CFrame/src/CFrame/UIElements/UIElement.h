@@ -52,6 +52,14 @@ namespace CFrame
        Font font = Font::Verdana;
     };
 
+    struct OverFlowProperties {
+        bool overflow = false;
+        int clipY;
+        int clipHeight;
+        int clipX;
+        int clipWidth;
+    };
+
 
     struct ElementProperties 
     {
@@ -129,6 +137,7 @@ namespace CFrame
         void SetDragToResize(bool b);
         void SetWidthResizable(bool is) { isWidthResizable = is; };
         void SetAnchorPoint(PositionMode mode);
+        void SetOverflow(bool b);
 
         void AnimateScale(float scaleX, float scaleY);
         void AnimateGradient(float speed);
@@ -173,6 +182,7 @@ namespace CFrame
         
         ElementProperties properties;
         AnimationProperties animProperties;
+        OverFlowProperties overflow;
      
         std::function<void()> onHover = []() {};
         std::function<void()> onLeave = []() {};
