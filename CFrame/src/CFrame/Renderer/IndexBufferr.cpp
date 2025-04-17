@@ -1,4 +1,5 @@
 #include "IndexBufferr.h"
+#include <glad/glad.h>
 
 namespace CFrame 
 {

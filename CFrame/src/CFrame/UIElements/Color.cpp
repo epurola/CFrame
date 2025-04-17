@@ -1,4 +1,5 @@
 #include "Color.h"
+#include <SDL3/SDL.h>
 
 // Define static color instances with muted, faded tones
 constexpr Color Color::Red{ 204, 68, 51, 255 };
@@ -23,3 +24,10 @@ constexpr Color Color::Gold{ 204, 174, 51, 255 };
 constexpr Color Color::Silver{ 169, 169, 169, 255 };
 constexpr Color Color::Maroon{ 102, 0, 0, 255 };
 constexpr Color Color::Olive{ 107, 142, 35, 255 };
+
+SDL_Color Color::toSDLColor(float opacity) const
+{
+    opacity = (opacity < 0.0f) ? 0.0f : (opacity > 1.0f) ? 1.0f : opacity;
+    Uint8 alpha = static_cast<Uint8>(opacity * 255);
+    return SDL_Color{ r, g, b, alpha };
+}

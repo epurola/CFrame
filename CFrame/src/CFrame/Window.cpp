@@ -1,5 +1,6 @@
 #include "Window.h"
 #include "glad/glad.h"
+#include "SDL3/SDL.h"
 
 namespace CFrame 
 {
@@ -10,7 +11,7 @@ Window::Window(EventDispatcher& dispather)
 Window::~Window()
 {
 	if (context) {
-		SDL_GL_DestroyContext(context);
+		SDL_GL_DestroyContext(static_cast<SDL_GLContext>(context));
 	}
 	if (window) {
 		SDL_DestroyWindow(window);

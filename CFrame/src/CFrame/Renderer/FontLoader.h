@@ -3,8 +3,11 @@
 #include <string>
 #include <map>
 #include <fstream>
-#include <ft2build.h>
-#include FT_FREETYPE_H
+
+extern "C" {
+	typedef struct FT_LibraryRec_* FT_Library;
+	typedef struct FT_FaceRec_* FT_Face;
+}
 
 struct fontInfo {
 	int x, y;
@@ -23,6 +26,7 @@ namespace CFrame {
 
 
 		bool LoadFont();
+		bool LoadIcons();
 		std::vector<uint8_t>     GetFontAtlas();
 		std::map<char, fontInfo> GetGlyphs() { return glyphs; }
 

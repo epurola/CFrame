@@ -9,6 +9,7 @@ namespace CFrame
         isHeightResizable = (h == -1); 
         isWidthResizable = (w == -1);
         dragToResize = false;
+     
 
     }
 

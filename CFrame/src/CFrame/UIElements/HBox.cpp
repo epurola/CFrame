@@ -85,26 +85,6 @@ namespace CFrame {
             break;
         }
 
-        switch (yAlign)
-        {
-        case AlignItems::Center:
-            ypos = y + (height / 2) - (maxChildHeight / 2);
-            break;
-        case AlignItems::End:
-            ypos = y + (height - maxChildHeight) - properties.padding;
-            break;
-        case AlignItems::Start:
-            ypos = y + properties.padding;
-            break;
-        case AlignItems::Stretch:
-            ypos = y + properties.padding;
-            break;
-        default:
-            ypos = y + properties.padding;
-            break;
-        }
-
-        
 
         // Assign positions to each child
         for (size_t i = 0; i < children.size(); i++)
@@ -114,7 +94,27 @@ namespace CFrame {
                 continue;
             }
 
-            xpos = xpos + child->GetProperties().marginLeft; //Todo: Remove the need to constantly call GetProperties
+            switch (yAlign)
+            {
+            case AlignItems::Center:
+                ypos = y + (height / 2) - (child->GetHeight() / 2) ;
+                break;
+            case AlignItems::End:
+                ypos = y + (height - maxChildHeight) - properties.padding;
+                break;
+            case AlignItems::Start:
+                ypos = y + properties.padding;
+                break;
+            case AlignItems::Stretch:
+                ypos = y + properties.padding;
+                break;
+            default:
+                ypos = y + properties.padding;
+                break;
+            }
+
+
+            xpos = xpos + child->GetProperties().marginLeft; 
             ypos = ypos + child->GetProperties().marginTop;
 
             if (!child->IsPositionAbsolute()) {

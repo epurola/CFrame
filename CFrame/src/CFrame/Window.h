@@ -2,8 +2,10 @@
 #include "Core.h"
 #include "CFrameEvent/CFrameEvent.h"
 #include <string>
-#include "SDL3/SDL.h"
 #include "Log.h"
+
+struct SDL_Window;
+
 
 
 namespace CFrame
@@ -33,7 +35,7 @@ namespace CFrame
 		unsigned int height = 720;
 		std::string title;
 		SDL_Window* window;
-		SDL_GLContext context;
+		void* context; // holds SDL_GLContext
 		EventDispatcher& dispatcher;
 	};
 }

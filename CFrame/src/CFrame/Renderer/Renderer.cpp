@@ -1,6 +1,8 @@
 #include "Renderer.h"
 #include <iostream>
 #include <filesystem>
+#include <glad/glad.h>
+#include <SDL3/SDL.h>
 
 
 namespace CFrame {

@@ -14,7 +14,7 @@ public:
 		CFrame::VBox* friendList  = new CFrame::VBox(-1,-1);
 		CFrame::VBox* messageBox  = new CFrame::VBox(-1, -1);
 		CFrame::HBox* contentLeft = new CFrame::HBox(500,-1);
-		ServerInfoBox* info       = new ServerInfoBox(20, 20, -1, -1); //H = 110;
+		ServerInfoBox* info       = new ServerInfoBox(20, 20, -1, -1); //H = 120;
 		info->SetMargin(0,20,0,0);
 		info->SetPositionAbsolute(true);
 		info->SetAnchorPoint(CFrame::PositionMode::BottomLeft); // Set the origin where absolute positioning is calculated from
@@ -64,9 +64,9 @@ public:
 							button1->SetColor({ 100, 100, 100, 255 });
 							});
 		CFrame::Button* button2 = new CFrame::Button(90, 90);
-						button2->SetText("Eeli");
-						button2->SetFont(CFrame::Font::Arial);
-						button2->SetFontSize(34.0);
+						button2->SetText("\x14");
+						button2->SetFont(CFrame::Font::SegoeMDL2Assets);
+						button2->SetFontSize(44.0);
 		                button2->SetRadius(20,20,20,20);
 						button2->SetOnLeave([button2]() {
 							button2->SetColor(Color::Gray);
@@ -75,9 +75,9 @@ public:
 							button2->SetColor({ 100, 100, 100, 255 });
 						});
 		CFrame::Button* button3 = new CFrame::Button(90, 90);
-						button3->SetText("GRM");
-						button3->SetFont(CFrame::Font::TimesNewRoman);
-						button3->SetFontSize(34.0);
+						button3->SetText("\x55");
+						button3->SetFont(CFrame::Font::SegoeMDL2Assets);
+						button3->SetFontSize(44.0);
 		                button3->SetRadius(20,20,20,20);
 						button3->SetOnLeave([button3]() {
 							button3->SetColor(Color::Gray);

@@ -14,7 +14,7 @@ namespace CFrame
         isWidthResizable = (w == -1);
         isHeightResizable = (h == -1);
 		SetRadius(15,15,15,15);
-        //SetColor(Color::Gray);
+        SetColor(Color::Gray);
 
 	}
 
@@ -78,6 +78,7 @@ namespace CFrame
 
             for (char c : text) {
                 fontInfo glyph = glyphs[c];
+               
 
                 float charWidth = glyph.width;
                 float charHeight = glyph.height;
@@ -205,10 +206,8 @@ namespace CFrame
                 return;
             }
             hovering = true;
-
-
             //call the onClick handler
-            CF_CORE_INFO("Button Hovered!");
+           // CF_CORE_INFO("Button Hovered!");
             if (onHover ) {
                 onHover();
             }

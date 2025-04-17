@@ -1,6 +1,7 @@
 #pragma once
 
 #include "VertexBuffer.h"
+#include <glad/glad.h>
 
 
 namespace CFrame{

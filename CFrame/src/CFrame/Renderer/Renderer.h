@@ -11,7 +11,6 @@
 #include "Shader.h"
 #include "Texture.h"
 #include "../UIElements/UIElement.h"
-#include <SDL3/SDL.h>
 #include "Fontloader.h"
 
 

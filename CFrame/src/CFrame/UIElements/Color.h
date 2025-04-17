@@ -1,9 +1,8 @@
 #pragma once
 #include <cstdint> 
-#include <SDL3/SDL.h>
 #include <iostream>
 #include "../Core.h"
-
+struct SDL_Color;
 struct CFRAME_API Color {
     uint8_t r, g, b, a;
 
@@ -36,9 +35,5 @@ struct CFRAME_API Color {
     static const Color Maroon;
     static const Color Olive;
 
-    SDL_Color toSDLColor(float opacity) const {
-        opacity = (opacity < 0.0f) ? 0.0f : (opacity > 1.0f) ? 1.0f : opacity;
-        Uint8 alpha = static_cast<Uint8>(opacity * 255);
-        return SDL_Color{ r, g, b, alpha };
-    }
+    SDL_Color toSDLColor(float opacity) const;
 };

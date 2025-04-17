@@ -34,6 +34,7 @@ project "CFrame"
 		"%{prj.name}/src/**.cpp",
 	}
 
+
 	includedirs
 	{
 		"%{prj.name}/vendor/stb",
@@ -54,6 +55,11 @@ project "CFrame"
 		"Glad",
 		"SDL3",
 		"freetype"
+	}
+	linkoptions {
+		"/WHOLEARCHIVE:Glad.lib",
+		"/WHOLEARCHIVE:SDL3.lib",
+		"/WHOLEARCHIVE:freetype.lib"
 	}
 
 	filter "system:windows"
@@ -100,14 +106,11 @@ project "SandBox"
 	includedirs
 	{
 		"CFrame/vendor/spdlog/include",
-		"CFrame/src",
-		"%{prj.name}/vendor/glm/glm",
-		"CFrame/vendor/stb",
-		"%{IncludeDir.Glad}",
-		"%{IncludeDir.SDL3}",
-		"CFrame/vendor/freetype/include/",
-		"CFrame/vendor/freetype/include/freetype"
+		"CFrame/src",                
+		"%{prj.name}/vendor/glm/glm",  
+	
 	}
+
 	links
 	{
 	    "CFrame"

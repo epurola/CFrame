@@ -1,5 +1,6 @@
 #include "Shader.h"
 #include "../Log.h"
+#include <glad/glad.h>
 namespace CFrame
 {
     Shader::Shader(const std::string filePath)

@@ -11,13 +11,31 @@ ServerInfoBox::ServerInfoBox(int x, int y, int w, int h)
 	topPart->SetPadding(20);
 
 	bottomPart = new CFrame::HBox(-1, -1);
-	bottomPart->SetBorder(0, 2, 2, 2);
-	bottomPart->SetBorderColor(Color::Gray);
+	bottomPart->SetAlignment(CFrame::AlignItems::Start, CFrame::AlignItems::Center);
 	bottomPart->SetColor(Color::DarkGray);
-	bottomPart->SetRadius(0, 0, 20, 20);
+	bottomPart->SetRadius(20, 20, 20, 20);
+	bottomPart->SetPadding(10);
 
 	CFrame::Button* button20 = new CFrame::Button(10,10,100, 100);
 	CFrame::Button* button21 = new CFrame::Button(55,10, -1, 100);
+	 
+	CFrame::Button* logo  = new CFrame::Button( 55, 55);
+	logo->SetText("\x2B");
+	logo->SetMargin(30, 0, 0, 0);
+	logo->SetFontSize(44);
+	logo->SetFont(CFrame::Font::SegoeMDL2Assets);
+	logo->SetColor(Color::DarkGray);
+	CFrame::Button* logo1 = new CFrame::Button( 55, 55);
+	logo1->SetText("\x0D");
+	logo1->SetFontSize(44);
+	logo1->SetFont(CFrame::Font::SegoeMDL2Assets);
+	logo1->SetColor(Color::DarkGray);
+	CFrame::Button* logo2 = new CFrame::Button( 55, 55);
+	
+	logo2->SetText("\x12");
+	logo2->SetFontSize(44);
+	logo2->SetFont(CFrame::Font::SegoeMDL2Assets);
+	logo2->SetColor(Color::DarkGray);
 
 	
 	button20->SetRadius(55, 55, 55, 55);
@@ -42,7 +60,8 @@ ServerInfoBox::ServerInfoBox(int x, int y, int w, int h)
 	button21->SetColor(Color::DarkGray);
 	button21->SetTextAlign(CFrame::TextAlign::Start);
 	button21->SetFontSize(20);
-	button21->SetPositionAbsolute(true);
+	button21->SetMargin(50, 0,0,0);
+
 	button21->SetPadding(60);
 	button21->SetAnchorPoint(CFrame::PositionMode::BottomLeft);
 	
@@ -52,12 +71,18 @@ ServerInfoBox::ServerInfoBox(int x, int y, int w, int h)
 	SetRadius(20,20,20,20);
 	SetBorder(2);
 	SetBorderColor(Color::Gray);
-	SetPadding(10);
-	AddChild(button21);
-	AddChild(button20);
+	//SetPadding(10);
+	bottomPart->AddChild(button21);
+	bottomPart->AddChild(button20);
+	bottomPart->AddChild(logo);
+	bottomPart->AddChild(logo1);
+	bottomPart->AddChild(logo2);
 	SetMinHeight(120);
-	
+	AddChild(topPart);
+	topPart->SetVisibility(false);
+	AddChild(bottomPart);
 	SetColor(Color::DarkGray);
+	SetPadding(2);
 }
 
 
