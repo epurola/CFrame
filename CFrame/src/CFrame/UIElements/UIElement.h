@@ -60,6 +60,20 @@ namespace CFrame
         int clipWidth;
     };
 
+    struct Vertices {
+        float topLeftX;
+        float topLeftY;
+
+        float topRightX;
+        float topRightY;
+
+        float bottomLeftX;
+        float bottomLeftY;
+
+        float bottomRightX;
+        float bottomRightY;
+    };
+
 
     struct ElementProperties 
     {
@@ -69,6 +83,7 @@ namespace CFrame
         int marginBottom   = 0;
         int padding        = 0;
         Radius radius;
+        Vertices vertices;
         float border       = 0;
         float borderTop    = 0;
         float borderBottom = 0;
@@ -107,6 +122,8 @@ namespace CFrame
         virtual void UpdateChildSizes() {}
         virtual void OnEvent(CFrameEvent& event);
         virtual ElementType GetElementType() const = 0;
+
+        void UpdateVertices();
 
         void SetMargin(int marginleft, int marginRight, int marginTop, int marginBottom);
         void SetPadding(int padding);

@@ -59,10 +59,10 @@ namespace CFrame
 			auto* mouseEvent = dynamic_cast<MouseDraggedEvent*>(&event);
 			if (mouseEvent->GetStartX() > x + (width - 15) && mouseEvent->GetStartX() < x + width) {
 				if (dragToResize) {
-					SetWidth(width + (mouseEvent->GetCurrentX() - mouseEvent->GetStartX()));
+					SetWidth((width + (int)(mouseEvent->GetCurrentX() - mouseEvent->GetStartX())));
 					event.handled = true;
 					//toDo: use a different flag so the container does not divide equally
-					CF_CORE_INFO("RESIZE! {0}", width + (mouseEvent->GetCurrentX() - mouseEvent->GetStartX()));
+					//CF_CORE_INFO("RESIZE! {0}", width + (mouseEvent->GetCurrentX() - mouseEvent->GetStartX()));
 				}
 			}
 		}

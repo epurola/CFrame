@@ -39,7 +39,7 @@ namespace CFrame
                 element.type,
                 element.normalized,
                 layout.GetStride(),
-                (const void*)offset);
+                (const void*)(uintptr_t)offset);
 
             offset += element.count * VertexBufferElement::GetSizeOfType(element.type);
         }

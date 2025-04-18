@@ -9,6 +9,7 @@ uniform vec2 u_Center;
 uniform float u_ZIndex;
 out vec4 fragPos;
 out vec2 v_TexCoord;
+
 void main()
 {
    gl_Position = u_MVP *  vec4(position.x, position.y, u_ZIndex, 1.0);

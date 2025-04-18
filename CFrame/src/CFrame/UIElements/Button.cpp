@@ -49,7 +49,7 @@ namespace CFrame
             imageTexture.get());
 
 
-       renderer.RenderText(text, centeredX, centeredY, textProps, labelTexture.get(), overflow );
+       renderer.RenderText(text, (float)centeredX, (float)centeredY, textProps, labelTexture.get(), overflow );
 	}
 
     void Button::UpdateChildSizes()
@@ -78,25 +78,24 @@ namespace CFrame
 
             for (char c : text) {
                 fontInfo glyph = glyphs[c];
-               
 
-                float charWidth = glyph.width;
-                float charHeight = glyph.height;
+                float charWidth = (float)glyph.width;
+                float charHeight = (float)glyph.height;
                 textProps.textWidth += glyph.advance;
-                textProps.textHeight = std::max((float)textProps.textHeight, charHeight);
+                textProps.textHeight = (int)std::max((float)textProps.textHeight, charHeight);
             }
 
             if (textProps.textAlign == TextAlign::Center) {
-                offsetX = (width / 2) - (textProps.textWidth / 2);
-                offsetY = (height / 2.0f) + (textProps.textHeight / 2.0f); //OpneGl goes from down up and screen up down so flip this
+                offsetX = (float)(width / 2) - (textProps.textWidth / 2);
+                offsetY = (float)(height / 2.0f) + (textProps.textHeight / 2.0f); //OpneGl goes from down up and screen up down so flip this
             }
             else if (textProps.textAlign == TextAlign::Start) {
-                offsetX = properties.padding;
-                offsetY = (height / 2.0f) + (textProps.textHeight / 2.0f);
+                offsetX = (float)properties.padding;
+                offsetY = (float)(height / 2.0f) + (textProps.textHeight / 2.0f);
             }
             else {
-                offsetX = width - textProps.textWidth - properties.padding;
-                offsetY = (height / 2.0f) + (textProps.textHeight / 2.0f);
+                offsetX = (float)width - textProps.textWidth - properties.padding;
+                offsetY = (float)(height / 2.0f) + (textProps.textHeight / 2.0f);
             }
 
             for (char c : text) {
@@ -109,14 +108,14 @@ namespace CFrame
                 float texX2 = (glyph.x + glyph.width) / (float)labelTexture->GetWidth();
                 float texY2 = (glyph.y + glyph.height) / (float)labelTexture->GetHeight();
 
-                float charWidth = glyph.width;
-                float charHeight = glyph.height;
+                float charWidth = (float)glyph.width;
+                float charHeight = (float)glyph.height;
 
                 float xpos = GetX() + offsetX + glyph.bearingX;
                 float ypos = GetY() + offsetY + (charHeight - glyph.bearingY);
 
-                float w = glyph.width;   // actual width of the glyph quad
-                float h = glyph.height;  // actual height of the glyph quad
+                float w = (float)glyph.width;   // actual width of the glyph quad
+                float h = (float)glyph.height;  // actual height of the glyph quad
 
                 float leftX = xpos;
                 float rightX = xpos + w;
@@ -144,7 +143,7 @@ namespace CFrame
                 textProps.vertices.push_back(texX1);                   //Texture coord x1
                 textProps.vertices.push_back(texY1);                   //Texture coord y1
 
-                unsigned int baseIndex = (textProps.vertices.size() / 4) - 4;
+                unsigned int baseIndex = (unsigned int)(textProps.vertices.size() / 4) - 4;
                 textProps.indices.push_back(baseIndex);                // 0
                 textProps.indices.push_back(baseIndex + 1);            // 1
                 textProps.indices.push_back(baseIndex + 2);            // 2

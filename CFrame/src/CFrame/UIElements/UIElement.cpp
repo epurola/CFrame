@@ -3,6 +3,7 @@
 namespace CFrame {
 
 
+
 	UIElement::UIElement(int x, int y, int w, int h, UIElement* parent)
 		:x(x), y(y), width(w), height(h), parent(parent)
 	{
@@ -14,6 +15,21 @@ namespace CFrame {
 	void UIElement::OnEvent(CFrameEvent& event)
 	{
 		//Default
+	}
+
+	void UIElement::UpdateVertices()
+	{
+		properties.vertices.bottomLeftX = x;
+		properties.vertices.bottomLeftY = y;
+
+		properties.vertices.bottomRightX = x + width;
+		properties.vertices.bottomRightY = y;
+
+		properties.vertices.topLeftX = x;
+		properties.vertices.topLeftY = y + height;
+
+		properties.vertices.topRightX = x + width;
+		properties.vertices.topRightY = y + height;
 	}
 
 	void UIElement::SetMargin(int marginleft, int marginRight, int marginTop, int marginBottom)
@@ -156,8 +172,6 @@ namespace CFrame {
 		this->onHover = onHover;
 	}
 
-	/*By providing a time to SetScale the scaling becomes animated otherwise it is
-	applied to the width and height permanently*/
 	void UIElement::SetScale(float scaleX, float scaleY)
 	{
 		this->properties.scaleX = scaleX;

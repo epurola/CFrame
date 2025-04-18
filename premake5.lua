@@ -56,11 +56,6 @@ project "CFrame"
 		"SDL3",
 		"freetype"
 	}
-	linkoptions {
-		"/WHOLEARCHIVE:Glad.lib",
-		"/WHOLEARCHIVE:SDL3.lib",
-		"/WHOLEARCHIVE:freetype.lib"
-	}
 
 	filter "system:windows"
 		systemversion "latest"
@@ -106,9 +101,7 @@ project "SandBox"
 	includedirs
 	{
 		"CFrame/vendor/spdlog/include",
-		"CFrame/src",                
-		"%{prj.name}/vendor/glm/glm",  
-	
+		"CFrame/src"              
 	}
 
 	links

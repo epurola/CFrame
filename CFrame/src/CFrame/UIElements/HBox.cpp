@@ -51,7 +51,7 @@ namespace CFrame {
             }
         }
 
-        int totalSpacing = spacing * (children.size() - 1);
+        int totalSpacing = static_cast<int>(spacing * (children.size() - 1));
         // Width is the width of the current hbox
         int availableSpace = width - fixedWidth - totalSpacing - totalMargins - (properties.padding * 2);
 
@@ -137,6 +137,7 @@ namespace CFrame {
                 }
                 
                 child->UpdateChildSizes();
+                child->UpdateVertices();
                 
                 continue;
             }
@@ -202,6 +203,7 @@ namespace CFrame {
                 xpos += spacing;
                 //xpos-=  padding;
             }
+            child->UpdateVertices();
         }
 	}
 

@@ -3,6 +3,9 @@
 #include <filesystem>
 #include <glad/glad.h>
 #include <SDL3/SDL.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp> 
+#define M_PI 3.14159265358979323846
 
 
 namespace CFrame {
@@ -57,15 +60,16 @@ namespace CFrame {
 
         int windowWidth  = window.GetWidth();
         int windowHeight = window.GetHeight();
-        
+
+ 
         /*Vertices of the rectangle. Calculates the top left as the origin*/
         float vertices[] = {
-            /* x, y,        r, g, b, a         texture coordinates      Gradient color
-            location = 0    location = 1       location = 2             location = 3*/
-           x , y + h ,       r, g, b, a,        0.0f, 1.0f,           rg, gg, bg, ag,     // Top-left
-           x + w, y + h,     r, g, b, a,        1.0f, 1.0f,           rg, gg, bg, ag,     // Top-right
-           x + w , y ,       r, g, b, a,        1.0f, 0.0f,           rg, gg, bg, ag,     // Bottom-right
-           x, y,             r, g, b, a,        0.0f, 0.0f,           rg, gg, bg, ag,  
+            /* x, y,                                        r, g, b, a         texture coordinates      Gradient color
+            location = 0                                    location = 1       location = 2             location = 3*/
+           p.vertices.topLeftX , p.vertices.topLeftY,           r, g, b, a,     0.0f, 1.0f,     rg, gg, bg, ag,     // Top-left
+           p.vertices.topRightX, p.vertices.topRightY,          r, g, b, a,     1.0f, 1.0f,     rg, gg, bg, ag,     // Top-right
+           p.vertices.bottomRightX , p.vertices.bottomRightY,   r, g, b, a,     1.0f, 0.0f,     rg, gg, bg, ag,     // Bottom-right
+           p.vertices.bottomLeftX, p.vertices.bottomLeftY,      r, g, b, a,     0.0f, 0.0f,     rg, gg, bg, ag,  
         };
 
            
@@ -79,7 +83,7 @@ namespace CFrame {
             /*Create Vertex Array*/
             rectVA = std::make_unique<VertexArray>();
             rectLayout = std::make_unique<VertexBufferLayout>();
-            rectVB = std::make_unique<VertexBuffer>(vertices, 4 * 12 * sizeof(float));
+            rectVB = std::make_unique<VertexBuffer>(vertices, static_cast<unsigned int>(4 * 12 * sizeof(float)));
             /*creates index buffer with 6 indecies.*/
             rectIndices = std::make_unique<IndexBuffer>(indecies, 6);
             rectLayout->Push<float>(2); // Position x, y
@@ -112,7 +116,7 @@ namespace CFrame {
         shader->SetUniform1f("u_TopLeft", float(p.radius.topLeft));
         shader->SetUniform1f("u_Time", time);
         shader->SetUniform1f("u_Speed", speed);
-        //shader->SetUniform1f("u_Angle", angle);
+        //shader->SetUniform1f("u_Angle", p.angle);
         //shader->SetUniform2f("u_Center", centerX, centerY);
         shader->SetUniform1f("u_BorderTop", p.borderTop);
         shader->SetUniform1f("u_BorderBottom", p.borderBottom);
@@ -141,16 +145,16 @@ namespace CFrame {
         if (!textVA) {
             textVA      = std::make_unique<VertexArray>();
             textLayout  = std::make_unique<VertexBufferLayout>();
-            textVB      = std::make_unique<VertexBuffer>(t.vertices.data(), t.vertices.size() * sizeof(float));
-            textIndices = std::make_unique<IndexBuffer>(t.indices.data(), t.indices.size());
+            textVB      = std::make_unique<VertexBuffer>(t.vertices.data(), static_cast<unsigned int>(t.vertices.size() * sizeof(float)));
+            textIndices = std::make_unique<IndexBuffer>(t.indices.data(), static_cast<unsigned int>(t.indices.size()));
 
             textLayout->Push<float>(2); // Position x, y
             textLayout->Push<float>(2); // Texture coordinates
         }
 
         textVA->Bind();
-        textVB->SetData(t.vertices.data(), t.vertices.size() * sizeof(float));
-        textIndices->SetData(t.indices.data(), t.indices.size());
+        textVB->SetData(t.vertices.data(), static_cast<unsigned int>(t.vertices.size() * sizeof(float)));
+        textIndices->SetData(t.indices.data(), static_cast<unsigned int>(t.indices.size()));
         textVA->AddBuffer(*textVB, *textLayout);
 
         if (atlas != nullptr) {
@@ -166,7 +170,7 @@ namespace CFrame {
         textShader->SetUniform1i("u_Texture", 0); 
         textShader->SetUniform1f("u_Opacity", t.opacity);
 
-        glDrawElements(GL_TRIANGLES, t.indices.size(), GL_UNSIGNED_INT, nullptr);
+        glDrawElements(GL_TRIANGLES, static_cast<unsigned int>(t.indices.size()), GL_UNSIGNED_INT, nullptr);
 
         atlas->UnBind();
 

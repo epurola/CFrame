@@ -26,12 +26,13 @@ ServerInfoBox::ServerInfoBox(int x, int y, int w, int h)
 	logo->SetFont(CFrame::Font::SegoeMDL2Assets);
 	logo->SetColor(Color::DarkGray);
 	CFrame::Button* logo1 = new CFrame::Button( 55, 55);
+	logo1->SetAngle(45.0);
 	logo1->SetText("\x0D");
 	logo1->SetFontSize(44);
 	logo1->SetFont(CFrame::Font::SegoeMDL2Assets);
-	logo1->SetColor(Color::DarkGray);
+	logo1->SetColor(Color::Gray);
 	CFrame::Button* logo2 = new CFrame::Button( 55, 55);
-	
+	logo2->SetAngle(45.0);
 	logo2->SetText("\x12");
 	logo2->SetFontSize(44);
 	logo2->SetFont(CFrame::Font::SegoeMDL2Assets);

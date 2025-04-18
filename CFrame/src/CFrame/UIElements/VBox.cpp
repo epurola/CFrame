@@ -54,7 +54,7 @@ namespace CFrame
             totalMargins += child->GetProperties().marginLeft + child->GetProperties().marginRight;
         }
 
-        int totalSpacing = spacing * (children.size() - 1);
+        int totalSpacing = static_cast<int>(spacing * (children.size() - 1));
         int availableSpace = height - fixedHeight - totalSpacing - totalMargins - (properties.padding * 2);
 
         if (flexibleCount > 0)
@@ -134,6 +134,7 @@ namespace CFrame
                     child->SetY(GetY() + child->GetLocalY());
                 }
                child->UpdateChildSizes();
+               child->UpdateVertices();
                
                 continue;
             }
@@ -192,6 +193,7 @@ namespace CFrame
             {
                 ypos += spacing ;
             }
+            child->UpdateVertices();
         }
 	}
    
