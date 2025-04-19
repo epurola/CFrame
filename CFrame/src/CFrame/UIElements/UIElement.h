@@ -95,7 +95,7 @@ namespace CFrame
         Color color2;
         float scaleX       = 1;
         float scaleY       = 1;
-        float angle        = 0;
+        float angle        = 0.0f;
         float opacity      = 1;
         int maxWidth       = -1;
         int maxHeight      = 0;

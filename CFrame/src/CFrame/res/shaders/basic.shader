@@ -4,7 +4,6 @@ layout(location = 0)in vec4 position;
 layout(location = 2) in vec2 texCoord;
 
 uniform mat4 u_MVP;
-uniform float u_Angle;
 uniform vec2 u_Center;
 uniform float u_ZIndex;
 out vec4 fragPos;
@@ -43,6 +42,7 @@ uniform float u_BorderLeft;
 uniform float u_BorderTop;
 uniform float u_BorderBottom;
 uniform sampler2D u_Texture;
+uniform float u_Angle;
 uniform bool u_HasTexture;
 
 in vec4 fragPos;
@@ -75,9 +75,26 @@ float sdRoundedBox(in vec2 p, in vec2 b, in vec4 r)
 
 void main()
 {
+
     // Transform the coordinate space  relative to the rect ( Center of the rect = 0,0)
     //by substracting the centre of the rect from the fragments position
-	vec2 p = fragPos.xy - (u_RectMin + u_RectMax) * 0.5; 
+	vec2 center = (u_RectMin + u_RectMax) * 0.5;
+
+    // Compute the local coordinates relative to the center of the rectangle
+    vec2 p = fragPos.xy - center;
+
+    // Apply the rotation matrix
+    float angleInRadians = -u_Angle * 3.14159265359 / 180.0;
+
+   // Apply the rotation matrix
+   float cosAngle = cos(angleInRadians);
+   float sinAngle = sin(angleInRadians);
+   vec2 rotatedP = vec2(
+      cosAngle * p.x - sinAngle * p.y,
+      sinAngle * p.x + cosAngle * p.y
+    );
+    // Use the rotated coordinates
+    p = rotatedP;
     // Half the width and the height to define rect bound in the new coord system ( Center of the rect = 0,0)
     vec2 b = (u_RectMax - u_RectMin) * 0.5;
     // Radius for all corners
@@ -101,7 +118,6 @@ void main()
     vec4 gradientColor = mix(color1, color2, gradient);
     vec4 gradientBorderColor = mix(borderColor1, borderColor2, gradient);
     vec4 texColor = texture(u_Texture, v_TexCoord);
-    
     
     // If the distance is negative or zero, we're inside the box, color the fragment
      if (dist < 0.0) {

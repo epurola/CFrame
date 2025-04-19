@@ -1,7 +1,10 @@
 #include "UIElement.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/constants.hpp>    
+#include <glm/gtc/matrix_transform.hpp>
 
 namespace CFrame {
-
+#define M_PI 3.14159265358979323846
 
 
 	UIElement::UIElement(int x, int y, int w, int h, UIElement* parent)
@@ -30,6 +33,45 @@ namespace CFrame {
 
 		properties.vertices.topRightX = x + width;
 		properties.vertices.topRightY = y + height;
+
+		if (properties.angle > 0.0f) {
+			
+			float cX = x + (GetWidth() / 2.0f);
+			float cY = y + (GetHeight() / 2.0f);
+
+			float angle = properties.angle * M_PI / 180.0f;
+			float cosA = cos(angle);
+			float sinA = sin(angle);
+
+	
+		   //x' = cos(θ)⋅(x−cx)−sin(θ)⋅(y−cy) + cx
+		   //y' = sin(θ)⋅(x−cx)+cos(θ)⋅(y−cy)+cy
+		float dx = properties.vertices.bottomLeftX - cX;
+        float dy = properties.vertices.bottomLeftY - cY;
+        properties.vertices.bottomLeftX = cX + cosA * dx - sinA * dy;
+        properties.vertices.bottomLeftY = cY + sinA * dx + cosA * dy;
+
+        // Rotate bottom-right vertex
+        dx = properties.vertices.bottomRightX - cX ;
+        dy = properties.vertices.bottomRightY - cY ;
+        properties.vertices.bottomRightX = cX + cosA * dx - sinA * dy;
+        properties.vertices.bottomRightY = cY + sinA * dx + cosA * dy;
+
+        // Rotate top-left vertex
+        dx = properties.vertices.topLeftX - cX;
+        dy = properties.vertices.topLeftY - cY ;
+        properties.vertices.topLeftX = cX + cosA * dx - sinA * dy;
+        properties.vertices.topLeftY = cY + sinA * dx + cosA * dy;
+
+        // Rotate top-right vertex
+        dx = properties.vertices.topRightX - cX ;
+        dy = properties.vertices.topRightY - cY ;
+        properties.vertices.topRightX = cX + cosA * dx - sinA * dy;
+		properties.vertices.topRightY = cY + sinA * dx + cosA * dy;
+
+		}
+
+
 	}
 
 	void UIElement::SetMargin(int marginleft, int marginRight, int marginTop, int marginBottom)

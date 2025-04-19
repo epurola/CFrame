@@ -5,7 +5,7 @@
 #include <SDL3/SDL.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp> 
-#define M_PI 3.14159265358979323846
+
 
 
 namespace CFrame {
@@ -34,6 +34,7 @@ namespace CFrame {
             texture->Bind();
             hasTexture = true;
         }
+      
        
         SDL_Color c = p.color1.toSDLColor(p.opacity);
         SDL_Color c1 = p.color1.toSDLColor(p.opacity);
@@ -116,7 +117,7 @@ namespace CFrame {
         shader->SetUniform1f("u_TopLeft", float(p.radius.topLeft));
         shader->SetUniform1f("u_Time", time);
         shader->SetUniform1f("u_Speed", speed);
-        //shader->SetUniform1f("u_Angle", p.angle);
+        shader->SetUniform1f("u_Angle", p.angle);
         //shader->SetUniform2f("u_Center", centerX, centerY);
         shader->SetUniform1f("u_BorderTop", p.borderTop);
         shader->SetUniform1f("u_BorderBottom", p.borderBottom);

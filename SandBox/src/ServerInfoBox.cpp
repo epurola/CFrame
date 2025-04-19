@@ -78,6 +78,7 @@ ServerInfoBox::ServerInfoBox(int x, int y, int w, int h)
 	bottomPart->AddChild(logo);
 	bottomPart->AddChild(logo1);
 	bottomPart->AddChild(logo2);
+	bottomPart->ToFront(logo1);
 	SetMinHeight(120);
 	AddChild(topPart);
 	topPart->SetVisibility(false);

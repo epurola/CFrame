@@ -163,7 +163,8 @@ public:
 						
 		CFrame::Button* button6  = new CFrame::Button(-1, 75);
 						button6->SetText("Kirjasto");
-		                button6->SetColor(Color::DarkGray);
+						button6->SetAngle(25.0);
+		                button6->SetColor(Color::Gray);
 						button6->SetPadding(20);
 						button6->SetTextAlign(CFrame::TextAlign::Start);
 						button6->SetOnLeave([button6]() { 
