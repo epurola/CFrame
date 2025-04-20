@@ -121,7 +121,7 @@ namespace CFrame
                 float rightX = xpos + w;
                 float topY = ypos;
                 float bottomY = ypos - h;
-
+               
                 //Define 4 vertices for the current character
                 textProps.vertices.push_back(leftX);                   //top-Left x
                 textProps.vertices.push_back(topY);                    //Top-Left y
@@ -249,6 +249,17 @@ namespace CFrame
         textProps.textAlign = alignX;
     }
 
+    void Button::SetTextColor(Color color1, std::optional<Color> color2)
+    {
+        if (color2.has_value()) {
+            textProps.color1 = color1;
+            textProps.color2 = color2.value();
+        }
+        else {
+            textProps.color1 = color1;
+            textProps.color2 = color1;
+        } 
+    }
 }
 
 

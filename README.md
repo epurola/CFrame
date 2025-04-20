@@ -6,3 +6,4 @@ ToDo:
 
  Finish event system and expose it to the client.
  Refactor UpdateChildSizes().
+ Add Blur() functionality

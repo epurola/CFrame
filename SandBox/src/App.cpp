@@ -155,7 +155,7 @@ public:
 							});
 						button5->SetOnHover([button5]() {
 							button5->SetBorder(2.5f);
-						    button5->SetBorderGradient(Color::Cyan, Color::Red);
+						    button5->SetBorderColor(Color::Cyan, Color::Red);
 						    button5->AnimateGradient(3.0);
 							button5->SetOpacity(0.2);
 							button5->SetColor(Color::Gray);
@@ -173,7 +173,7 @@ public:
 						});
 						button6->SetOnHover([button6]() {
 							button6->SetBorder(2.5f);
-							button6->SetBorderGradient(Color::Cyan, Color::Red);
+							button6->SetBorderColor(Color::Cyan, Color::Red);
 							button6->AnimateGradient(3.0);
 							button6->SetOpacity(0.2);
 							button6->SetColor(Color::Gray);
@@ -190,7 +190,7 @@ public:
 						});
 						button7->SetOnHover([button7]() {
 							button7->SetBorder(2.5f);
-							button7->SetBorderGradient(Color::Cyan, Color::Red);
+							button7->SetBorderColor(Color::Cyan, Color::Red);
 							button7->AnimateGradient(3.0);
 							button7->SetOpacity(0.2);
 							button7->SetColor(Color::Gray);
@@ -206,7 +206,7 @@ public:
 							});
 						button8->SetOnHover([button8]() {
 							button8->SetBorder(2.5f);
-							button8->SetBorderGradient(Color::Cyan, Color::Red);
+							button8->SetBorderColor(Color::Cyan, Color::Red);
 							button8->AnimateGradient(3.0);
 							button8->SetOpacity(0.2);
 							button8->SetColor(Color::Gray);
@@ -222,7 +222,7 @@ public:
 						});
 						button9->SetOnHover([button9]() {
 							button9->SetBorder(2.5f);
-							button9->SetBorderGradient(Color::Cyan, Color::Red);
+							button9->SetBorderColor(Color::Cyan, Color::Red);
 							button9->AnimateGradient(3.0);
 						});
 						button9->SetOpacity(0.5);

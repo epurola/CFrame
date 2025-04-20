@@ -19,60 +19,54 @@ namespace CFrame {
 	{
 		//Default
 	}
-
+	//ToDo: Add flags if this needs to recalculate or not
 	void UIElement::UpdateVertices()
 	{
-		properties.vertices.bottomLeftX = x;
-		properties.vertices.bottomLeftY = y;
+		properties.vertices.bottomLeft.x = x;
+		properties.vertices.bottomLeft.y = y;
 
-		properties.vertices.bottomRightX = x + width;
-		properties.vertices.bottomRightY = y;
+		properties.vertices.bottomRight.x = x + width;
+		properties.vertices.bottomRight.y = y;
 
-		properties.vertices.topLeftX = x;
-		properties.vertices.topLeftY = y + height;
+		properties.vertices.topLeft.x = x;
+		properties.vertices.topLeft.y = y + height;
 
-		properties.vertices.topRightX = x + width;
-		properties.vertices.topRightY = y + height;
+		properties.vertices.topRight.x = x + width;
+		properties.vertices.topRight.y = y + height;
 
 		if (properties.angle > 0.0f) {
+
+			float angleRadians = properties.angle * M_PI / 180.0f;
+			float cosA = cos(angleRadians);
+			float sinA = sin(angleRadians);
 			
-			float cX = x + (GetWidth() / 2.0f);
+		    float cX = x + (GetWidth() / 2.0f);
 			float cY = y + (GetHeight() / 2.0f);
 
-			float angle = properties.angle * M_PI / 180.0f;
-			float cosA = cos(angle);
-			float sinA = sin(angle);
+	        // Rotate bottom-left vertex
+		    RotatePoint(properties.vertices.bottomLeft, properties.angle, cosA, sinA, cX, cY); 
 
-	
-		   //x' = cos(θ)⋅(x−cx)−sin(θ)⋅(y−cy) + cx
-		   //y' = sin(θ)⋅(x−cx)+cos(θ)⋅(y−cy)+cy
-		float dx = properties.vertices.bottomLeftX - cX;
-        float dy = properties.vertices.bottomLeftY - cY;
-        properties.vertices.bottomLeftX = cX + cosA * dx - sinA * dy;
-        properties.vertices.bottomLeftY = cY + sinA * dx + cosA * dy;
+            // Rotate bottom-right vertex
+		    RotatePoint(properties.vertices.bottomRight, properties.angle, cosA, sinA, cX, cY);
 
-        // Rotate bottom-right vertex
-        dx = properties.vertices.bottomRightX - cX ;
-        dy = properties.vertices.bottomRightY - cY ;
-        properties.vertices.bottomRightX = cX + cosA * dx - sinA * dy;
-        properties.vertices.bottomRightY = cY + sinA * dx + cosA * dy;
+            // Rotate top-left vertex
+		    RotatePoint(properties.vertices.topLeft, properties.angle, cosA, sinA, cX, cY);
 
-        // Rotate top-left vertex
-        dx = properties.vertices.topLeftX - cX;
-        dy = properties.vertices.topLeftY - cY ;
-        properties.vertices.topLeftX = cX + cosA * dx - sinA * dy;
-        properties.vertices.topLeftY = cY + sinA * dx + cosA * dy;
-
-        // Rotate top-right vertex
-        dx = properties.vertices.topRightX - cX ;
-        dy = properties.vertices.topRightY - cY ;
-        properties.vertices.topRightX = cX + cosA * dx - sinA * dy;
-		properties.vertices.topRightY = cY + sinA * dx + cosA * dy;
-
+            // Rotate top-right vertex
+		    RotatePoint(properties.vertices.topRight, properties.angle, cosA, sinA, cX, cY);
 		}
-
-
 	}
+	//Todo: Maybe also take the center in as a point
+	void UIElement::RotatePoint(Point& p, float angle, float cosA, float sinA, float cX, float cY)
+	{
+		float dx = p.x - cX;
+		float dy = p.y - cY;
+		//x' = cos(θ)⋅(x−cx)−sin(θ)⋅(y−cy) + cx
+		//y' = sin(θ)⋅(x−cx)+cos(θ)⋅(y−cy) + cy
+		p.x = cX + cosA * dx - sinA * dy;
+		p.y = cY + sinA * dx + cosA * dy;
+	}
+
 
 	void UIElement::SetMargin(int marginleft, int marginRight, int marginTop, int marginBottom)
 	{
@@ -149,16 +143,16 @@ namespace CFrame {
 		this->properties.borderLeft = l;
 	}
 
-	void UIElement::SetBorderColor(Color color1)
+	void UIElement::SetBorderColor(Color color1, std::optional<Color> color2)
 	{
-		this->properties.borderColor1 = color1;
-		this->properties.borderColor2 = color1;
-	}
-
-	void UIElement::SetBorderGradient(Color color1, Color color2)
-	{
-		this->properties.borderColor1 = color1;
-		this->properties.borderColor2 = color2;
+		if (color2.has_value()) {
+			this->properties.borderColor1 = color1;
+			this->properties.borderColor2 = color2.value();
+		}
+		else {
+			this->properties.borderColor1 = color1;
+			this->properties.borderColor2 = color1;
+		}
 	}
 
 	void UIElement::SetOpacity(float opacity)
@@ -194,16 +188,18 @@ namespace CFrame {
 		imageTexture = std::make_unique<Texture>(path);
 	}
 
-	void UIElement::SetColor(Color color)
+	void UIElement::SetColor(Color color, std::optional<Color> color2)
 	{
-		this->properties.color1 = color;
-		this->properties.color2 = color;
+		if (color2.has_value()) {
+			this->properties.color1 = color;
+			this->properties.color2 = color2.value();
+		}
+		else {
+			this->properties.color1 = color;
+			this->properties.color2 = color;
+		}
 	}
-	void UIElement::SetGradient(Color color1, Color color2)
-	{
-		this->properties.color1 = color1;
-		this->properties.color2 = color2;
-	}
+	
 	void UIElement::SetOnLeave(std::function<void()> onLeave)
 	{
 		this->onLeave = onLeave;

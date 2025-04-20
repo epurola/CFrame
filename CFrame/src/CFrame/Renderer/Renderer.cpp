@@ -67,10 +67,10 @@ namespace CFrame {
         float vertices[] = {
             /* x, y,                                        r, g, b, a         texture coordinates      Gradient color
             location = 0                                    location = 1       location = 2             location = 3*/
-           p.vertices.topLeftX , p.vertices.topLeftY,           r, g, b, a,     0.0f, 1.0f,     rg, gg, bg, ag,     // Top-left
-           p.vertices.topRightX, p.vertices.topRightY,          r, g, b, a,     1.0f, 1.0f,     rg, gg, bg, ag,     // Top-right
-           p.vertices.bottomRightX , p.vertices.bottomRightY,   r, g, b, a,     1.0f, 0.0f,     rg, gg, bg, ag,     // Bottom-right
-           p.vertices.bottomLeftX, p.vertices.bottomLeftY,      r, g, b, a,     0.0f, 0.0f,     rg, gg, bg, ag,  
+           p.vertices.topLeft.x , p.vertices.topLeft.y,           r, g, b, a,     0.0f, 1.0f,     rg, gg, bg, ag,     // Top-left
+           p.vertices.topRight.x, p.vertices.topRight.y,          r, g, b, a,     1.0f, 1.0f,     rg, gg, bg, ag,     // Top-right
+           p.vertices.bottomRight.x , p.vertices.bottomRight.y,   r, g, b, a,     1.0f, 0.0f,     rg, gg, bg, ag,     // Bottom-right
+           p.vertices.bottomLeft.x, p.vertices.bottomLeft.y,      r, g, b, a,     0.0f, 0.0f,     rg, gg, bg, ag,  
         };
 
            

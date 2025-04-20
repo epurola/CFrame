@@ -5,6 +5,7 @@
 #include <memory> 
 #include "../Animator/Animator.h"
 #include <map>
+#include <optional>
 
 
 
@@ -35,6 +36,7 @@ namespace CFrame
         void SetFontSize(float size);
         void SetFont(Font font);
         void SetTextAlign(TextAlign alignX);
+        void SetTextColor(Color color1, std::optional<Color> color2 = std::nullopt);
         
 
         inline ElementType GetElementType() const override { return ElementType::BUTTON; };

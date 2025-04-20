@@ -1,11 +1,13 @@
 #pragma once
 #include <vector>
 #include <cmath>
+#include <optional>
 #include "../Core.h"
 #include "../Renderer/Renderer.h"
 #include "../Renderer/FontManager.h"
 #include "../CFrameEvent/CFrameEvent.h"
 #include "Color.h"
+
 
 namespace CFrame 
 {
@@ -32,6 +34,11 @@ namespace CFrame
 
     };
 
+    struct Point {
+        int x;
+        int y;
+    };
+
     struct Radius {
         float topRight    = 0;
         float topLeft     = 0;
@@ -50,6 +57,8 @@ namespace CFrame
        float fontSize = 24;  
        TextAlign textAlign = TextAlign::Center;
        Font font = Font::Verdana;
+       Color color1;
+       Color color2;
     };
 
     struct OverFlowProperties {
@@ -63,15 +72,19 @@ namespace CFrame
     struct Vertices {
         float topLeftX;
         float topLeftY;
+        Point topLeft;
 
         float topRightX;
         float topRightY;
+        Point topRight;
 
         float bottomLeftX;
         float bottomLeftY;
+        Point bottomLeft;
 
         float bottomRightX;
         float bottomRightY;
+        Point bottomRight;
     };
 
 
@@ -124,6 +137,7 @@ namespace CFrame
         virtual ElementType GetElementType() const = 0;
 
         void UpdateVertices();
+        void RotatePoint(Point& p, float angle, float cosA, float sinA, float cX, float cY);
 
         void SetMargin(int marginleft, int marginRight, int marginTop, int marginBottom);
         void SetPadding(int padding);
@@ -136,8 +150,7 @@ namespace CFrame
         void SetAngle(float angle);
         void SetBorder(float border);
         void SetBorder(float t, float b, float r, float l);
-        void SetBorderColor(Color color1);
-        void SetBorderGradient(Color color1, Color color2);
+        void SetBorderColor(Color color1, std::optional<Color> color2 = std::nullopt);
         void SetOpacity(float opacity);
         void SetMaxWidth(int maxWidth);
         void SetMinHeight(int minHeight);
@@ -147,8 +160,7 @@ namespace CFrame
         /// Sets the color of the UI element.
         /// @param color.
         /// The format is {r,g,b,a}. You can set a custom color using this format.
-        void SetColor(Color color);
-        void SetGradient(Color color1, Color color2);
+        void SetColor(Color color, std::optional<Color> color2 = std::nullopt);
         void SetScale(float scaleX, float scaleY);
         void SetVisibility(bool visibility);
         void SetDragToResize(bool b);
