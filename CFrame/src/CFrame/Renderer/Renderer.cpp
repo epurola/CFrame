@@ -34,7 +34,9 @@ namespace CFrame {
             texture->Bind();
             hasTexture = true;
         }
-      
+        int windowWidth = window.GetWidth();
+        int windowHeight = window.GetHeight();
+
        
         SDL_Color c = p.color1.toSDLColor(p.opacity);
         SDL_Color c1 = p.color1.toSDLColor(p.opacity);
@@ -58,9 +60,6 @@ namespace CFrame {
         float ggb = p.borderColor2.g / 255.0f;
         float bgb = p.borderColor2.b / 255.0f;
         float agb = p.borderColor2.a / 255.0f;
-
-        int windowWidth  = window.GetWidth();
-        int windowHeight = window.GetHeight();
 
  
         /*Vertices of the rectangle. Calculates the top left as the origin*/

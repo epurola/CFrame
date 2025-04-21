@@ -62,6 +62,12 @@ void Window::OnUpdate()
 		   dispatcher.Dispatch(closed);
 		   break;
 	   }
+	   case SDL_EVENT_MOUSE_WHEEL:
+	   {
+		   MouseScrolledEvent scroll(event.wheel.x, event.wheel.y, event.wheel.mouse_x, event.wheel.mouse_y);
+		   dispatcher.Dispatch(scroll);
+		   break;
+	   }
        default:  
            break;  
        }  

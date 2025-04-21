@@ -17,6 +17,7 @@ namespace CFrame
 		MouseButtonDown,
 		MouseButtonReleased,
 		MouseDragged,
+		MouseScroll,
 		WindowResized,
 		WindowClosed
 	};
@@ -134,6 +135,27 @@ namespace CFrame
 	private:
 		float startX, startY;
 		float currentX, currentY;
+	};
+
+	/*Mouse Scroll event*/
+	class CFRAME_API MouseScrolledEvent : public CFrameEvent
+	{
+	public:
+		MouseScrolledEvent(float startX, float startY, float mouseX, float mouseY )
+			: distanceX(startX), distanceY(startY), mouseX(mouseX), mouseY(mouseY) {
+		}
+
+		inline float GetDistanceX() const { return distanceX; }
+		inline float GetDistanceY() const { return distanceY; }
+		inline float GetMouseX() const { return mouseX; }
+		inline float GetMouseY() const { return mouseY; }
+
+
+
+		CFrameEventType GetEventType() const override { return CFrameEventType::MouseScroll; }
+	private:
+		float distanceX, distanceY;
+		float mouseX, mouseY;
 	};
 
 	/*Event dispatcher */

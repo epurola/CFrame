@@ -34,6 +34,9 @@ Application::Application(int width, int height)
 
 	eventDispatcher->AddListener(CFrameEventType::MouseDragged,
 		[this](CFrameEvent& event) { OnEvent(event); });
+
+	eventDispatcher->AddListener(CFrameEventType::MouseScroll,
+		[this](CFrameEvent& event) { OnEvent(event); });
 }  
 
 Application::~Application()   
@@ -72,6 +75,7 @@ void Application::OnEvent(CFrameEvent& e)
 		rootContainer->UpdateChildSizes();
 	 }
 }  
+
 
 void Application::addElement(UIElement* element)  
 {  

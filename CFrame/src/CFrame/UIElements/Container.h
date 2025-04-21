@@ -26,6 +26,7 @@ namespace CFrame {
 		void ToBack(UIElement* child);
 
 		void SetAlignment(AlignItems xAlign, AlignItems yAlign );
+		void SetScrollEnabled(bool b);
 
 		inline int GetSpacing() const { return spacing; }
 		inline ElementType GetElementType() const override { return ElementType::CONTAINER; };
@@ -35,6 +36,7 @@ namespace CFrame {
 	protected:
 		int spacing = 0;
 		AlignItems xAlign, yAlign;
+		bool scrollEnabled = false;
 		
 	};
 

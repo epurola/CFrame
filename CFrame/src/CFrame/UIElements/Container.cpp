@@ -46,6 +46,11 @@ namespace CFrame
 		this->yAlign = yAlign;
 	}
 
+	void Container::SetScrollEnabled(bool b)
+	{
+		scrollEnabled = b;
+	}
+
 	void Container::OnEvent(CFrameEvent& event)
 	{
 		if (!IsVisible()) return;
@@ -66,7 +71,22 @@ namespace CFrame
 				}
 			}
 		}
-		
+
+		if (event.GetEventType() == CFrameEventType::MouseScroll) {
+			auto* mouseEvent = dynamic_cast<MouseScrolledEvent*>(&event);
+			if ((mouseEvent->GetMouseX() >= x && mouseEvent->GetMouseX() <= x + width) &&
+				(mouseEvent->GetMouseY() >= y && mouseEvent->GetMouseY() <= y + height)) {
+				if (scrollEnabled) {
+					CF_CORE_INFO("Scrolling");
+					for (auto& child : children) {
+						//todo: Dont allow to overflow at the top. it will cause elemesnt to not be correctly placed
+						child->SetY(child->GetY() + (mouseEvent->GetDistanceY() * 7));
+						child->UpdateChildSizes();
+						child->UpdateVertices();
+					}
+				}
+			}
+		}
 
 	}
 	void Container::ToFront(UIElement* child)

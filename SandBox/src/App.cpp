@@ -28,6 +28,7 @@ public:
 
 		vbox->AddChild(header);
 		vbox->AddChild(content);
+		vbox->ToFront(header);
 		
 		
 		contentLeft->SetMaxWidth(800);
@@ -131,6 +132,7 @@ public:
 		sideBar->SetSpacing(20);
 		sideBar->SetAlignment(CFrame::AlignItems::Center, CFrame::AlignItems::Start);
 		sideBar->SetColor(Color::DarkGray);
+		sideBar->SetScrollEnabled(true);
 		
 
 		CFrame::Button* button5 = new CFrame::Button(-1, 75);
@@ -243,6 +245,7 @@ public:
 		friendList->SetBorder(0.7);
 		friendList->SetBorderColor(Color::Gray);
 		friendList->SetBorder(2,0,2,2);
+		
 
 		CFrame::Button* button10 = new CFrame::Button(50, 50);
 						button10->SetText("-");
