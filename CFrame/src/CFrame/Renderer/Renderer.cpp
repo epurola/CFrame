@@ -36,7 +36,7 @@ namespace CFrame {
         }
         int windowWidth = window.GetWidth();
         int windowHeight = window.GetHeight();
-
+        //ClipOverflow(x, y, w, h, windowHeight);
        
         SDL_Color c = p.color1.toSDLColor(p.opacity);
         SDL_Color c1 = p.color1.toSDLColor(p.opacity);
@@ -164,8 +164,15 @@ namespace CFrame {
         glm::mat4 proj = glm::ortho(0.0f, float(windowWidth), // Left, Right
                                    float(windowHeight), 0.0f,  // Bottom, Top
                                                 -1.0f, 1.0f); 
+        //Todo: Also use the second color
+        SDL_Color c = t.color1.toSDLColor(t.opacity);
+        float r = c.r / 255.0f;
+        float g = c.g / 255.0f;
+        float b = c.b / 255.0f;
+        float a = c.a / 255.0f;
 
         textShader->Bind();
+        textShader->SetUniform4f("u_Color", r, b, g, a);
         textShader->SetUniformMat4f("u_MVP", proj);
         textShader->SetUniform1i("u_Texture", 0); 
         textShader->SetUniform1f("u_Opacity", t.opacity);

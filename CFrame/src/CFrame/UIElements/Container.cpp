@@ -77,10 +77,14 @@ namespace CFrame
 			if ((mouseEvent->GetMouseX() >= x && mouseEvent->GetMouseX() <= x + width) &&
 				(mouseEvent->GetMouseY() >= y && mouseEvent->GetMouseY() <= y + height)) {
 				if (scrollEnabled) {
-					CF_CORE_INFO("Scrolling");
 					for (auto& child : children) {
-						//todo: Dont allow to overflow at the top. it will cause elemesnt to not be correctly placed
-						child->SetY(child->GetY() + (mouseEvent->GetDistanceY() * 7));
+						//Break if going to overflow the top
+						int newY = child->GetY() + (mouseEvent->GetDistanceY() * 7); //ToDo: Add variable to cotrol the sensitivity of scroll
+						if (newY < properties.padding + GetY()) {
+							event.handled = true;
+							return;
+						}
+						child->SetY(newY);
 						child->UpdateChildSizes();
 						child->UpdateVertices();
 					}

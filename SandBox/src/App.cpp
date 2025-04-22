@@ -28,7 +28,7 @@ public:
 
 		vbox->AddChild(header);
 		vbox->AddChild(content);
-		vbox->ToFront(header);
+	
 		
 		
 		contentLeft->SetMaxWidth(800);
