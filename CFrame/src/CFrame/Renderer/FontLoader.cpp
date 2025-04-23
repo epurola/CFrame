@@ -92,6 +92,8 @@ namespace CFrame {
 
 			glyphs[c] = info;
 		}
+		FT_Done_Face(face);
+		FT_Done_FreeType(ft);
 		return true;
 	}
 
@@ -113,9 +115,9 @@ namespace CFrame {
 
 		CF_CORE_INFO("Font init OK!");
 
-		// Adjust the range for Material Design Icons (in the Private Use Area)
-		const int startChar = 0xF0000; // Start of the Private Use Area (PUA)
-		const int endChar = 0xF0FFF; // End of the Private Use Area (You can extend this as needed)
+		
+		const int startChar = 0xE000; // start of Private Use Area (PUA)
+		const int endChar = 0xF8FF;
 
 		const int cols = 16;
 		const int rows = (endChar - startChar + 1 + cols - 1) / cols;
@@ -171,7 +173,6 @@ namespace CFrame {
 			info.advance = face->glyph->advance.x >> 6;
 
 			glyphs[c] = info;
-			CF_CORE_INFO("Icon! {0}", c);
 		}
 
 		CF_CORE_INFO("Icon font loaded successfully!");

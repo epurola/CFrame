@@ -22,13 +22,23 @@ in vec2 v_TexCoord;
 
 uniform float u_Opacity;
 uniform vec4 u_Color;
+uniform vec4 u_Color2;
+uniform float u_Speed;
+uniform float u_Time;
 
 out vec4 color;
-
 uniform sampler2D u_Texture;
 
 void main()
 {
+    //Todo; Pass in the length of text so the gradient is not just applied to each char independetly
+    float gradient = v_TexCoord.x + sin(u_Time * u_Speed);
+
+    vec4 color1 = u_Color;
+    vec4 color2 = u_Color2;
+    // Interpolate between the colors
+    vec4 c = mix(color1, color2, gradient);
+
     float alpha = texture(u_Texture, v_TexCoord).r;
-    color = vec4(u_Color.r, u_Color.b, u_Color.b, alpha * u_Opacity); 
+    color = vec4(c.r, c.b, c.b, alpha * u_Opacity); 
 }

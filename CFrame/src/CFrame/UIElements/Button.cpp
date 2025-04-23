@@ -58,9 +58,10 @@ namespace CFrame
             FontKey key = { textProps.font, textProps.fontSize };
             FontManager& fm = FontManager::GetInstance();
             std::pair<std::shared_ptr<Texture>, std::map<char, fontInfo>> font = fm.GetFont(key);
-            glyphs = font.second;
+            glyphs = font.second; //Info about the glyph and where it is in the atlas
             labelTexture = font.first;
         }
+       
         if (!overflow.overflow) {
             overflow.clipHeight = height;
             overflow.clipWidth  = width;
@@ -75,6 +76,7 @@ namespace CFrame
             textProps.textHeight = 0;
             textProps.vertices.clear();
             textProps.indices.clear();
+            //ToDo: Determine if you need to use the text or icon icons have PUA range
 
             for (char c : text) {
                 fontInfo glyph = glyphs[c];
@@ -227,6 +229,11 @@ namespace CFrame
     void Button::SetText(std::string text)
     {
         this->text = text;
+    }
+
+    void Button::SetIcon(int codePoint)
+    {
+        icon = codePoint;
     }
 
     void Button::setTextOpacity(float opacity)

@@ -166,13 +166,22 @@ namespace CFrame {
                                                 -1.0f, 1.0f); 
         //Todo: Also use the second color
         SDL_Color c = t.color1.toSDLColor(t.opacity);
+        SDL_Color c2 = t.color2.toSDLColor(t.opacity);
         float r = c.r / 255.0f;
         float g = c.g / 255.0f;
         float b = c.b / 255.0f;
         float a = c.a / 255.0f;
 
+        float r2 = c2.r / 255.0f;
+        float g2 = c2.g / 255.0f;
+        float b2 = c2.b / 255.0f;
+        float a2 = c2.a / 255.0f;
+
         textShader->Bind();
         textShader->SetUniform4f("u_Color", r, b, g, a);
+        textShader->SetUniform4f("u_Color2", r2, g2, b2, a2);
+        textShader->SetUniform1f("u_Speed", 1.0f);
+        textShader->SetUniform1f("u_Time", 1.0f);
         textShader->SetUniformMat4f("u_MVP", proj);
         textShader->SetUniform1i("u_Texture", 0); 
         textShader->SetUniform1f("u_Opacity", t.opacity);

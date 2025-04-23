@@ -147,8 +147,8 @@ namespace CFrame
 
 		inline float GetDistanceX() const { return distanceX; }
 		inline float GetDistanceY() const { return distanceY; }
-		inline float GetMouseX() const { return mouseX; }
-		inline float GetMouseY() const { return mouseY; }
+		inline float GetMouseX()    const { return mouseX; }
+		inline float GetMouseY()    const { return mouseY; }
 
 
 

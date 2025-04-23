@@ -32,6 +32,7 @@ namespace CFrame
         void StartAnimation();
 
         void SetText(std::string text);
+        void SetIcon(int codePoint);
         void setTextOpacity(float opacity);
         void SetFontSize(float size);
         void SetFont(Font font);
@@ -44,6 +45,7 @@ namespace CFrame
     private:
         std::function<void()> onClick;
         std::string text;
+        std::optional<int> icon;
         std::unique_ptr<Animator> animator;
         bool hovering = false;
         std::shared_ptr<Texture> labelTexture;

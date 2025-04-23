@@ -20,6 +20,7 @@ namespace CFrame
 			FontLoader fontLoader(GetFontPath(key.font), key.fontSize);
            
             fontLoader.LoadFont();
+            //fontLoader.LoadIcons();
             
 			std::vector<uint8_t> atlas = fontLoader.GetFontAtlas();
 			std::map<char, fontInfo> glyphs = fontLoader.GetGlyphs();

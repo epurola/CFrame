@@ -136,7 +136,7 @@ public:
 		
 
 		CFrame::Button* button5 = new CFrame::Button(-1, 75);
-		                button5->SetColor(Color::DarkGray);
+						button5->SetTextColor(Color::Cyan, Color::Red);
 						button5->SetText("Kaverit");
 						button5->SetOverflow(true);
 						button5->SetPadding(20);
