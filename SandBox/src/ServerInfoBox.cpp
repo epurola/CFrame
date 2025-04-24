@@ -3,6 +3,7 @@
 ServerInfoBox::ServerInfoBox(int x, int y, int w, int h)
 	:VBox(x,y,w,h)
 {
+	isWidthResizable = true;
 	topPart = new CFrame::HBox(-1, -1);
 	topPart->SetRadius(20,20,0,0);
 	topPart->SetBorder(2, 0, 2, 2);
@@ -15,29 +16,32 @@ ServerInfoBox::ServerInfoBox(int x, int y, int w, int h)
 	bottomPart->SetColor(Color::DarkGray);
 	bottomPart->SetRadius(20, 20, 20, 20);
 	bottomPart->SetPadding(10);
+	bottomPart->SetSpacing(10);
 
 	CFrame::Button* button20 = new CFrame::Button(10,10,100, 100);
-	CFrame::Button* button21 = new CFrame::Button(55,10, -1, 100);
+	CFrame::Button* button21 = new CFrame::Button(55,10, 300, 100);
+	button21->SetWidthResizable(true);
 	 
 	CFrame::Button* logo  = new CFrame::Button( 55, 55);
-	logo->SetText("\x2B");
-	logo->SetMargin(30, 0, 0, 0);
+	logo->SetIcon(0xE74F);
 	logo->SetFontSize(44);
 	logo->SetFont(CFrame::Font::SegoeMDL2Assets);
 	logo->SetColor(Color::DarkGray);
+	logo->SetMargin(0, 0, 0, 0);
 	CFrame::Button* logo1 = new CFrame::Button( 55, 55);
-	logo1->SetAngle(45.0);
-	logo1->SetText("\x0D");
+	//logo1->SetAngle(45.0);
+	logo1->SetIcon(0xE720);
 	logo1->SetFontSize(44);
 	logo1->SetFont(CFrame::Font::SegoeMDL2Assets);
-	logo1->SetColor(Color::Gray);
+	logo1->SetColor(Color::DarkGray);
+	
 	CFrame::Button* logo2 = new CFrame::Button( 55, 55);
-	logo2->SetAngle(45.0);
-	logo2->SetText("\x12");
-	logo2->SetFontSize(44);
+	//logo2->SetAngle(45.0);
+	logo2->SetIcon(0xE713);
+	logo2->SetFontSize(34);
 	logo2->SetFont(CFrame::Font::SegoeMDL2Assets);
 	logo2->SetColor(Color::DarkGray);
-
+	
 	
 	button20->SetRadius(55, 55, 55, 55);
 	button20->SetBackgroundImage("C:/Users/eelip/Pictures/aaaaaaaape.jpg");
@@ -61,7 +65,8 @@ ServerInfoBox::ServerInfoBox(int x, int y, int w, int h)
 	button21->SetColor(Color::DarkGray);
 	button21->SetTextAlign(CFrame::TextAlign::Start);
 	button21->SetFontSize(20);
-	button21->SetMargin(50, 0,0,0);
+	button21->SetMargin(50,0,0,0);
+
 
 	button21->SetPadding(60);
 	button21->SetAnchorPoint(CFrame::PositionMode::BottomLeft);

@@ -22,6 +22,7 @@ namespace CFrame
 
     void VBox::UpdateChildSizes()
     {
+       
         if (children.empty())
             return;
 
@@ -67,8 +68,9 @@ namespace CFrame
         }
 
         if (maxChildWidth == 0) {
-            maxChildWidth = height - (properties.padding * 2);
+            maxChildWidth = width - (properties.padding * 2);
         }
+       
 
 
         switch (yAlign)
@@ -194,6 +196,7 @@ namespace CFrame
                 ypos += spacing ;
             }
             child->UpdateVertices();
+            child->UpdateChildSizes();
         }
 	}
    

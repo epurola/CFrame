@@ -13,8 +13,8 @@ public:
 		CFrame::VBox* sideBar     = new CFrame::VBox(150,-1);
 		CFrame::VBox* friendList  = new CFrame::VBox(-1,-1);
 		CFrame::VBox* messageBox  = new CFrame::VBox(-1, -1);
-		CFrame::HBox* contentLeft = new CFrame::HBox(500,-1);
-		ServerInfoBox* info       = new ServerInfoBox(20, 20, -1, -1); //H = 120;
+		CFrame::HBox* contentLeft = new CFrame::HBox(600,-1);
+		ServerInfoBox* info       = new ServerInfoBox(20, 20, 600, -1); //H = 120;
 		info->SetMargin(0,20,0,0);
 		info->SetPositionAbsolute(true);
 		info->SetAnchorPoint(CFrame::PositionMode::BottomLeft); // Set the origin where absolute positioning is calculated from
@@ -22,6 +22,7 @@ public:
 		                                                        //even when window size changes
 		contentLeft->AddChild(sideBar);
 		contentLeft->AddChild(friendList);
+		contentLeft->SetMinWidth(500);
 		content->AddChild(contentLeft);
 		content->AddChild(messageBox);
 		content->ToFront(contentLeft);
@@ -31,7 +32,7 @@ public:
 	
 		
 		
-		contentLeft->SetMaxWidth(800);
+		contentLeft->SetMaxWidth(700);
 		contentLeft->SetColor(Color::DarkGray);
 		contentLeft->SetDragToResize(true); //Some other layer handles the event before so this does not currently work
 		
@@ -65,9 +66,9 @@ public:
 							button1->SetColor({ 100, 100, 100, 255 });
 							});
 		CFrame::Button* button2 = new CFrame::Button(90, 90);
-						button2->SetText("\x14");
-						button2->SetFont(CFrame::Font::SegoeMDL2Assets);
-						button2->SetFontSize(44.0);
+						button2->SetText("EMG");
+						button2->SetFont(CFrame::Font::Verdana);
+						button2->SetFontSize(34.0);
 		                button2->SetRadius(20,20,20,20);
 						button2->SetOnLeave([button2]() {
 							button2->SetColor(Color::Gray);
@@ -76,9 +77,9 @@ public:
 							button2->SetColor({ 100, 100, 100, 255 });
 						});
 		CFrame::Button* button3 = new CFrame::Button(90, 90);
-						button3->SetText("\x55");
-						button3->SetFont(CFrame::Font::SegoeMDL2Assets);
-						button3->SetFontSize(44.0);
+						button3->SetText("FN");
+						button3->SetFont(CFrame::Font::Verdana);
+						button3->SetFontSize(34.0);
 		                button3->SetRadius(20,20,20,20);
 						button3->SetOnLeave([button3]() {
 							button3->SetColor(Color::Gray);
@@ -165,7 +166,7 @@ public:
 						
 		CFrame::Button* button6  = new CFrame::Button(-1, 75);
 						button6->SetText("Kirjasto");
-						button6->SetAngle(25.0);
+						//button6->SetAngle(25.0);
 		                button6->SetColor(Color::Gray);
 						button6->SetPadding(20);
 						button6->SetTextAlign(CFrame::TextAlign::Start);
@@ -252,12 +253,13 @@ public:
 						button10->SetFontSize(34);
 		                button10->SetColor(Color::Gray);
 		CFrame::Button* button11 = new CFrame::Button(50, 50);
-						button11->SetText("×");
+						button11->SetIcon(0xE700);
 						button11->SetFontSize(24);
 		                button11->SetColor(Color::Gray);
+						button11->SetFont(CFrame::Font::SegoeMDL2Assets);
 		CFrame::Button* button12 = new CFrame::Button(50, 50);
 		                button12->SetText("X");
-						button12->SetFont(CFrame::Font::VerdanaBold);
+						button12->SetIcon(0xE711);
 						button12->SetFontSize(24);
 		                button12->SetColor(Color::Gray);
 		
@@ -265,21 +267,28 @@ public:
 		header->AddChild(button10);
 		header->AddChild(button11);
 		header->AddChild(button12);
+
 		
 		header->SetSpacing(15);
 		header->SetPadding(10);
 		header->SetColor(Color::DarkGray);
 		header->SetAlignment(CFrame::AlignItems::End, CFrame::AlignItems::Center);
 		
-
+		CFrame::InputField* inputField = new CFrame::InputField(-1, -1, -1, 75, nullptr);
 		//messageBox->SetColor(Color::DarkGray);
 		messageBox->SetBorder(2, 0, 0, 0);
 		messageBox->SetBorderColor(Color::Gray);
-		CFrame::Button* button16 = new CFrame::Button(300, 300);
-		button16->SetColor(Color::Gold);
-		button16->SetMargin(20, 20, 20, 20);
-		messageBox->AddChild(button16);
+		messageBox->SetColor(Color::Gray);
 		messageBox->SetOpacity(0.3);
+		messageBox->SetPadding(25);
+		inputField->SetMargin(0, 0, 30, 0);
+		inputField->SetColor(Color::DarkGray);
+		CFrame::Button* button16 = new CFrame::Button(-1, -1);
+		
+		button16->SetColor(Color::Gold);
+		messageBox->AddChild(button16);
+		messageBox->AddChild(inputField);
+		
 		
 		
 		rootContainer->SetColor(Color::Red);

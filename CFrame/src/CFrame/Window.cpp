@@ -19,7 +19,7 @@ Window::~Window()
 	SDL_Quit();
 }
 
-void Window::OnUpdate()  
+bool Window::OnUpdate()  
 {  
    SDL_Event event;
    bool isDragging;
@@ -29,12 +29,14 @@ void Window::OnUpdate()
 	   {
 		   MouseButtonDownEvent mouseButtonDownEvent(event.button.x, event.button.y);
 		   dispatcher.Dispatch(mouseButtonDownEvent);
+		   return true;
            break;  
 	   }   
        case SDL_EVENT_KEY_DOWN:  
        {  
            KeyPressedEvent keyEvent(event.key.key, event.key.repeat); 
 		   dispatcher.Dispatch(keyEvent);  
+		   return true;
            break;  
        } 
 	   case SDL_EVENT_MOUSE_MOTION:
@@ -46,6 +48,7 @@ void Window::OnUpdate()
 				   MouseDraggedEvent dragEvent(event.motion.x - event.motion.xrel, event.motion.y - event.motion.yrel, event.motion.x, event.motion.y);
 				   dispatcher.Dispatch(dragEvent);
 			   }
+			   return true;
 		   break;
 	   }
 	   case SDL_EVENT_WINDOW_RESIZED:
@@ -53,27 +56,29 @@ void Window::OnUpdate()
 		   WindowResizedEvent resizedEvent(event.window.data1, event.window.data2);
 		   glViewport(0, 0, event.window.data1, event.window.data2);
 		   dispatcher.Dispatch(resizedEvent);
-		
+		   return true;
 		   break;
 	   }
 	   case SDL_EVENT_WINDOW_CLOSE_REQUESTED:
 	   {
 		   WindowClosedEvent closed;
 		   dispatcher.Dispatch(closed);
+		   return true;
 		   break;
 	   }
 	   case SDL_EVENT_MOUSE_WHEEL:
 	   {
 		   MouseScrolledEvent scroll(event.wheel.x, event.wheel.y, event.wheel.mouse_x, event.wheel.mouse_y);
 		   dispatcher.Dispatch(scroll);
+		   return true;
 		   break;
 	   }
        default:  
+		   return false;
            break;  
        }  
    }  
-   SDL_GL_SwapWindow(window);
-  
+   return false;
 }
 
 
@@ -86,6 +91,11 @@ void Window::GL_UpdateviewPort(int x, int y, int w, int h)
 void Window::GL_ClearColorBuffer()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void Window::GL_SwapWindow()
+{
+	SDL_GL_SwapWindow(window);
 }
 
 void Window::SetWidth(int windowWidth)

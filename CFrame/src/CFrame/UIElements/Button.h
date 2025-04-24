@@ -36,8 +36,6 @@ namespace CFrame
         void setTextOpacity(float opacity);
         void SetFontSize(float size);
         void SetFont(Font font);
-        void SetTextAlign(TextAlign alignX);
-        void SetTextColor(Color color1, std::optional<Color> color2 = std::nullopt);
         
 
         inline ElementType GetElementType() const override { return ElementType::BUTTON; };
@@ -45,11 +43,10 @@ namespace CFrame
     private:
         std::function<void()> onClick;
         std::string text;
-        std::optional<int> icon;
+        std::optional<int> icon = std::nullopt;
         std::unique_ptr<Animator> animator;
         bool hovering = false;
         std::shared_ptr<Texture> labelTexture;
-        TextProperties textProps;
         std::map<char, fontInfo> glyphs;
      
     };

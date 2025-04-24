@@ -37,6 +37,9 @@ Application::Application(int width, int height)
 
 	eventDispatcher->AddListener(CFrameEventType::MouseScroll,
 		[this](CFrameEvent& event) { OnEvent(event); });
+
+	eventDispatcher->AddListener(CFrameEventType::KeyPressed,
+		[this](CFrameEvent& event) { OnEvent(event); });
 }  
 
 Application::~Application()   
@@ -71,7 +74,7 @@ void Application::OnEvent(CFrameEvent& e)
 		if (e.handled) { return; }  
 		element->OnEvent(e); 
 	}  
-	if (e.GetEventType() == CFrameEventType::MouseDragged) {
+	if (e.GetEventType() == CFrameEventType::MouseDragged ) {
 		rootContainer->UpdateChildSizes();
 	 }
 }  
@@ -90,22 +93,26 @@ void Application::SetWindowSize(int width, int height)
 
    void Application::run()  
 {  
-	constexpr double target_fps = 50.0;  
+	constexpr double target_fps = 60.0;  
 	constexpr std::chrono::milliseconds frame_duration(static_cast<int>(1000.0 / target_fps));    
 	/*Needs to be created after window->Create since there is no 
 	valid GL context before that*/
 	renderer = std::make_unique<Renderer>(*window);
 	
-
+	//Currently stops animation if mouse does not move
 	while (running) {  
 		auto start_time = std::chrono::steady_clock::now();  
-		window->GL_ClearColorBuffer(); 
+		
+		bool render = window->OnUpdate(); // Handles even polling return true if event was dispathed
 
-		for (auto& element : UIElements) {  
-			element->Render(*renderer);   
-		}  
-
-		window->OnUpdate(); // Add SwapBuffers and HadleInput to Window so input can be doen before draw  
+		if (render) {
+			window->GL_ClearColorBuffer();
+			for (auto& element : UIElements) {
+				element->Render(*renderer);  
+			}
+			window->GL_SwapWindow();
+			
+		}
 
 		auto end_time = std::chrono::steady_clock::now();  
 		auto elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);  

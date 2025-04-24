@@ -19,8 +19,12 @@ namespace CFrame
 		if (fonts.find(key) == fonts.end()) {
 			FontLoader fontLoader(GetFontPath(key.font), key.fontSize);
            
-            fontLoader.LoadFont();
-            //fontLoader.LoadIcons();
+            if (key.font != SegoeMDL2Assets) {
+                fontLoader.LoadFont();
+            }
+            else {
+                fontLoader.LoadIcons();
+            }
             
 			std::vector<uint8_t> atlas = fontLoader.GetFontAtlas();
 			std::map<char, fontInfo> glyphs = fontLoader.GetGlyphs();
@@ -59,7 +63,7 @@ namespace CFrame
 
             // Icon Fonts
         case Font::SegoeMDL2Assets: // Windows 10/11 icon font. Currently cant load them
-            return "C:/dev/CFrame/CFrame/src/CFrame/res/fonts/FontAwesome.ttf";
+            return "C:/Windows/Fonts/segmdl2.ttf";
         case Font::Wingdings:
             return "C:/Windows/Fonts/wingding.ttf";
         case Font::Webdings:

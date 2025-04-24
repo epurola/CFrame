@@ -39,7 +39,9 @@ namespace CFrame {
 		std::string fontPath;
 		std::vector<uint8_t> fontBuffer;
 		FT_Library ft;
-		FT_Face face;
+		FT_Face iconFace;
+		FT_Library ftIcon;
+		FT_Face faceIcon;
 		float fontSize;
 		
 		std::map<char, fontInfo> glyphs;

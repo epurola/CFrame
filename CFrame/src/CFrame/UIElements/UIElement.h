@@ -17,7 +17,8 @@ namespace CFrame
     {
         CONTAINER,
         BUTTON,
-        LABEL
+        LABEL,
+        INPUTFIELD
     };
 
     enum TextAlign {
@@ -57,8 +58,8 @@ namespace CFrame
        float fontSize = 24;  
        TextAlign textAlign = TextAlign::Center;
        Font font = Font::Verdana;
-       Color color1;
-       Color color2;
+       Color color1 = Color::White;
+       Color color2 = Color::White;
     };
 
     struct OverFlowProperties {
@@ -70,20 +71,9 @@ namespace CFrame
     };
 
     struct Vertices {
-        float topLeftX;
-        float topLeftY;
         Point topLeft;
-
-        float topRightX;
-        float topRightY;
         Point topRight;
-
-        float bottomLeftX;
-        float bottomLeftY;
         Point bottomLeft;
-
-        float bottomRightX;
-        float bottomRightY;
         Point bottomRight;
     };
 
@@ -154,6 +144,7 @@ namespace CFrame
         void SetOpacity(float opacity);
         void SetMaxWidth(int maxWidth);
         void SetMinHeight(int minHeight);
+        void SetMinWidth(int minHWidth);
         void SetZindex(float index);
         void SetPositionAbsolute(bool b);
         void SetBackgroundImage(std::string path);
@@ -167,14 +158,17 @@ namespace CFrame
         void SetWidthResizable(bool is) { isWidthResizable = is; };
         void SetAnchorPoint(PositionMode mode);
         void SetOverflow(bool b);
+        void SetIsDirty(bool b);
+        void SetTextColor(Color color1, std::optional<Color> color2 = std::nullopt);
+        void SetTextAlign(TextAlign alignX);
 
         void AnimateScale(float scaleX, float scaleY);
         void AnimateGradient(float speed);
 
         int    GetX()       const  { return x; }
         int    GetY()       const  { return y; }
-        int    GetLocalX()       const { return localX; }
-        int    GetLocalY()       const { return localY; }
+        int    GetLocalX()  const  { return localX; }
+        int    GetLocalY()  const  { return localY; }
         float  GetAngle()   const  { return properties.angle; }
         int    GetWidth()   const  { return width; }
         int    GetHeight()  const  { return height; }
@@ -183,9 +177,10 @@ namespace CFrame
         bool  IsWidthResizable()        const  { return isWidthResizable; }
         bool  IsHeightResizable()       const  { return isHeightResizable; }
         bool  IsVisible()               const  { return isVisible; }
-        bool  IsPositionAbsolute()             const { return positionAbsolute; };
+        bool  IsPositionAbsolute()      const  { return positionAbsolute; };
         bool  IsDraggable()             const  { return dragToResize; };
         bool  IsElementWithAnimation()  const  { return animProperties.isAnimatedElement; }
+        bool  IsDirty()                 const  { return isDirty; }
 
         ElementProperties&    GetProperties()      { return properties; };
         AnimationProperties&  GetAnimProperties()  { return animProperties; };
@@ -204,6 +199,7 @@ namespace CFrame
         bool isWidthResizable;
         bool isHeightResizable;
         bool isVisible;
+        bool isDirty = true;
         bool dragToResize;
         bool positionAbsolute = false;
         PositionMode pMode = PositionMode::TopLeft;
@@ -211,6 +207,7 @@ namespace CFrame
         
         ElementProperties properties;
         AnimationProperties animProperties;
+        TextProperties textProps;
         OverFlowProperties overflow;
      
         std::function<void()> onHover = []() {};

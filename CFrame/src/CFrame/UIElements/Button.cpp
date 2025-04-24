@@ -22,7 +22,7 @@ namespace CFrame
 	{
 
 	}
-    //todo: make singleton fontmanager and a different method to generate the text data
+
     //For everytime button change change font size and position not everyframe.
 	void Button::Render(Renderer& renderer)
 	{
@@ -42,7 +42,7 @@ namespace CFrame
         int centeredY = y + (height - renderHeight) / 2;
         
 
-		renderer.DrawRectangle((float)centeredX, (float)centeredY, (float)renderWidth, (float)renderHeight, 
+		renderer.DrawRectangle((float)centeredX, (float)centeredY , (float)renderWidth, (float)renderHeight, 
             GetProperties(),
             animator->GetTime(), 
             animProperties.speed,
@@ -103,6 +103,9 @@ namespace CFrame
             for (char c : text) {
                 //Store the current glyph info
                 fontInfo glyph = glyphs[c];
+                if (icon.has_value()) {
+                     glyph = glyphs[icon.value()];
+                }
 
                 //texture coordinates for the character
                 float texX1 = glyph.x / (float)labelTexture->GetWidth(); // width
@@ -159,11 +162,8 @@ namespace CFrame
 
     void Button::OnEvent(CFrameEvent& event)
     {
-        // Early return if the event is not a MouseButtonDown event
-        if (CFrameEventType::MouseButtonDown != event.GetEventType() &&
-            event.GetEventType() != CFrameEventType::MouseMoved) {
-            return;
-        }
+ 
+       //Add early return if not tracked event
 
         if (event.GetEventType() == CFrameEventType::MouseButtonDown) {
 
@@ -199,18 +199,16 @@ namespace CFrame
 
             // Check if the mouse position is inside the button's bounds
             if (xPos < x || xPos >(x + width) || yPos < y || yPos >(y + height)) {
-                if (hovering && !animator->IsAnimating()) { 
+                if (hovering ) { 
                     onLeave();
                     hovering = false;
                 }
-                
                 return;
             }
             hovering = true;
             //call the onClick handler
-           // CF_CORE_INFO("Button Hovered!");
             if (onHover ) {
-                onHover();
+                onHover(); 
             }
             event.handled = true;
         }
@@ -234,6 +232,8 @@ namespace CFrame
     void Button::SetIcon(int codePoint)
     {
         icon = codePoint;
+        SetText(" ");
+        SetFont(Font::SegoeMDL2Assets);
     }
 
     void Button::setTextOpacity(float opacity)
@@ -251,22 +251,7 @@ namespace CFrame
         textProps.font = font;
     }
 
-    void Button::SetTextAlign(TextAlign alignX)
-    {
-        textProps.textAlign = alignX;
-    }
-
-    void Button::SetTextColor(Color color1, std::optional<Color> color2)
-    {
-        if (color2.has_value()) {
-            textProps.color1 = color1;
-            textProps.color2 = color2.value();
-        }
-        else {
-            textProps.color1 = color1;
-            textProps.color2 = color1;
-        } 
-    }
+   
 }
 
 

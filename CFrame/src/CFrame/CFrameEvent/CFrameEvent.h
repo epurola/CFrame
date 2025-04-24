@@ -141,12 +141,12 @@ namespace CFrame
 	class CFRAME_API MouseScrolledEvent : public CFrameEvent
 	{
 	public:
-		MouseScrolledEvent(float startX, float startY, float mouseX, float mouseY )
+		MouseScrolledEvent(float startX, int startY, float mouseX, float mouseY )
 			: distanceX(startX), distanceY(startY), mouseX(mouseX), mouseY(mouseY) {
 		}
 
 		inline float GetDistanceX() const { return distanceX; }
-		inline float GetDistanceY() const { return distanceY; }
+		inline int   GetDistanceY() const { return distanceY; }
 		inline float GetMouseX()    const { return mouseX; }
 		inline float GetMouseY()    const { return mouseY; }
 
@@ -154,7 +154,7 @@ namespace CFrame
 
 		CFrameEventType GetEventType() const override { return CFrameEventType::MouseScroll; }
 	private:
-		float distanceX, distanceY;
+		int distanceX, distanceY;
 		float mouseX, mouseY;
 	};
 

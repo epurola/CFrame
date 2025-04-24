@@ -32,11 +32,14 @@ namespace CFrame
 	{
 		if (!IsVisible()) return;
 
-		renderer.DrawRectangle((float)x, (float)y, (float)width, (float)height,
+		renderer.DrawRectangle((float)x, (float)y , (float)width, (float)height,
 			GetProperties(), 1.0f, 1.0f, nullptr);
 
 		for (auto& child : renderChildren) {
-			child->Render(renderer);
+			if (child->IsVisible()) {
+				child->Render(renderer);
+			}
+			
 		}
 	}
 
@@ -53,11 +56,13 @@ namespace CFrame
 
 	void Container::OnEvent(CFrameEvent& event)
 	{
+		//Add early return if not tracked event
 		if (!IsVisible()) return;
 
 		for (auto& child : children) {
-			if (event.handled)  return;
+			//if (event.handled)  return;// CAUSES ARTIFACTsometimes hovered effect stays on button
 			child->OnEvent(event);
+			
 		}
 	
 		if (event.GetEventType() == CFrameEventType::MouseDragged) {
@@ -79,11 +84,7 @@ namespace CFrame
 				if (scrollEnabled) {
 					for (auto& child : children) {
 						//Break if going to overflow the top
-						int newY = child->GetY() + (mouseEvent->GetDistanceY() * 7); //ToDo: Add variable to cotrol the sensitivity of scroll
-						if (newY < properties.padding + GetY()) {
-							event.handled = true;
-							return;
-						}
+						int newY = child->GetY() + (mouseEvent->GetDistanceY() * 10); //ToDo: Add variable to cotrol the sensitivity of scroll
 						child->SetY(newY);
 						child->UpdateChildSizes();
 						child->UpdateVertices();

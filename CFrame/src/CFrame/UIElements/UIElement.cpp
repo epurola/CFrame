@@ -109,6 +109,9 @@ namespace CFrame {
 		if (width > properties.maxWidth && properties.maxWidth != -1) {
 			width = properties.maxWidth;
 		}
+		if (width < properties.minWidth && properties.minWidth != -1) {
+			width = properties.minWidth;
+		}
 	}
 
 	void UIElement::SetX(int x)
@@ -169,6 +172,11 @@ namespace CFrame {
 	{
 		properties.minHeight = minHeight;
 		height = minHeight;
+	}
+
+	void UIElement::SetMinWidth(int minHWidth)
+	{
+		this->properties.minWidth = minHWidth;
 	}
 
 	void UIElement::SetZindex(float index)
@@ -245,7 +253,33 @@ namespace CFrame {
 	void UIElement::SetOverflow(bool allow)
 	{
 		overflow.overflow = allow;
-	} 
+	}
+	void UIElement::SetIsDirty(bool b)
+	{
+		isDirty = b;
+		if (parent) {
+			parent->SetIsDirty(b);
+		}
+		
+	}
+
+	void UIElement::SetTextColor(Color color1, std::optional<Color> color2)
+	{
+		if (color2.has_value()) {
+			textProps.color1 = color1;
+			textProps.color2 = color2.value();
+		}
+		else {
+			textProps.color1 = color1;
+			textProps.color2 = color1;
+		}
+	}
+
+	void UIElement::SetTextAlign(TextAlign alignX)
+	{
+		textProps.textAlign = alignX;
+	}
+
 	
 
 }

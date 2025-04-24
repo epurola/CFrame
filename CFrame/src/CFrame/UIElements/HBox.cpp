@@ -39,7 +39,7 @@ namespace CFrame {
             if (child->IsWidthResizable())
             {
                 flexibleCount++;
-                totalMargins += child->GetProperties().marginLeft * 2;
+                totalMargins += child->GetProperties().marginLeft + child->GetProperties().marginRight;
             }
             else
             {
