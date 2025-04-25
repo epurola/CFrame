@@ -146,6 +146,10 @@ namespace CFrame
 		isActive = b;
 	}
 
+    void InputField::RegisterAnimator(std::shared_ptr<AnimationManager> manager)
+    {
+    }
+
     void InputField::SetInput(const std::string& value)
     {
 

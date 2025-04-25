@@ -19,7 +19,9 @@ namespace CFrame
 		MouseDragged,
 		MouseScroll,
 		WindowResized,
-		WindowClosed
+		WindowClosed,
+		WindowFullScreen,
+		MouseLeaveWindow
 	};
 
 	class CFrameEvent 
@@ -84,6 +86,15 @@ namespace CFrame
 		WindowClosedEvent() {} ;
 
 		CFrameEventType GetEventType() const override { return CFrameEventType::WindowClosed; }
+	};
+
+	/*Window Closed event*/
+	class CFRAME_API MouseLeaveWindowEvent : public CFrameEvent
+	{
+	public:
+		MouseLeaveWindowEvent() {};
+
+		CFrameEventType GetEventType() const override { return CFrameEventType::MouseLeaveWindow; }
 	};
 
 	/*Mouse move event*/
@@ -156,6 +167,22 @@ namespace CFrame
 	private:
 		int distanceX, distanceY;
 		float mouseX, mouseY;
+	};
+
+	/*Set to fulScreen event*/
+	class CFRAME_API WindowFullscreenEvent : public CFrameEvent
+	{
+	public:
+		WindowFullscreenEvent(float width, float height)
+		: width(width), height(height){}
+
+		inline float GetWidth()    const { return width; }
+		inline float GetHeight()    const { return height; }
+
+		CFrameEventType GetEventType() const override { return CFrameEventType::WindowFullScreen; }
+	private:
+		
+		float width, height;
 	};
 
 	/*Event dispatcher */

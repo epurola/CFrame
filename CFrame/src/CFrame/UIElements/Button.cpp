@@ -23,6 +23,11 @@ namespace CFrame
 
 	}
 
+    void Button::RegisterAnimator(std::shared_ptr<AnimationManager> manager)
+    {
+        animationManager = manager;
+    }
+
     //For everytime button change change font size and position not everyframe.
 	void Button::Render(Renderer& renderer)
 	{
@@ -199,9 +204,10 @@ namespace CFrame
 
             // Check if the mouse position is inside the button's bounds
             if (xPos < x || xPos >(x + width) || yPos < y || yPos >(y + height)) {
-                if (hovering ) { 
+                if (hovering) { 
                     onLeave();
                     hovering = false;
+                    animationManager->RemoveAnimator(*this);
                 }
                 return;
             }
@@ -209,8 +215,18 @@ namespace CFrame
             //call the onClick handler
             if (onHover ) {
                 onHover(); 
+                if (animProperties.speed > 0 ) {
+                    animationManager->RegisterAnimation(*this);
+                }  
             }
             event.handled = true;
+        }
+        if (event.GetEventType() == CFrameEventType::MouseLeaveWindow) {
+            if (hovering) {
+                onLeave();
+                hovering = false;
+                animationManager->RemoveAnimator(*this);
+            }
         }
     }
 

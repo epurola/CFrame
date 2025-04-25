@@ -20,7 +20,6 @@ namespace CFrame
 		float t = (animationDuration > 0) ? (float)elapsedTime / animationDuration : 1.0f;
 		if (t > 1.0f) t = 1.0f;
 
-
 		element.AnimateScale(1.0f + t * (element.GetAnimProperties().animScaleX - 1.0f),
 			                1.0f + t * (element.GetAnimProperties().animScaleY - 1.0f)); //startscale + t *(targetScale - startScale) 
 
@@ -40,6 +39,7 @@ namespace CFrame
 	{
 		isAnimating = false;
 	}
+
 	float Animator::GetTime()
 	{
 		return (float)SDL_GetTicks() / 1000.0f;

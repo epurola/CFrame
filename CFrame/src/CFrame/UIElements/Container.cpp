@@ -15,6 +15,14 @@ namespace CFrame
 			delete child;
 	}
 
+	void Container::RegisterAnimator(std::shared_ptr<AnimationManager> manager)
+	{
+		animationManager = manager;
+		for (auto child : children) {
+			child->RegisterAnimator(manager);
+		}
+	}
+
 	void Container::SetSpacing(int spacing)
 	{
 		this->spacing = spacing;

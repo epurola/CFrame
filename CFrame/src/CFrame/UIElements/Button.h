@@ -8,26 +8,28 @@
 #include <optional>
 
 
-
 namespace CFrame 
 {
     class CFRAME_API Button : public UIElement 
     {
     public:
-        Button(int x , int y , int w , int h , const std::string& text = "Button", 
+        Button( int x , int y , int w , int h , const std::string& text = "Button", 
             std::function<void()> onClick =  []() {},
             UIElement* parent = nullptr);
 
+     
 
-        explicit Button(int w, int h)
+        explicit Button( int w, int h) 
             : Button(0, 0, w, h, "Button", nullptr) {
         }
+
 
         ~Button();
 
         void Render(Renderer& renderer) override;
         void UpdateChildSizes() override; 
         void OnEvent(CFrameEvent& event) override;
+        void RegisterAnimator(std::shared_ptr<AnimationManager> manager) override;
         void SetOnClick(std::function<void()> onClick);
         void StartAnimation();
 

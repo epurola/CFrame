@@ -7,7 +7,7 @@
 #include "../Renderer/FontManager.h"
 #include "../CFrameEvent/CFrameEvent.h"
 #include "Color.h"
-
+#include "../Animator/AnimationManager.h"
 
 namespace CFrame 
 {
@@ -128,6 +128,7 @@ namespace CFrame
 
         void UpdateVertices();
         void RotatePoint(Point& p, float angle, float cosA, float sinA, float cX, float cY);
+        virtual void RegisterAnimator(std::shared_ptr<AnimationManager> manager);
 
         void SetMargin(int marginleft, int marginRight, int marginTop, int marginBottom);
         void SetPadding(int padding);
@@ -204,6 +205,7 @@ namespace CFrame
         bool positionAbsolute = false;
         PositionMode pMode = PositionMode::TopLeft;
         std::unique_ptr<Texture> imageTexture;
+        std::shared_ptr<AnimationManager> animationManager;
         
         ElementProperties properties;
         AnimationProperties animProperties;

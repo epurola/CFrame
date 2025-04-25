@@ -26,6 +26,7 @@ namespace CFrame
 		void GL_SwapWindow();
 		void SetWidth(int w);
 		void SetHeight(int h);
+		void SetFullScreen();
 
 
 		 Window& Create(unsigned int width = 1280, 

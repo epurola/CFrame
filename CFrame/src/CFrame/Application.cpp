@@ -16,6 +16,7 @@ Application::Application(int width, int height)
 	window->SetHeight(windowHeight);  
 	window->SetWidth(windowWidth);  
 	
+	animationManager = std::make_shared<AnimationManager>();
 	rootContainer = std::make_unique <VBox>(windowWidth, windowHeight);  
 	rootContainer->SetAlignment(AlignItems::Start, AlignItems::Start);  
 	UIElements.push_back(rootContainer.get());  
@@ -40,6 +41,12 @@ Application::Application(int width, int height)
 
 	eventDispatcher->AddListener(CFrameEventType::KeyPressed,
 		[this](CFrameEvent& event) { OnEvent(event); });
+
+	eventDispatcher->AddListener(CFrameEventType::WindowFullScreen,
+		[this](CFrameEvent& event) { OnEvent(event); });
+
+	eventDispatcher->AddListener(CFrameEventType::MouseLeaveWindow,
+		[this](CFrameEvent& event) { OnEvent(event); });
 }  
 
 Application::~Application()   
@@ -52,9 +59,10 @@ void Application::OnEvent(CFrameEvent& e)
 	if (CFrameEventType::WindowClosed == e.GetEventType())   
 	{  
 		CF_CORE_INFO("Closing Window");  
-		running = false;  
+		stop();
 		e.handled = true;  
 	}  
+
 	if (CFrameEventType::WindowResized == e.GetEventType())  
 	{  
 		//The main pane should be updated  
@@ -98,14 +106,17 @@ void Application::SetWindowSize(int width, int height)
 	/*Needs to be created after window->Create since there is no 
 	valid GL context before that*/
 	renderer = std::make_unique<Renderer>(*window);
+	for (auto element : UIElements) {
+		element->RegisterAnimator(animationManager);
+	}
 	
 	//Currently stops animation if mouse does not move
-	while (running) {  
+	while (running ) {  
 		auto start_time = std::chrono::steady_clock::now();  
 		
 		bool render = window->OnUpdate(); // Handles even polling return true if event was dispathed
 
-		if (render) {
+		if (render || animationManager->IsAnimating()) {
 			window->GL_ClearColorBuffer();
 			for (auto& element : UIElements) {
 				element->Render(*renderer);  
@@ -121,5 +132,14 @@ void Application::SetWindowSize(int width, int height)
 			std::this_thread::sleep_for(frame_duration - elapsed_time);  
 		}  
 	}  
-}  
+}
+   void Application::stop()
+   {
+	   running = false;
+   }
+
+   void Application::ToggleFullScreen()
+   {
+	   window->SetFullScreen();
+   }
 }

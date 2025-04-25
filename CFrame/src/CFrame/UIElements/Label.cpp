@@ -19,6 +19,11 @@ namespace CFrame
 		
 	}
 
+    void Label::RegisterAnimator(std::shared_ptr<AnimationManager> manager)
+    {
+
+    }
+
 	void Label::CreateTexture(const std::string& text, int w, int h)
 	{
 		

@@ -25,6 +25,7 @@ struct CFRAME_API Color {
     static const Color Magenta;
     static const Color Gray;
     static const Color LightGray;
+    static const Color LightGray2;
     static const Color DarkGray;
     static const Color Brown;
     static const Color Teal;

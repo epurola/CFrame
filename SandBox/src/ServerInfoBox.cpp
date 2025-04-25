@@ -13,7 +13,7 @@ ServerInfoBox::ServerInfoBox(int x, int y, int w, int h)
 
 	bottomPart = new CFrame::HBox(-1, -1);
 	bottomPart->SetAlignment(CFrame::AlignItems::Start, CFrame::AlignItems::Center);
-	bottomPart->SetColor(Color::DarkGray);
+	bottomPart->SetColor(Color::LightGray);
 	bottomPart->SetRadius(20, 20, 20, 20);
 	bottomPart->SetPadding(10);
 	bottomPart->SetSpacing(10);
@@ -26,21 +26,39 @@ ServerInfoBox::ServerInfoBox(int x, int y, int w, int h)
 	logo->SetIcon(0xE74F);
 	logo->SetFontSize(44);
 	logo->SetFont(CFrame::Font::SegoeMDL2Assets);
-	logo->SetColor(Color::DarkGray);
-	logo->SetMargin(0, 0, 0, 0);
+	logo->SetTextColor(Color::Red);
+	logo->SetColor(Color::LightGray);
+	logo->SetOnLeave([logo]() {
+		logo->SetColor(Color::LightGray);
+		});
+	logo->SetOnHover([logo]() {
+		logo->SetColor({ 100, 100, 100, 255 });
+		});
 	CFrame::Button* logo1 = new CFrame::Button( 55, 55);
 	//logo1->SetAngle(45.0);
 	logo1->SetIcon(0xE720);
 	logo1->SetFontSize(44);
 	logo1->SetFont(CFrame::Font::SegoeMDL2Assets);
-	logo1->SetColor(Color::DarkGray);
-	
+	logo1->SetColor(Color::LightGray);
+	logo1->SetTextColor(Color::Red);
+	logo1->SetOnLeave([logo1]() {
+		logo1->SetColor(Color::LightGray);
+		});
+	logo1->SetOnHover([logo1]() {
+		logo1->SetColor({ 100, 100, 100, 255 });
+		});
 	CFrame::Button* logo2 = new CFrame::Button( 55, 55);
 	//logo2->SetAngle(45.0);
 	logo2->SetIcon(0xE713);
 	logo2->SetFontSize(34);
 	logo2->SetFont(CFrame::Font::SegoeMDL2Assets);
-	logo2->SetColor(Color::DarkGray);
+	logo2->SetColor(Color::LightGray);
+	logo2->SetOnLeave([logo2]() {
+		logo2->SetColor(Color::LightGray);
+		});
+	logo2->SetOnHover([logo2]() {
+		logo2->SetColor({ 100, 100, 100, 255 });
+		});
 	
 	
 	button20->SetRadius(55, 55, 55, 55);
@@ -53,16 +71,15 @@ ServerInfoBox::ServerInfoBox(int x, int y, int w, int h)
 	
 
 	button21->SetOnLeave([button21]() {
-		button21->SetColor(Color::DarkGray);
+		button21->SetColor(Color::LightGray);
 		});
 	button21->SetOnHover([button21]() {
 		button21->SetColor({ 100, 100, 100, 255 });
-
 		});
 
 	
 	button21->SetText("aefootballclub45");
-	button21->SetColor(Color::DarkGray);
+	button21->SetColor(Color::LightGray);
 	button21->SetTextAlign(CFrame::TextAlign::Start);
 	button21->SetFontSize(20);
 	button21->SetMargin(50,0,0,0);
@@ -76,7 +93,7 @@ ServerInfoBox::ServerInfoBox(int x, int y, int w, int h)
 	
 	SetRadius(20,20,20,20);
 	SetBorder(2);
-	SetBorderColor(Color::Gray);
+	
 	//SetPadding(10);
 	bottomPart->AddChild(button21);
 	bottomPart->AddChild(button20);
@@ -88,7 +105,7 @@ ServerInfoBox::ServerInfoBox(int x, int y, int w, int h)
 	AddChild(topPart);
 	topPart->SetVisibility(false);
 	AddChild(bottomPart);
-	SetColor(Color::DarkGray);
+	SetColor(Color::LightGray);
 	SetPadding(2);
 }
 

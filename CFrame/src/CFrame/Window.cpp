@@ -59,6 +59,13 @@ bool Window::OnUpdate()
 		   return true;
 		   break;
 	   }
+	   case SDL_EVENT_WINDOW_MOUSE_LEAVE:
+	   {
+		   MouseLeaveWindowEvent leaveEvent;
+		   dispatcher.Dispatch(leaveEvent);
+		   return true;
+		   break;
+	   }
 	   case SDL_EVENT_WINDOW_CLOSE_REQUESTED:
 	   {
 		   WindowClosedEvent closed;
@@ -70,6 +77,12 @@ bool Window::OnUpdate()
 	   {
 		   MouseScrolledEvent scroll(event.wheel.x, event.wheel.y, event.wheel.mouse_x, event.wheel.mouse_y);
 		   dispatcher.Dispatch(scroll);
+		   return true;
+		   break;
+	   }
+	   case SDL_EVENT_WINDOW_MAXIMIZED:
+	   {
+
 		   return true;
 		   break;
 	   }
@@ -107,6 +120,20 @@ void Window::SetHeight(int windowHeight)
 {
 	height = windowHeight;
 }
+
+void Window::SetFullScreen()
+{
+	Uint32 flags = SDL_GetWindowFlags(window);
+	bool isFullscreen = flags & SDL_WINDOW_FULLSCREEN;
+
+	if (isFullscreen) {
+		SDL_SetWindowFullscreen(window, 0); // Exit fullscreen
+	}
+	else {
+		SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN); // Borderless fullscreen
+	}
+}
+
 
 Window& Window::Create(unsigned int width, unsigned int height, const std::string& title)
 {

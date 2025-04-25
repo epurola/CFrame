@@ -8,6 +8,7 @@
 #include "UIElements/UIElement.h"
 #include "UIElements/VBox.h"
 #include "Renderer/Renderer.h"
+#include "Animator/AnimationManager.h"
 
 namespace CFrame
 {
@@ -24,6 +25,8 @@ public:
 
 
 	void run();
+	void stop();
+	void ToggleFullScreen();
 	std::unique_ptr<VBox> rootContainer;
 
 private:
@@ -32,6 +35,7 @@ private:
 	
 	std::unique_ptr<Window> window;
 	std::unique_ptr<Renderer> renderer;
+	std::shared_ptr<AnimationManager> animationManager;
 
 	bool running = true;
 	int windowWidth ;

@@ -14,6 +14,7 @@ namespace CFrame {
 		void OnEvent(CFrameEvent& event) override;
 		void UpdateChildSizes() override;
 		void SetIsActive(bool b);
+		void RegisterAnimator(std::shared_ptr<AnimationManager> manager);
 
 		void SetInput(const std::string& value);
 		std::string GetInput() const { return input; };

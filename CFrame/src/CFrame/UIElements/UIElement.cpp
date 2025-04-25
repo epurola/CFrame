@@ -67,6 +67,11 @@ namespace CFrame {
 		p.y = cY + sinA * dx + cosA * dy;
 	}
 
+	void UIElement::RegisterAnimator(std::shared_ptr<AnimationManager> manager)
+	{
+
+	}
+
 
 	void UIElement::SetMargin(int marginleft, int marginRight, int marginTop, int marginBottom)
 	{
