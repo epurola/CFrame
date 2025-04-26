@@ -16,6 +16,9 @@ namespace CFrame {
         shader = std::make_unique<Shader>("C:/dev/CFrame/CFrame/src/CFrame/res/shaders/basic.shader");
 
         textShader = std::make_unique<Shader>("C:/dev/CFrame/CFrame/src/CFrame/res/shaders/textShader.shader");
+
+        lineShader = std::make_unique<Shader>("C:/dev/CFrame/CFrame/src/CFrame/res/shaders/lineShader.shader");
+
 	}
 
 	Renderer::~Renderer()
@@ -72,10 +75,6 @@ namespace CFrame {
            p.vertices.bottomLeft.x, p.vertices.bottomLeft.y,      r, g, b, a,     0.0f, 0.0f,     rg, gg, bg, ag,  
         };
 
-           
-        /*Indecies to draw a rectangle*/
-        unsigned int indecies[] = { 0, 1, 2, 2, 3, 0 };
-
         /*create vertex buffer with the vertices and the size of the data
         4 vertices with 12 data point that are floats.
         Will also automaticaaly bind it*/
@@ -85,7 +84,7 @@ namespace CFrame {
             rectLayout = std::make_unique<VertexBufferLayout>();
             rectVB = std::make_unique<VertexBuffer>(vertices, static_cast<unsigned int>(4 * 12 * sizeof(float)));
             /*creates index buffer with 6 indecies.*/
-            rectIndices = std::make_unique<IndexBuffer>(indecies, 6);
+            rectIndices = std::make_unique<IndexBuffer>(rectIndecies, 6);
             rectLayout->Push<float>(2); // Position x, y
             rectLayout->Push<float>(4); // Color Data r, g, b, a
             rectLayout->Push<float>(2); // Texture coordinates
@@ -193,6 +192,52 @@ namespace CFrame {
         if (!o.overflow) {
             DisableOverflow();
         }
+    }
+
+    void Renderer::DrawLine(LineProperties p)
+    {
+        int windowWidth = window.GetWidth();
+        int windowHeight = window.GetHeight();
+
+        SDL_Color c = p.color.toSDLColor(1);
+
+        float r = c.r / 255.0f;
+        float g = c.g / 255.0f;
+        float b = c.b / 255.0f;
+        float a = c.a / 255.0f;
+
+        /*Vertices of the rectangle. Calculates the top left as the origin*/
+        float vertices[] = {
+           p.vertices.topLeft.x , p.vertices.topLeft.y,           r, g, b, a,    
+           p.vertices.topRight.x, p.vertices.topRight.y,          r, g, b, a,    
+           p.vertices.bottomRight.x , p.vertices.bottomRight.y,   r, g, b, a,     
+           p.vertices.bottomLeft.x, p.vertices.bottomLeft.y,      r, g, b, a    
+        };
+
+        if (!lineVA) {
+            /*Create Vertex Array*/
+            lineVA = std::make_unique<VertexArray>();
+            lineLayout = std::make_unique<VertexBufferLayout>();
+            lineVB = std::make_unique<VertexBuffer>(vertices, static_cast<unsigned int>(4 * 6 * sizeof(float)));
+            /*creates index buffer with 6 indecies.*/
+            lineIndices = std::make_unique<IndexBuffer>(rectIndecies, 6);
+            lineLayout->Push<float>(2); // Position x, y
+            lineLayout->Push<float>(4); // Color Data r, g, b, a
+        }
+
+        lineVA->Bind();
+        lineVB->SetData(vertices, 4 * 6 * sizeof(float));
+        lineVA->AddBuffer(*lineVB, *lineLayout);
+        lineIndices->Bind();
+
+        glm::mat4 proj = glm::ortho(0.0f, float(windowWidth),  float(windowHeight), 0.0f, -1.0f, 1.0f);
+
+        //Bind the shader and set uniforms
+        lineShader->Bind();
+        lineShader->SetUniform4f("u_Color", r, g, b, a);
+        lineShader->SetUniformMat4f("u_MVP", proj);
+       
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
     }
 
     void Renderer::ClipOverflow(int x, int y, int width, int height, int windowHeight)

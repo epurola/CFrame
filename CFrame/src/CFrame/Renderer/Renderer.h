@@ -16,6 +16,7 @@ namespace CFrame {
 	struct ElementProperties;
 	struct TextProperties;
 	struct OverFlowProperties;
+	struct LineProperties;
 
 	class Renderer
 	{
@@ -28,6 +29,7 @@ namespace CFrame {
 			ElementProperties p, float speed, float time, Texture* texture );
 
 		void RenderText(const std::string& text, float x, float y, TextProperties t, Texture* atlas, OverFlowProperties o);
+		void DrawLine(LineProperties p);
 		void ClipOverflow(int x, int y, int width, int height, int windowHeight);
 		void DisableOverflow();
         
@@ -47,5 +49,13 @@ namespace CFrame {
 		std::unique_ptr<VertexBuffer> textVB;
 		std::unique_ptr<VertexBufferLayout> textLayout;
 		std::unique_ptr<IndexBuffer> textIndices;
+
+		std::unique_ptr<Shader> lineShader;
+		std::unique_ptr<VertexArray> lineVA;
+		std::unique_ptr<VertexBuffer> lineVB;
+		std::unique_ptr<VertexBufferLayout> lineLayout;
+		std::unique_ptr<IndexBuffer> lineIndices;
+
+		unsigned int rectIndecies[6] = { 0, 1, 2, 2, 3, 0 };
 	};
 }

@@ -21,7 +21,8 @@ namespace CFrame
 		WindowResized,
 		WindowClosed,
 		WindowFullScreen,
-		MouseLeaveWindow
+		MouseLeaveWindow,
+		TextInput
 	};
 
 	class CFrameEvent 
@@ -40,12 +41,31 @@ namespace CFrame
 			: keyCode(keycode), repeatCount(repeatCount) {}
 
 		inline int GetKeyCode() const { return keyCode; }
+		inline char GetChar() const { return character; }
 		inline int GetRepeatCount() const { return repeatCount; }
 
 		CFrameEventType GetEventType() const override { return CFrameEventType::KeyPressed; }
 	private:
 		int keyCode;
 		int repeatCount;
+		char character;
+	};
+
+	/*Key press event*/
+	class CFRAME_API TextInputEvent : public CFrameEvent
+	{
+	public:
+		TextInputEvent(char character, int repeatCount)
+			: character(character), repeatCount(repeatCount) {
+		}
+
+		inline char GetChar() const { return character; }
+		inline int GetRepeatCount() const { return repeatCount; }
+
+		CFrameEventType GetEventType() const override { return CFrameEventType::TextInput; }
+	private:
+		int repeatCount;
+		char character;
 	};
 
 	/*Key release event*/

@@ -12,6 +12,8 @@ namespace CFrame
         SetRadius(20,20,20,20);
         SetTextAlign(TextAlign::Start);
         SetPadding(10);
+
+        lineProperties.color = Color::Blue;
 	}
 
 	InputField::~InputField()
@@ -23,17 +25,41 @@ namespace CFrame
 	{
 		renderer.DrawRectangle(x, y, width, height ,properties, 1.0f, 1.0f, nullptr);
 		renderer.RenderText(input, x, y, textProps, labelTexture.get(), overflow);
+        
+        renderer.DrawLine(lineProperties);
 	}
 
-	void InputField::OnEvent(CFrameEvent& event)
-	{
-        if (event.GetEventType() == CFrameEventType::KeyPressed) {
-            auto* keyEvent = dynamic_cast<KeyPressedEvent*>(&event);
-            input.append("f");
-            CF_CORE_INFO("Typed " + input);
-            UpdateChildSizes();
+    void InputField::OnEvent(CFrameEvent& event)  
+    {  
+        if (event.GetEventType() == CFrameEventType::MouseButtonDown) {
+
+            auto* mouseEvent = dynamic_cast<MouseButtonDownEvent*>(&event);
+            if (!mouseEvent) {
+                return; // Early return if the event is not a MouseButtonDownEvent
+            }
+
+            int xPos = static_cast<int>(mouseEvent->GetX());
+            int yPos = static_cast<int>(mouseEvent->GetY());
+
+            if (xPos < x || xPos >(x + width) || yPos < y || yPos >(y + height)) {
+                isActive = false;
+                animationManager->DeActivatetextInput();
+                return; 
+            }
+
+            animationManager->ActivateTextInput();
+            isActive = true;
         }
-	}
+
+       if (event.GetEventType() == CFrameEventType::TextInput) {  
+           auto* keyEvent = dynamic_cast<TextInputEvent*>(&event);  
+           if (keyEvent) {  
+               input += keyEvent->GetChar();   
+               UpdateChildSizes();  
+           }  
+       }  
+    }
+
 
 	void InputField::UpdateChildSizes()
 	{
@@ -55,7 +81,7 @@ namespace CFrame
 
 
         float offsetX = 0.0f, offsetY = 0.0f;
-        int textWidth = 0, textHeight = 0;
+       // int textWidth = 0, textHeight = 0;
         textProps.textWidth = 0;
         textProps.textHeight = 0;
         textProps.vertices.clear();
@@ -83,6 +109,7 @@ namespace CFrame
             offsetX = (float)width - textProps.textWidth - properties.padding;
             offsetY = (float)(height / 2.0f) + (textProps.textHeight / 2.0f);
         }
+        textWidth = textProps.textWidth;
 
         for (char c : input) {
             //Store the current glyph info
@@ -139,6 +166,16 @@ namespace CFrame
 
             offsetX += glyph.advance;
         }
+        lineProperties.vertices.topLeft.x = x + offsetX;
+        lineProperties.vertices.bottomLeft.x = x + offsetX;
+        lineProperties.vertices.topRight.x = x + offsetX + 3;
+        lineProperties.vertices.bottomRight.x = x + offsetX + 3;
+
+        // Y coordinates (from top to bottom)
+        lineProperties.vertices.topLeft.y = y +10;
+        lineProperties.vertices.topRight.y = y +10;
+        lineProperties.vertices.bottomLeft.y = y + height - 13;
+        lineProperties.vertices.bottomRight.y = y + height -13;
 	}
 
 	void InputField::SetIsActive(bool b)
@@ -148,6 +185,7 @@ namespace CFrame
 
     void InputField::RegisterAnimator(std::shared_ptr<AnimationManager> manager)
     {
+        animationManager = manager;
     }
 
     void InputField::SetInput(const std::string& value)

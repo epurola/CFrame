@@ -77,6 +77,13 @@ namespace CFrame
         Point bottomRight;
     };
 
+    struct LineProperties {
+        Vertices vertices;
+        int width;
+        int height;
+        Color color;
+    };
+
 
     struct ElementProperties 
     {

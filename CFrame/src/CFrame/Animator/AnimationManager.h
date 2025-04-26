@@ -1,5 +1,6 @@
 #pragma once
 #include <unordered_set>
+#include "../Window.h"
 
 namespace CFrame 
 {
@@ -8,14 +9,20 @@ namespace CFrame
 	class AnimationManager 
 	{
 	public:
+		AnimationManager(Window& window);
+		~AnimationManager();
 
 		bool IsAnimating() { return !animatingElements.empty(); }
 
 		void RegisterAnimation(UIElement& animatingElement);
 		void RemoveAnimator(UIElement& animatingElement);
 
+		void ActivateTextInput();
+		void DeActivatetextInput();
+
 
 	private:
 		std::unordered_set<UIElement*> animatingElements;
+		Window& window;
 	};
 }

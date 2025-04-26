@@ -27,6 +27,8 @@ namespace CFrame
 		void SetWidth(int w);
 		void SetHeight(int h);
 		void SetFullScreen();
+		void StartTextInput();
+		void StopTextInput();
 
 
 		 Window& Create(unsigned int width = 1280, 

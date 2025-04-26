@@ -1,6 +1,7 @@
 #pragma once
 #include "UIelement.h"
 #include <variant>
+#include <Windows.h>
 
 namespace CFrame {
 
@@ -25,9 +26,11 @@ namespace CFrame {
 
 
 	private:
-		std::string input = "Hello";
+		std::string input = "";
+		int textWidth;
 		bool isActive = false;
 		std::shared_ptr<Texture> labelTexture;
 		std::map<char, fontInfo> glyphs;
+		LineProperties lineProperties;
 	};
 }

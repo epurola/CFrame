@@ -39,8 +39,18 @@ bool Window::OnUpdate()
 		   return true;
            break;  
        } 
+	   case SDL_EVENT_TEXT_INPUT:
+	   {
+		    char text[2] = { 0 };
+			SDL_strlcat(text, event.text.text, sizeof(text));
+			TextInputEvent textEvent(text[0], 0);
+			dispatcher.Dispatch(textEvent);
+			return true;
+			break;
+	   }
 	   case SDL_EVENT_MOUSE_MOTION:
 	   {
+		  
 		   MouseMovedEvent mouseMovedEvent(event.motion.x, event.motion.y);
 		   dispatcher.Dispatch(mouseMovedEvent);
 			   if (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON_MASK(SDL_BUTTON_LEFT)) {
@@ -134,6 +144,15 @@ void Window::SetFullScreen()
 	}
 }
 
+void Window::StartTextInput()
+{
+	SDL_StartTextInput(window);
+}
+
+void Window::StopTextInput()
+{
+	SDL_StopTextInput(window);
+}
 
 Window& Window::Create(unsigned int width, unsigned int height, const std::string& title)
 {

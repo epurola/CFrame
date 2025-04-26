@@ -16,7 +16,7 @@ Application::Application(int width, int height)
 	window->SetHeight(windowHeight);  
 	window->SetWidth(windowWidth);  
 	
-	animationManager = std::make_shared<AnimationManager>();
+	animationManager = std::make_shared<AnimationManager>(*window);
 	rootContainer = std::make_unique <VBox>(windowWidth, windowHeight);  
 	rootContainer->SetAlignment(AlignItems::Start, AlignItems::Start);  
 	UIElements.push_back(rootContainer.get());  
@@ -46,6 +46,9 @@ Application::Application(int width, int height)
 		[this](CFrameEvent& event) { OnEvent(event); });
 
 	eventDispatcher->AddListener(CFrameEventType::MouseLeaveWindow,
+		[this](CFrameEvent& event) { OnEvent(event); });
+
+	eventDispatcher->AddListener(CFrameEventType::TextInput,
 		[this](CFrameEvent& event) { OnEvent(event); });
 }  
 
@@ -106,6 +109,7 @@ void Application::SetWindowSize(int width, int height)
 	/*Needs to be created after window->Create since there is no 
 	valid GL context before that*/
 	renderer = std::make_unique<Renderer>(*window);
+	
 	for (auto element : UIElements) {
 		element->RegisterAnimator(animationManager);
 	}
