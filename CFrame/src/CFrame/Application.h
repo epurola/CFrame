@@ -8,7 +8,7 @@
 #include "UIElements/UIElement.h"
 #include "UIElements/VBox.h"
 #include "Renderer/Renderer.h"
-#include "Animator/AnimationManager.h"
+#include "AnimationManager.h"
 
 namespace CFrame
 {
@@ -35,7 +35,7 @@ private:
 	
 	std::unique_ptr<Window> window;
 	std::unique_ptr<Renderer> renderer;
-	std::shared_ptr<AnimationManager> animationManager;
+	std::shared_ptr<ApplicationManager> animationManager;
 
 	bool running = true;
 	int windowWidth ;

@@ -29,7 +29,7 @@ namespace CFrame
         void Render(Renderer& renderer) override;
         void UpdateChildSizes() override; 
         void OnEvent(CFrameEvent& event) override;
-        void RegisterAnimator(std::shared_ptr<AnimationManager> manager) override;
+        void RegisterAnimator(std::shared_ptr<ApplicationManager> manager) override;
         void SetOnClick(std::function<void()> onClick);
         void StartAnimation();
 

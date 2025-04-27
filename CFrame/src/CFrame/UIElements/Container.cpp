@@ -15,9 +15,9 @@ namespace CFrame
 			delete child;
 	}
 
-	void Container::RegisterAnimator(std::shared_ptr<AnimationManager> manager)
+	void Container::RegisterAnimator(std::shared_ptr<ApplicationManager> manager)
 	{
-		animationManager = manager;
+		applicationManager = manager;
 		for (auto child : children) {
 			child->RegisterAnimator(manager);
 		}
@@ -47,7 +47,6 @@ namespace CFrame
 			if (child->IsVisible()) {
 				child->Render(renderer);
 			}
-			
 		}
 	}
 

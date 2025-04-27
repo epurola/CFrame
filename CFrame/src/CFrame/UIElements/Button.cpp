@@ -23,9 +23,9 @@ namespace CFrame
 
 	}
 
-    void Button::RegisterAnimator(std::shared_ptr<AnimationManager> manager)
+    void Button::RegisterAnimator(std::shared_ptr<ApplicationManager> manager)
     {
-        animationManager = manager;
+        applicationManager = manager;
     }
 
     //For everytime button change change font size and position not everyframe.
@@ -207,7 +207,7 @@ namespace CFrame
                 if (hovering) { 
                     onLeave();
                     hovering = false;
-                    animationManager->RemoveAnimator(*this);
+                    applicationManager->RemoveAnimator(*this);
                 }
                 return;
             }
@@ -216,7 +216,7 @@ namespace CFrame
             if (onHover ) {
                 onHover(); 
                 if (animProperties.speed > 0 ) {
-                    animationManager->RegisterAnimation(*this);
+                    applicationManager->RegisterAnimation(*this);
                 }  
             }
             event.handled = true;
@@ -225,7 +225,7 @@ namespace CFrame
             if (hovering) {
                 onLeave();
                 hovering = false;
-                animationManager->RemoveAnimator(*this);
+                applicationManager->RemoveAnimator(*this);
             }
         }
     }

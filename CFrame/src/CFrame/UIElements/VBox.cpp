@@ -10,7 +10,7 @@ namespace CFrame
         isWidthResizable = (w == -1);
         dragToResize = false;
      
-
+ 
     }
 
     VBox::~VBox()

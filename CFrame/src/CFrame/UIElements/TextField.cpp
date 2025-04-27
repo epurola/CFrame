@@ -1,8 +1,8 @@
-#include "InputField.h"
+#include "TextField.h"
 
 namespace CFrame 
 {
-	InputField::InputField(int x, int y, int w, int h, UIElement* parent)
+	TextField::TextField(int x, int y, int w, int h, UIElement* parent)
 		:UIElement(x,y,w,h,parent)
 	{
 		isWidthResizable = (w == -1);
@@ -10,26 +10,38 @@ namespace CFrame
         SetColor(Color::White, Color::White);
         SetTextColor(Color::White);
         SetRadius(20,20,20,20);
-        SetTextAlign(TextAlign::Start);
         SetPadding(10);
+       
 
-        lineProperties.color = Color::Blue;
+        lineProperties.color = Color::Blue; 
+        cursorHeight = 20;
+        textProps.textHeight = 0;
+
+
 	}
 
-	InputField::~InputField()
+	TextField::~TextField()
 	{
 
 	}
 
-	void InputField::Render(Renderer& renderer)
+	void TextField::Render(Renderer& renderer)
 	{
 		renderer.DrawRectangle(x, y, width, height ,properties, 1.0f, 1.0f, nullptr);
 		renderer.RenderText(input, x, y, textProps, labelTexture.get(), overflow);
         
-        renderer.DrawLine(lineProperties);
+        if (isActive) {
+            elapsedTime += 0.016f;
+            if (elapsedTime > 1.0f) {
+                elapsedTime = 0.0f;
+            }
+            if (elapsedTime < 0.5f) {
+                renderer.DrawLine(lineProperties);
+            }
+        }
 	}
 
-    void InputField::OnEvent(CFrameEvent& event)  
+    void TextField::OnEvent(CFrameEvent& event)  
     {  
         if (event.GetEventType() == CFrameEventType::MouseButtonDown) {
 
@@ -43,11 +55,17 @@ namespace CFrame
 
             if (xPos < x || xPos >(x + width) || yPos < y || yPos >(y + height)) {
                 isActive = false;
-                animationManager->DeActivatetextInput();
+                applicationManager->RemoveAnimator(*this);
+                applicationManager->DeActivatetextInput();
                 return; 
             }
-
-            animationManager->ActivateTextInput();
+            if (isActive) {
+                isActive = false;
+                applicationManager->RemoveAnimator(*this);
+                return;
+            }
+            applicationManager->RegisterAnimation(*this);
+            applicationManager->ActivateTextInput();
             isActive = true;
         }
 
@@ -58,13 +76,25 @@ namespace CFrame
                UpdateChildSizes();  
            }  
        }  
+
+       if (event.GetEventType() == CFrameEventType::MouseScroll) {
+           auto* mouseEvent = dynamic_cast<MouseScrolledEvent*>(&event);
+           if ((mouseEvent->GetMouseX() >= x && mouseEvent->GetMouseX() <= x + width) &&
+               (mouseEvent->GetMouseY() >= y && mouseEvent->GetMouseY() <= y + height)) 
+                { 
+                    UpdateVertexY(mouseEvent->GetDistanceY());
+                }
+            }
     }
+       
+    
+ 
 
 
-	void InputField::UpdateChildSizes()
+	void TextField::UpdateChildSizes()
 	{
         if (!labelTexture) {
-            FontKey key = { textProps.font, textProps.fontSize };
+            FontKey key = { textProps.font, 30 };
             FontManager& fm = FontManager::GetInstance();
             std::pair<std::shared_ptr<Texture>, std::map<char, fontInfo>> font = fm.GetFont(key);
             glyphs = font.second; //Info about the glyph and where it is in the atlas
@@ -79,38 +109,28 @@ namespace CFrame
             overflow.clipY = y;
         }
 
-
         float offsetX = 0.0f, offsetY = 0.0f;
-       // int textWidth = 0, textHeight = 0;
         textProps.textWidth = 0;
         textProps.textHeight = 0;
         textProps.vertices.clear();
         textProps.indices.clear();
-        //ToDo: Determine if you need to use the text or icon icons have PUA range
 
         for (char c : input) {
+            
             fontInfo glyph = glyphs[c];
-
             float charWidth = (float)glyph.width;
             float charHeight = (float)glyph.height;
             textProps.textWidth += glyph.advance;
             textProps.textHeight = (int)std::max((float)textProps.textHeight, charHeight);
         }
 
-        if (textProps.textAlign == TextAlign::Center) {
-            offsetX = (float)(width / 2) - (textProps.textWidth / 2);
-            offsetY = (float)(height / 2.0f) + (textProps.textHeight / 2.0f); //OpneGl goes from down up and screen up down so flip this
-        }
-        else if (textProps.textAlign == TextAlign::Start) {
-            offsetX = (float)properties.padding;
-            offsetY = (float)(height / 2.0f) + (textProps.textHeight / 2.0f);
-        }
-        else {
-            offsetX = (float)width - textProps.textWidth - properties.padding;
-            offsetY = (float)(height / 2.0f) + (textProps.textHeight / 2.0f);
-        }
+        offsetX = (float)properties.padding;
+        offsetY = (float)(height / 2.0f) + (textProps.textHeight / 2.0f);
+       
         textWidth = textProps.textWidth;
-
+        int lineNumber = 0;
+        int lineSpacing = 5;
+        
         for (char c : input) {
             //Store the current glyph info
             fontInfo glyph = glyphs[c];
@@ -123,6 +143,16 @@ namespace CFrame
 
             float charWidth = (float)glyph.width;
             float charHeight = (float)glyph.height;
+
+            int floatsPerVertex = 4;  // (x, y, u, v)
+            int i = 0;
+
+            if ((offsetX + glyph.advance + glyph.bearingX) > width - properties.padding) {
+                lineNumber++;
+                offsetX = (float)properties.padding; // Reset to start
+
+                UpdateVertexY(textProps.textHeight + lineSpacing); //Update old lines position
+            }
 
             float xpos = GetX() + offsetX + glyph.bearingX;
             float ypos = GetY() + offsetY + (charHeight - glyph.bearingY);
@@ -137,7 +167,7 @@ namespace CFrame
 
             //Define 4 vertices for the current character
             textProps.vertices.push_back(leftX);                   //top-Left x
-            textProps.vertices.push_back(topY);                    //Top-Left y
+            textProps.vertices.push_back(topY );                   //Top-Left y
             textProps.vertices.push_back(texX1);                   //Texture coord x1
             textProps.vertices.push_back(texY2);                   //Texture coord y2
 
@@ -166,31 +196,45 @@ namespace CFrame
 
             offsetX += glyph.advance;
         }
+
         lineProperties.vertices.topLeft.x = x + offsetX;
         lineProperties.vertices.bottomLeft.x = x + offsetX;
         lineProperties.vertices.topRight.x = x + offsetX + 3;
         lineProperties.vertices.bottomRight.x = x + offsetX + 3;
 
-        // Y coordinates (from top to bottom)
-        lineProperties.vertices.topLeft.y = y +10;
-        lineProperties.vertices.topRight.y = y +10;
-        lineProperties.vertices.bottomLeft.y = y + height - 13;
-        lineProperties.vertices.bottomRight.y = y + height -13;
+        //Reset to match font height
+        lineProperties.vertices.topLeft.y = y + (cursorHeight );
+        lineProperties.vertices.topRight.y = y + (cursorHeight );
+        lineProperties.vertices.bottomLeft.y = y + height - (cursorHeight );
+        lineProperties.vertices.bottomRight.y = y + height - (cursorHeight );
+        
 	}
 
-	void InputField::SetIsActive(bool b)
+	void TextField::SetIsActive(bool b)
 	{
 		isActive = b;
 	}
 
-    void InputField::RegisterAnimator(std::shared_ptr<AnimationManager> manager)
+    void TextField::RegisterAnimator(std::shared_ptr<ApplicationManager> manager)
     {
-        animationManager = manager;
+        applicationManager = manager;
     }
 
-    void InputField::SetInput(const std::string& value)
+    void TextField::SetInput(const std::string& value)
     {
 
+    }
+    void TextField::UpdateVertexY(int offset)
+    {
+        int floatsPerVertex = 4;  // (x, y, u, v)
+        int i = 0;
+
+            for (float& v : textProps.vertices) {
+                if ((i % floatsPerVertex) == 1) {
+                    v -= offset;
+                }
+                i++;
+            }
     }
 }
 

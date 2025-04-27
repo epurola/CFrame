@@ -21,7 +21,7 @@ namespace CFrame
         ~Label();
 
         void Render(Renderer& renderer) override;
-        void RegisterAnimator(std::shared_ptr<AnimationManager> manager);
+        void RegisterAnimator(std::shared_ptr<ApplicationManager> manager);
         void CreateTexture(const std::string& text, int width, int height);
         void UpdateChildSizes() override;
         void OnEvent(CFrameEvent& event) override;

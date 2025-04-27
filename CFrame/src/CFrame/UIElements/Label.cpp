@@ -19,7 +19,7 @@ namespace CFrame
 		
 	}
 
-    void Label::RegisterAnimator(std::shared_ptr<AnimationManager> manager)
+    void Label::RegisterAnimator(std::shared_ptr<ApplicationManager> manager)
     {
 
     }

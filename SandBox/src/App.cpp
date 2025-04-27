@@ -305,7 +305,7 @@ public:
 		header->SetColor(Color::DarkGray);
 		header->SetAlignment(CFrame::AlignItems::End, CFrame::AlignItems::Center);
 		
-		CFrame::InputField* inputField = new CFrame::InputField(-1, -1, -1, 75, nullptr);
+		CFrame::TextField* inputField = new CFrame::TextField(-1, -1, -1, 75, nullptr);
 		//messageBox->SetColor(Color::DarkGray);
 		messageBox->SetBorder(2, 0, 0, 0);
 		messageBox->SetBorderColor(Color::LightGray);
@@ -319,10 +319,7 @@ public:
 		button16->SetColor(Color::Blue);
 		messageBox->AddChild(button16);
 		messageBox->AddChild(inputField);
-		
-		
-		
-		rootContainer->SetColor(Color::Red);
+	
 		rootContainer->AddChild(vbox);
 		
 		

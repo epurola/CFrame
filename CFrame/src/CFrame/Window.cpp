@@ -1,6 +1,7 @@
 #include "Window.h"
 #include "glad/glad.h"
 #include "SDL3/SDL.h"
+#include <windows.h>
 
 namespace CFrame 
 {
@@ -154,6 +155,15 @@ void Window::StopTextInput()
 	SDL_StopTextInput(window);
 }
 
+//If using borderless define hit arreas in this function
+static SDL_HitTestResult SDL_HitTest(SDL_Window* win, const SDL_Point* pos, void* data) {
+	Window* windowInstance = static_cast<Window*>(data);
+	if (pos->y < 50 && pos->x < (int)windowInstance->GetWidth() - 225) {
+		return SDL_HITTEST_DRAGGABLE;
+	}
+	return SDL_HITTEST_NORMAL;
+}
+
 Window& Window::Create(unsigned int width, unsigned int height, const std::string& title)
 {
 	this->width = width;
@@ -169,11 +179,14 @@ Window& Window::Create(unsigned int width, unsigned int height, const std::strin
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
-	window = SDL_CreateWindow(title.c_str(), width, height, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
+	window = SDL_CreateWindow(title.c_str(), width, height, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE); //| SDL_WINDOW_BORDERLESS
 	if (window == nullptr) {
 		CF_CORE_ERROR("SDL_CreateWindow Error: {0}");
 	}
 
+	if (SDL_SetWindowHitTest(window, SDL_HitTest, this) != 0) {
+		CF_CORE_ERROR("SDL_SetWindowHitTest Error: {0}", SDL_GetError());
+	}
 
 	context = SDL_GL_CreateContext(window);
 	if (context == nullptr) {

@@ -16,9 +16,14 @@ Application::Application(int width, int height)
 	window->SetHeight(windowHeight);  
 	window->SetWidth(windowWidth);  
 	
-	animationManager = std::make_shared<AnimationManager>(*window);
+	animationManager = std::make_shared<ApplicationManager>(*window);
 	rootContainer = std::make_unique <VBox>(windowWidth, windowHeight);  
 	rootContainer->SetAlignment(AlignItems::Start, AlignItems::Start);  
+	
+	rootContainer->SetPadding(2);
+	rootContainer->SetColor(Color::LightGray);
+	
+	rootContainer->UpdateVertices();
 	UIElements.push_back(rootContainer.get());  
 	
 	eventDispatcher->AddListener(CFrameEventType::WindowClosed,  
@@ -102,7 +107,8 @@ void Application::SetWindowSize(int width, int height)
 	windowWidth = width;  
 }  
 
-   void Application::run()  
+//TODO: Poll events at a higher frequency
+void Application::run()  
 {  
 	constexpr double target_fps = 60.0;  
 	constexpr std::chrono::milliseconds frame_duration(static_cast<int>(1000.0 / target_fps));    
@@ -116,15 +122,16 @@ void Application::SetWindowSize(int width, int height)
 	
 	//Currently stops animation if mouse does not move
 	while (running ) {  
-		auto start_time = std::chrono::steady_clock::now();  
-		
+		 
 		bool render = window->OnUpdate(); // Handles even polling return true if event was dispathed
-
+		auto start_time = std::chrono::steady_clock::now();
 		if (render || animationManager->IsAnimating()) {
 			window->GL_ClearColorBuffer();
 			for (auto& element : UIElements) {
 				element->Render(*renderer);  
+				
 			}
+			
 			window->GL_SwapWindow();
 			
 		}
