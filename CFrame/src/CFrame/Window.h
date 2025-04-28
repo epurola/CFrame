@@ -27,8 +27,11 @@ namespace CFrame
 		void SetWidth(int w);
 		void SetHeight(int h);
 		void SetFullScreen();
+		void MinimizeWindow();
 		void StartTextInput();
 		void StopTextInput();
+
+		void SetBorderColor(HWND hwnd, COLORREF borderColor);
 		
 
 

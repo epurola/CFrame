@@ -22,6 +22,8 @@ namespace CFrame {
 		void UpdateVertexY(int offset);
 
 		bool IsActive() const { return isActive; }
+		void AddCharacter(char c);
+		void UpdateCursorPosition(int offset);
 
 		inline ElementType GetElementType() const override { return ElementType::INPUTFIELD; };
 
@@ -36,5 +38,8 @@ namespace CFrame {
 		int offsetOldChar = 0;
 		float elapsedTime = 0.0f;
 		int cursorHeight;
+		float offsetX = 0.0f, offsetY = 0.0f;
+		int lineSpacing = 5;
+		int lineNumber = 0;
 	};
 }

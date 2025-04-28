@@ -7,8 +7,7 @@ class SandBox : public CFrame::Application
 public:
 	SandBox() : CFrame::Application(2000, 1500)
 	{
-		CFrame::VBox* vbox        = new CFrame::VBox();
-		CFrame::HBox* header      = new CFrame::HBox(-1, 75);
+		CFrame::VBox* vbox = new CFrame::VBox();
 		CFrame::HBox* content     = new CFrame::HBox();
 		CFrame::VBox* sideBar     = new CFrame::VBox(150,-1);
 		CFrame::VBox* friendList  = new CFrame::VBox(-1,-1);
@@ -26,11 +25,7 @@ public:
 		content->AddChild(contentLeft);
 		content->AddChild(messageBox);
 		content->ToFront(contentLeft);
-
-		vbox->AddChild(header);
 		vbox->AddChild(content);
-	
-		
 		
 		contentLeft->SetMaxWidth(700);
 		contentLeft->SetColor(Color::DarkGray);
@@ -42,7 +37,6 @@ public:
 
 		CFrame::Button* button = new CFrame::Button(90, 90);
 		                button->SetText("S");
-						button->SetFont(CFrame::Font::Arial);
 						button->setTextOpacity(0.8);
 						button->SetFontSize(34.0);
 		                button->SetMargin(0, 0, 50, 0);				 
@@ -56,7 +50,6 @@ public:
 						});
 		CFrame::Button* button1 = new CFrame::Button(90, 90);
 						button1->SetText("Wz");
-						button1->SetFont(CFrame::Font::Arial);
 						button1->SetFontSize(34.0);
 		                button1->SetRadius(20, 20, 20, 20);
 						button1->SetOnLeave([button1]() {
@@ -247,63 +240,6 @@ public:
 		friendList->SetBorder(0.7);
 		friendList->SetBorderColor(Color::LightGray);
 		friendList->SetBorder(2,0,2,2);
-		
-
-		CFrame::Button* button10 = new CFrame::Button(75, 75);
-						button10->SetIcon(0xE738);
-						button10->SetFontSize(22);
-						button10->SetTextColor(Color::White);
-						button10->SetRadius(0);
-		                button10->SetColor(Color::DarkGray);
-						button10->SetOnLeave([button10]() {
-							button10->SetColor(Color::DarkGray);
-
-							});
-						button10->SetOnHover([button10]() {
-							button10->SetColor(Color::Gray);
-							});
-		CFrame::Button* button11 = new CFrame::Button(75, 75);
-						button11->SetIcon(0xE71A);
-						button11->SetFontSize(24);
-						button11->SetRadius(0);
-						button11->SetTextColor(Color::White);
-		                button11->SetColor(Color::DarkGray);
-						button11->SetFont(CFrame::Font::SegoeMDL2Assets);
-						button11->SetOnLeave([button11]() {
-							button11->SetColor(Color::DarkGray);
-
-							});
-						button11->SetOnHover([button11]() {
-							button11->SetColor(Color::Gray);
-							});
-						button11->SetOnClick([button11, this]() {
-								ToggleFullScreen();
-							});
-		CFrame::Button* button12 = new CFrame::Button(75, 75);
-						button12->SetIcon(0xE711);
-						button12->SetFontSize(24);
-						button12->SetRadius(0);
-						button12->SetTextColor(Color::White);
-		                button12->SetColor(Color::DarkGray);
-						button12->SetOnLeave([button12]() {
-							button12->SetColor(Color::DarkGray);
-							});
-						button12->SetOnHover([button12]() {
-							button12->SetColor(Color::Red);
-							});
-						button12->SetOnClick([button12, this]() {
-							stop();
-							});
-		
-
-		header->AddChild(button10);
-		header->AddChild(button11);
-		header->AddChild(button12);
-
-		
-		
-		header->SetColor(Color::DarkGray);
-		header->SetAlignment(CFrame::AlignItems::End, CFrame::AlignItems::Center);
 		
 		CFrame::TextField* inputField = new CFrame::TextField(-1, -1, -1, 75, nullptr);
 		//messageBox->SetColor(Color::DarkGray);

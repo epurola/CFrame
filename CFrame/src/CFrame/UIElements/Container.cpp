@@ -12,7 +12,9 @@ namespace CFrame
 	Container::~Container()
 	{
 		for (auto& child : children)
-			delete child;
+			if (child) {
+				delete child;
+			}
 	}
 
 	void Container::RegisterAnimator(std::shared_ptr<ApplicationManager> manager)

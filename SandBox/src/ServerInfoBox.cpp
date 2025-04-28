@@ -50,7 +50,7 @@ ServerInfoBox::ServerInfoBox(int x, int y, int w, int h)
 	CFrame::Button* logo2 = new CFrame::Button( 55, 55);
 	//logo2->SetAngle(45.0);
 	logo2->SetIcon(0xE713);
-	logo2->SetFontSize(34);
+	logo2->SetFontSize(44);
 	logo2->SetFont(CFrame::Font::SegoeMDL2Assets);
 	logo2->SetColor(Color::LightGray);
 	logo2->SetOnLeave([logo2]() {

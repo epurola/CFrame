@@ -115,7 +115,7 @@ namespace CFrame {
 
 		FT_Set_Pixel_Sizes(iconFace, 0, (FT_UInt)fontSize);
 
-		CF_CORE_INFO("Font init OK!");
+		CF_CORE_INFO("Icon Font init OK!");
 
 		
 		int startChar = 0xE700; // Start of the Private Use Area (PUA)

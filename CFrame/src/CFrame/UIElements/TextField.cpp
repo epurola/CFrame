@@ -11,7 +11,6 @@ namespace CFrame
         SetTextColor(Color::White);
         SetRadius(20,20,20,20);
         SetPadding(10);
-       
 
         lineProperties.color = Color::Blue; 
         cursorHeight = 20;
@@ -27,6 +26,13 @@ namespace CFrame
 
 	void TextField::Render(Renderer& renderer)
 	{
+        if (!overflow.overflow) {
+            overflow.clipHeight = height;
+            overflow.clipWidth = width;
+            overflow.clipX = x;
+            overflow.clipY = y;
+        }
+
 		renderer.DrawRectangle(x, y, width, height ,properties, 1.0f, 1.0f, nullptr);
 		renderer.RenderText(input, x, y, textProps, labelTexture.get(), overflow);
         
@@ -73,7 +79,8 @@ namespace CFrame
            auto* keyEvent = dynamic_cast<TextInputEvent*>(&event);  
            if (keyEvent) {  
                input += keyEvent->GetChar();   
-               UpdateChildSizes();  
+               //UpdateChildSizes();
+               AddCharacter(keyEvent->GetChar());
            }  
        }  
 
@@ -86,37 +93,28 @@ namespace CFrame
                 }
             }
     }
-       
-    
- 
-
 
 	void TextField::UpdateChildSizes()
 	{
         if (!labelTexture) {
-            FontKey key = { textProps.font, 30 };
+            FontKey key = { textProps.font, textProps.fontSize };
             FontManager& fm = FontManager::GetInstance();
             std::pair<std::shared_ptr<Texture>, std::map<char, fontInfo>> font = fm.GetFont(key);
             glyphs = font.second; //Info about the glyph and where it is in the atlas
             labelTexture = font.first;
-            //auto [glyphs, labelTexture] = font;
-        }
-
-        if (!overflow.overflow) {
-            overflow.clipHeight = height;
-            overflow.clipWidth = width;
-            overflow.clipX = x;
-            overflow.clipY = y;
-        }
-
-        float offsetX = 0.0f, offsetY = 0.0f;
-        textProps.textWidth = 0;
-        textProps.textHeight = 0;
-        textProps.vertices.clear();
-        textProps.indices.clear();
-
-        for (char c : input) {
+           //Predetermine the tallest char for the AddCharFunction.
+            for (char c : "qwertyuiopasdfghjklöäzxcvbnmASDFGHJKLÖQWERTYUIOPZXCVBNM") {
+                fontInfo glyph = glyphs[c];
+                float charHeight = (float)glyph.height;
+                textProps.textHeight = (int)std::max((float)textProps.textHeight, charHeight);
+            }
+            //Set OffsetY based on the tallest one
+            offsetY = (float)(height / 2.0f) + (textProps.textHeight / 2.0f);
+            offsetX = (float)properties.padding;
             
+        }
+        //Recalculate when the textField size changes
+        for (char c : input) {
             fontInfo glyph = glyphs[c];
             float charWidth = (float)glyph.width;
             float charHeight = (float)glyph.height;
@@ -124,96 +122,106 @@ namespace CFrame
             textProps.textHeight = (int)std::max((float)textProps.textHeight, charHeight);
         }
 
-        offsetX = (float)properties.padding;
         offsetY = (float)(height / 2.0f) + (textProps.textHeight / 2.0f);
-       
+        offsetX = (float)properties.padding;
+
+        //Clear the vectors 
+        textProps.vertices.clear();
+        textProps.indices.clear();
         textWidth = textProps.textWidth;
-        int lineNumber = 0;
-        int lineSpacing = 5;
+        lineNumber = 0;
         
         for (char c : input) {
-            //Store the current glyph info
-            fontInfo glyph = glyphs[c];
-            
-            //texture coordinates for the character
-            float texX1 = glyph.x / (float)labelTexture->GetWidth(); // width
-            float texY1 = glyph.y / (float)labelTexture->GetHeight(); //height
-            float texX2 = (glyph.x + glyph.width) / (float)labelTexture->GetWidth();
-            float texY2 = (glyph.y + glyph.height) / (float)labelTexture->GetHeight();
-
-            float charWidth = (float)glyph.width;
-            float charHeight = (float)glyph.height;
-
-            int floatsPerVertex = 4;  // (x, y, u, v)
-            int i = 0;
-
-            if ((offsetX + glyph.advance + glyph.bearingX) > width - properties.padding) {
-                lineNumber++;
-                offsetX = (float)properties.padding; // Reset to start
-
-                UpdateVertexY(textProps.textHeight + lineSpacing); //Update old lines position
-            }
-
-            float xpos = GetX() + offsetX + glyph.bearingX;
-            float ypos = GetY() + offsetY + (charHeight - glyph.bearingY);
-
-            float w = (float)glyph.width;   // actual width of the glyph quad
-            float h = (float)glyph.height;  // actual height of the glyph quad
-
-            float leftX = xpos;
-            float rightX = xpos + w;
-            float topY = ypos;
-            float bottomY = ypos - h;
-
-            //Define 4 vertices for the current character
-            textProps.vertices.push_back(leftX);                   //top-Left x
-            textProps.vertices.push_back(topY );                   //Top-Left y
-            textProps.vertices.push_back(texX1);                   //Texture coord x1
-            textProps.vertices.push_back(texY2);                   //Texture coord y2
-
-            textProps.vertices.push_back(rightX);                  //Top-Right x
-            textProps.vertices.push_back(topY);                    //Top-Right y
-            textProps.vertices.push_back(texX2);                   //texture coord x2
-            textProps.vertices.push_back(texY2);                   //texture coord y2
-
-            textProps.vertices.push_back(rightX);                  //Bottom-Right x
-            textProps.vertices.push_back(bottomY);
-            textProps.vertices.push_back(texX2);                   //texture coord x2
-            textProps.vertices.push_back(texY1);                   //texture coord y1
-
-            textProps.vertices.push_back(leftX);                   //Bottom-Left x
-            textProps.vertices.push_back(bottomY);                 //bottom-Right y
-            textProps.vertices.push_back(texX1);                   //Texture coord x1
-            textProps.vertices.push_back(texY1);                   //Texture coord y1
-
-            unsigned int baseIndex = (unsigned int)(textProps.vertices.size() / 4) - 4;
-            textProps.indices.push_back(baseIndex);                // 0
-            textProps.indices.push_back(baseIndex + 1);            // 1
-            textProps.indices.push_back(baseIndex + 2);            // 2
-            textProps.indices.push_back(baseIndex + 2);            // 2
-            textProps.indices.push_back(baseIndex + 3);            // 3
-            textProps.indices.push_back(baseIndex);                // 0
-
-            offsetX += glyph.advance;
+            AddCharacter(c);
         }
 
-        lineProperties.vertices.topLeft.x = x + offsetX;
-        lineProperties.vertices.bottomLeft.x = x + offsetX;
-        lineProperties.vertices.topRight.x = x + offsetX + 3;
-        lineProperties.vertices.bottomRight.x = x + offsetX + 3;
-
-        //Reset to match font height
-        lineProperties.vertices.topLeft.y = y + (cursorHeight );
-        lineProperties.vertices.topRight.y = y + (cursorHeight );
-        lineProperties.vertices.bottomLeft.y = y + height - (cursorHeight );
-        lineProperties.vertices.bottomRight.y = y + height - (cursorHeight );
-        
+        UpdateCursorPosition(offsetX);
 	}
 
 	void TextField::SetIsActive(bool b)
 	{
 		isActive = b;
 	}
+
+    void TextField::AddCharacter(char c)
+    {
+        fontInfo glyph = glyphs[c];
+        
+        //texture coordinates for the character
+        float texX1 = glyph.x / (float)labelTexture->GetWidth(); // width
+        float texY1 = glyph.y / (float)labelTexture->GetHeight(); //height
+        float texX2 = (glyph.x + glyph.width) / (float)labelTexture->GetWidth();
+        float texY2 = (glyph.y + glyph.height) / (float)labelTexture->GetHeight();
+
+        textWidth = textProps.textWidth;
+        
+        float charWidth = (float)glyph.width;
+        float charHeight = (float)glyph.height;
+
+        if ((offsetX + glyph.advance + glyph.bearingX) > width - properties.padding) {
+            lineNumber++;
+            offsetX = (float)properties.padding; // Reset to start
+
+            UpdateVertexY(textProps.textHeight + lineSpacing); //Update old lines position
+        }
+
+        float xpos = GetX() + offsetX + glyph.bearingX;
+        float ypos = GetY() + offsetY + (charHeight - glyph.bearingY);
+
+        float w = (float)glyph.width;   // actual width of the glyph quad
+        float h = (float)glyph.height;  // actual height of the glyph quad
+
+        float leftX = xpos;
+        float rightX = xpos + w;
+        float topY = ypos;
+        float bottomY = ypos - h;
+
+        textProps.vertices.push_back(leftX);                   //top-Left x
+        textProps.vertices.push_back(topY);                   //Top-Left y
+        textProps.vertices.push_back(texX1);                   //Texture coord x1
+        textProps.vertices.push_back(texY2);                   //Texture coord y2
+
+        textProps.vertices.push_back(rightX);                  //Top-Right x
+        textProps.vertices.push_back(topY);                    //Top-Right y
+        textProps.vertices.push_back(texX2);                   //texture coord x2
+        textProps.vertices.push_back(texY2);                   //texture coord y2
+
+        textProps.vertices.push_back(rightX);                  //Bottom-Right x
+        textProps.vertices.push_back(bottomY);
+        textProps.vertices.push_back(texX2);                   //texture coord x2
+        textProps.vertices.push_back(texY1);                   //texture coord y1
+
+        textProps.vertices.push_back(leftX);                   //Bottom-Left x
+        textProps.vertices.push_back(bottomY);                 //bottom-Right y
+        textProps.vertices.push_back(texX1);                   //Texture coord x1
+        textProps.vertices.push_back(texY1);                   //Texture coord y1
+
+        unsigned int baseIndex = (unsigned int)(textProps.vertices.size() / 4) - 4;
+        textProps.indices.push_back(baseIndex);                // 0
+        textProps.indices.push_back(baseIndex + 1);            // 1
+        textProps.indices.push_back(baseIndex + 2);            // 2
+        textProps.indices.push_back(baseIndex + 2);            // 2
+        textProps.indices.push_back(baseIndex + 3);            // 3
+        textProps.indices.push_back(baseIndex);                // 0
+
+        offsetX += glyph.advance;
+
+        UpdateCursorPosition(offsetX);
+    }
+
+    void TextField::UpdateCursorPosition(int offset)
+    {
+        lineProperties.vertices.topLeft.x = x + offset;
+        lineProperties.vertices.bottomLeft.x = x + offset;
+        lineProperties.vertices.topRight.x = x + offset + 3;
+        lineProperties.vertices.bottomRight.x = x + offset + 3;
+        //Reset to match font height
+        lineProperties.vertices.topLeft.y = y + (cursorHeight);
+        lineProperties.vertices.topRight.y = y + (cursorHeight);
+        lineProperties.vertices.bottomLeft.y = y + height - (cursorHeight);
+        lineProperties.vertices.bottomRight.y = y + height - (cursorHeight);
+    }
+
 
     void TextField::RegisterAnimator(std::shared_ptr<ApplicationManager> manager)
     {

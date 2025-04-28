@@ -7,7 +7,7 @@ namespace CFrame
 	Label::Label(int x, int y, int w, int h, const std::string& text, UIElement* parent)
 		:UIElement(x,y,w,h,nullptr)
 	{
-		
+        SetOpacity(0);
 	}
 
 	Label::~Label()
@@ -16,69 +16,88 @@ namespace CFrame
 	}
 	void Label::Render(Renderer& renderer)
 	{
-		
+        renderer.DrawRectangle(x, y, width, height, GetProperties(), 0.0f, 0.0f, labelTexture.get());
 	}
 
     void Label::RegisterAnimator(std::shared_ptr<ApplicationManager> manager)
     {
-
+        applicationManager = manager;
     }
 
-	void Label::CreateTexture(const std::string& text, int w, int h)
-	{
-		
-	}
 	void Label::OnEvent(CFrameEvent& event)
 	{
 
 	}
 
 	void Label::UpdateChildSizes() {
+
         if (!labelTexture) {
-            fontLoader = std::make_unique< FontLoader>("C:/dev/CFrame/CFrame/src/CFrame/res/fonts/arial.ttf", textProps.fontSize);
-            fontLoader->LoadFont();
-            std::vector<uint8_t>atlas = fontLoader->GetFontAtlas();
-            glyphs = fontLoader->GetGlyphs();
-            labelTexture = std::make_unique<Texture>(atlas.data(), fontLoader->GetAtlasWidth(), fontLoader->GetAtlasHeight());
+            FontKey key = { textProps.font, textProps.fontSize };
+            FontManager& fm = FontManager::GetInstance();
+            std::pair<std::shared_ptr<Texture>, std::map<char, fontInfo>> font = fm.GetFont(key);
+            glyphs = font.second; //Info about the glyph and where it is in the atlas
+            labelTexture = font.first;
         }
+
+        if (!overflow.overflow) {
+            overflow.clipHeight = height;
+            overflow.clipWidth = width;
+            overflow.clipX = x;
+            overflow.clipY = y;
+        }
+
+
         float offsetX = 0.0f, offsetY = 0.0f;
         int textWidth = 0, textHeight = 0;
         textProps.textWidth = 0;
         textProps.textHeight = 0;
         textProps.vertices.clear();
         textProps.indices.clear();
+        //ToDo: Determine if you need to use the text or icon icons have PUA range
 
         for (char c : text) {
             fontInfo glyph = glyphs[c];
 
-            float charWidth = glyph.width;
-            float charHeight = glyph.height;
+            float charWidth = (float)glyph.width;
+            float charHeight = (float)glyph.height;
             textProps.textWidth += glyph.advance;
-            textProps.textHeight = std::max((float)textProps.textHeight, charHeight);
-
+            textProps.textHeight = (int)std::max((float)textProps.textHeight, charHeight);
         }
 
-        offsetX = (width / 2) - (textProps.textWidth / 2);
-        offsetY = (height / 2.0f) + (textProps.textHeight / 2.0f); //OpneGl goes from down up and screen up down so flip this
+        if (textProps.textAlign == TextAlign::Center) {
+            offsetX = (float)(width / 2) - (textProps.textWidth / 2);
+            offsetY = (float)(height / 2.0f) + (textProps.textHeight / 2.0f); //OpneGl goes from down up and screen up down so flip this
+        }
+        else if (textProps.textAlign == TextAlign::Start) {
+            offsetX = (float)properties.padding;
+            offsetY = (float)(height / 2.0f) + (textProps.textHeight / 2.0f);
+        }
+        else {
+            offsetX = (float)width - textProps.textWidth - properties.padding;
+            offsetY = (float)(height / 2.0f) + (textProps.textHeight / 2.0f);
+        }
 
         for (char c : text) {
             //Store the current glyph info
             fontInfo glyph = glyphs[c];
+            if (icon.has_value()) {
+                glyph = glyphs[icon.value()];
+            }
 
             //texture coordinates for the character
-            float texX1 = glyph.x / (float)fontLoader->GetAtlasWidth(); // width
-            float texY1 = glyph.y / (float)fontLoader->GetAtlasHeight(); //height
-            float texX2 = (glyph.x + glyph.width) / (float)fontLoader->GetAtlasWidth();
-            float texY2 = (glyph.y + glyph.height) / (float)fontLoader->GetAtlasHeight();
+            float texX1 = glyph.x / (float)labelTexture->GetWidth(); // width
+            float texY1 = glyph.y / (float)labelTexture->GetHeight(); //height
+            float texX2 = (glyph.x + glyph.width) / (float)labelTexture->GetWidth();
+            float texY2 = (glyph.y + glyph.height) / (float)labelTexture->GetHeight();
 
-            float charWidth = glyph.width;
-            float charHeight = glyph.height;
+            float charWidth = (float)glyph.width;
+            float charHeight = (float)glyph.height;
 
-            float xpos = x + offsetX + glyph.bearingX;
-            float ypos = y + offsetY + (charHeight - glyph.bearingY);
+            float xpos = GetX() + offsetX + glyph.bearingX;
+            float ypos = GetY() + offsetY + (charHeight - glyph.bearingY);
 
-            float w = glyph.width;   // actual width of the glyph quad
-            float h = glyph.height;  // actual height of the glyph quad
+            float w = (float)glyph.width;   // actual width of the glyph quad
+            float h = (float)glyph.height;  // actual height of the glyph quad
 
             float leftX = xpos;
             float rightX = xpos + w;
@@ -106,7 +125,7 @@ namespace CFrame
             textProps.vertices.push_back(texX1);                   //Texture coord x1
             textProps.vertices.push_back(texY1);                   //Texture coord y1
 
-            unsigned int baseIndex = (textProps.vertices.size() / 4) - 4;
+            unsigned int baseIndex = (unsigned int)(textProps.vertices.size() / 4) - 4;
             textProps.indices.push_back(baseIndex);                // 0
             textProps.indices.push_back(baseIndex + 1);            // 1
             textProps.indices.push_back(baseIndex + 2);            // 2

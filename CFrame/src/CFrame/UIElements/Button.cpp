@@ -15,7 +15,7 @@ namespace CFrame
         isHeightResizable = (h == -1);
 		SetRadius(15,15,15,15);
         SetColor(Color::Gray);
-
+        SetFontSize(24);
 	}
 
 	Button::~Button()
@@ -81,7 +81,7 @@ namespace CFrame
             textProps.textHeight = 0;
             textProps.vertices.clear();
             textProps.indices.clear();
-            //ToDo: Determine if you need to use the text or icon icons have PUA range
+            
 
             for (char c : text) {
                 fontInfo glyph = glyphs[c];

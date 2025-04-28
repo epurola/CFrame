@@ -16,14 +16,12 @@ Application::Application(int width, int height)
 	window->SetHeight(windowHeight);  
 	window->SetWidth(windowWidth);  
 	
-	animationManager = std::make_shared<ApplicationManager>(*window);
+	applicationManager = std::make_shared<ApplicationManager>(*window);
+	
 	rootContainer = std::make_unique <VBox>(windowWidth, windowHeight);  
 	rootContainer->SetAlignment(AlignItems::Start, AlignItems::Start);  
-	
-	rootContainer->SetPadding(2);
-	rootContainer->SetColor(Color::LightGray);
-	
-	rootContainer->UpdateVertices();
+	InitTitleBar();
+	rootContainer->AddChild(header);
 	UIElements.push_back(rootContainer.get());  
 	
 	eventDispatcher->AddListener(CFrameEventType::WindowClosed,  
@@ -110,30 +108,28 @@ void Application::SetWindowSize(int width, int height)
 //TODO: Poll events at a higher frequency
 void Application::run()  
 {  
-	constexpr double target_fps = 60.0;  
+	constexpr double target_fps = 100.0;  
 	constexpr std::chrono::milliseconds frame_duration(static_cast<int>(1000.0 / target_fps));    
 	/*Needs to be created after window->Create since there is no 
 	valid GL context before that*/
 	renderer = std::make_unique<Renderer>(*window);
-	
-	for (auto element : UIElements) {
-		element->RegisterAnimator(animationManager);
+	//Inject the manager into each UI element so they can send signals
+	for (auto& element : UIElements) {
+		element->RegisterAnimator(applicationManager);
 	}
-	
+
 	//Currently stops animation if mouse does not move
 	while (running ) {  
 		 
-		bool render = window->OnUpdate(); // Handles even polling return true if event was dispathed
+		bool render = window->OnUpdate(); // Handles even polling return true if there is an event
 		auto start_time = std::chrono::steady_clock::now();
-		if (render || animationManager->IsAnimating()) {
+		if (render || applicationManager->IsAnimating()) {
 			window->GL_ClearColorBuffer();
 			for (auto& element : UIElements) {
 				element->Render(*renderer);  
 				
 			}
-			
 			window->GL_SwapWindow();
-			
 		}
 
 		auto end_time = std::chrono::steady_clock::now();  
@@ -152,5 +148,49 @@ void Application::run()
    void Application::ToggleFullScreen()
    {
 	   window->SetFullScreen();
+   }
+
+   void Application::InitTitleBar()
+   {
+	   header = new HBox(-1, 75);
+	   minimize = new Button(75, 75);
+	   minimize->SetIcon(0xE738);
+	   minimize->SetFontSize(24);
+	   minimize->SetTextColor(Color::White);
+	   minimize->SetRadius(0);
+	   minimize->SetColor(Color::DarkGray);
+
+	   minimize->SetOnLeave([&]() { minimize->SetColor(Color::DarkGray); });
+	   minimize->SetOnClick([&, this]() { window->MinimizeWindow();});
+	   minimize->SetOnHover([&]() {minimize->SetColor(Color::Gray);});
+
+	   toggleMaximize = new Button(75, 75);
+	   toggleMaximize->SetIcon(0xE71A);
+	   toggleMaximize->SetFontSize(24);
+	   toggleMaximize->SetRadius(0);
+	   toggleMaximize->SetTextColor(Color::White);
+	   toggleMaximize->SetColor(Color::DarkGray);
+	   toggleMaximize->SetFont(CFrame::Font::SegoeMDL2Assets);
+
+	   toggleMaximize->SetOnLeave([&]() { toggleMaximize->SetColor(Color::DarkGray);});
+	   toggleMaximize->SetOnHover([&]() {toggleMaximize->SetColor(Color::Gray);});
+	   toggleMaximize->SetOnClick([&, this]() { ToggleFullScreen();});
+
+	   close = new Button(75, 75);
+	   close->SetIcon(0xE711);
+	   close->SetFontSize(24);
+	   close->SetRadius(0);
+	   close->SetTextColor(Color::White);
+	   close->SetColor(Color::DarkGray);
+
+	   close->SetOnLeave([&]() { close->SetColor(Color::DarkGray);});
+	   close->SetOnHover([&]() {close->SetColor(Color::Red);});
+	   close->SetOnClick([&, this]() {stop();});
+
+	   header->AddChild(minimize);
+	   header->AddChild(toggleMaximize);
+	   header->AddChild(close);
+	   header->SetColor(Color::DarkGray);
+	   header->SetAlignment(CFrame::AlignItems::End, CFrame::AlignItems::Center);
    }
 }

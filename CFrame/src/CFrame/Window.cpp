@@ -2,6 +2,10 @@
 #include "glad/glad.h"
 #include "SDL3/SDL.h"
 #include <windows.h>
+#include <dwmapi.h>
+#pragma comment(lib, "dwmapi.lib") 
+
+
 
 namespace CFrame 
 {
@@ -135,14 +139,19 @@ void Window::SetHeight(int windowHeight)
 void Window::SetFullScreen()
 {
 	Uint32 flags = SDL_GetWindowFlags(window);
-	bool isFullscreen = flags & SDL_WINDOW_FULLSCREEN;
+	bool isFullscreen = flags & SDL_WINDOW_MAXIMIZED;
 
 	if (isFullscreen) {
-		SDL_SetWindowFullscreen(window, 0); // Exit fullscreen
+		SDL_RestoreWindow(window);
 	}
 	else {
-		SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN); // Borderless fullscreen
+		SDL_MaximizeWindow(window); 
 	}
+}
+
+void Window::MinimizeWindow()
+{
+	SDL_MinimizeWindow(window);
 }
 
 void Window::StartTextInput()
@@ -155,11 +164,28 @@ void Window::StopTextInput()
 	SDL_StopTextInput(window);
 }
 
+void Window::SetBorderColor(HWND hwnd, COLORREF borderColor)
+{
+	DwmSetWindowAttribute(hwnd, DWMWA_BORDER_COLOR, &borderColor, sizeof(COLORREF));
+}
+
 //If using borderless define hit arreas in this function
 static SDL_HitTestResult SDL_HitTest(SDL_Window* win, const SDL_Point* pos, void* data) {
 	Window* windowInstance = static_cast<Window*>(data);
-	if (pos->y < 50 && pos->x < (int)windowInstance->GetWidth() - 225) {
+	if (pos->y < 5) {
+		return SDL_HITTEST_RESIZE_TOP;
+	}
+	if (pos->y > (int)windowInstance->GetHeight() - 5) {
+		return SDL_HITTEST_RESIZE_BOTTOM;
+	}
+	if (pos->y < 75 && pos->x < (int)windowInstance->GetWidth() - 225) {
 		return SDL_HITTEST_DRAGGABLE;
+	}
+	if (pos->x > (int)windowInstance->GetWidth() - 5) {
+		return SDL_HITTEST_RESIZE_RIGHT;
+	}
+	if (pos->x < 5) {
+		return SDL_HITTEST_RESIZE_LEFT;
 	}
 	return SDL_HITTEST_NORMAL;
 }
@@ -179,12 +205,26 @@ Window& Window::Create(unsigned int width, unsigned int height, const std::strin
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
-	window = SDL_CreateWindow(title.c_str(), width, height, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE); //| SDL_WINDOW_BORDERLESS
+	window = SDL_CreateWindow(title.c_str(), width, height, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_BORDERLESS); //| SDL_WINDOW_BORDERLESS
 	if (window == nullptr) {
 		CF_CORE_ERROR("SDL_CreateWindow Error: {0}");
 	}
 
-	if (SDL_SetWindowHitTest(window, SDL_HitTest, this) != 0) {
+	
+	// Get the HWND using SDL's property API
+	HWND hwnd = (HWND)SDL_GetPointerProperty(SDL_GetWindowProperties(window), SDL_PROP_WINDOW_WIN32_HWND_POINTER, NULL);
+
+	// Apply the rounded region to the window
+	DWM_WINDOW_CORNER_PREFERENCE preference = DWMWCP_ROUND;
+	DwmSetWindowAttribute(hwnd, DWMWA_WINDOW_CORNER_PREFERENCE, &preference, sizeof(preference));
+	//Set a border color
+	COLORREF discordBlue = RGB(114, 137, 218);  // Discord Blue color
+	SetBorderColor(hwnd, discordBlue);
+
+	if (SDL_SetWindowHitTest(window, SDL_HitTest, this)) {
+		
+	}
+	else {
 		CF_CORE_ERROR("SDL_SetWindowHitTest Error: {0}", SDL_GetError());
 	}
 

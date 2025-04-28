@@ -7,6 +7,8 @@
 #include <thread>
 #include "UIElements/UIElement.h"
 #include "UIElements/VBox.h"
+#include "UIElements/HBox.h"
+#include "UIElements/Button.h"
 #include "Renderer/Renderer.h"
 #include "AnimationManager.h"
 
@@ -23,10 +25,10 @@ public:
 	void addElement(UIElement* element);
 	void SetWindowSize(int width, int height);
 
-
 	void run();
 	void stop();
 	void ToggleFullScreen();
+	void InitTitleBar();
 	std::unique_ptr<VBox> rootContainer;
 
 private:
@@ -35,7 +37,12 @@ private:
 	
 	std::unique_ptr<Window> window;
 	std::unique_ptr<Renderer> renderer;
-	std::shared_ptr<ApplicationManager> animationManager;
+	std::shared_ptr<ApplicationManager> applicationManager;
+
+	HBox* header;
+	Button* close;
+	Button* minimize;
+	Button* toggleMaximize;
 
 	bool running = true;
 	int windowWidth ;
