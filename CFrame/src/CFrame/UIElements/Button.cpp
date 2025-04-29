@@ -16,6 +16,7 @@ namespace CFrame
 		SetRadius(15,15,15,15);
         SetColor(Color::Gray);
         SetFontSize(24);
+        SetIsDirty(true);
 	}
 
 	Button::~Button()
@@ -31,6 +32,7 @@ namespace CFrame
     //For everytime button change change font size and position not everyframe.
 	void Button::Render(Renderer& renderer)
 	{
+        if (!IsDirty()) return;
         int renderWidth  = width;
         int renderHeight = height;
 
@@ -55,6 +57,7 @@ namespace CFrame
 
 
        renderer.RenderText(text, (float)centeredX, (float)centeredY, textProps, labelTexture.get(), overflow );
+      
 	}
 
     void Button::UpdateChildSizes()

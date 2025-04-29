@@ -4,10 +4,11 @@
 namespace CFrame 
 {
 
-	Label::Label(int x, int y, int w, int h, const std::string& text, UIElement* parent)
-		:UIElement(x,y,w,h,nullptr)
+    Label::Label(int x, int y, int w, int h, const std::string& text, UIElement* parent)
+        :UIElement(x, y, w, h, nullptr), text(text)
 	{
         SetOpacity(0);
+        
 	}
 
 	Label::~Label()
@@ -16,7 +17,8 @@ namespace CFrame
 	}
 	void Label::Render(Renderer& renderer)
 	{
-        renderer.DrawRectangle(x, y, width, height, GetProperties(), 0.0f, 0.0f, labelTexture.get());
+        renderer.DrawRectangle(x, y, width, height, GetProperties(), 0.0f, 0.0f, nullptr);
+        renderer.RenderText(text, x, y, textProps, labelTexture.get(), overflow);
 	}
 
     void Label::RegisterAnimator(std::shared_ptr<ApplicationManager> manager)
@@ -28,6 +30,11 @@ namespace CFrame
 	{
 
 	}
+
+    void Label::SetText(std::string text)
+    {
+        this->text = text;
+    }
 
 	void Label::UpdateChildSizes() {
 

@@ -5,6 +5,8 @@ x64/
 CFrame/vendor/freetype/
 CFrame/src/CFrame/res/fonts/
 
+out/
+
 
 # Visual Studio files and folder
 .vs/

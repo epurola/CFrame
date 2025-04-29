@@ -18,7 +18,6 @@ namespace CFrame
 	{
 
 		if (fonts.find(key) == fonts.end()) {
-            CF_CORE_INFO("Font not found {0}", key.fontSize );
 			FontLoader fontLoader(GetFontPath(key.font), key.fontSize);
            
             if (key.font != SegoeMDL2Assets) {
@@ -34,9 +33,6 @@ namespace CFrame
 			auto atlasTexture = std::make_shared<Texture>(atlas.data(), fontLoader.GetAtlasWidth(), fontLoader.GetAtlasHeight());
 
 			fonts[key] = std::make_pair(std::move(atlasTexture), std::move(glyphs));
-        }
-        else {
-            CF_CORE_INFO("Font found");
         }
 		return fonts[key];
 	}

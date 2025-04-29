@@ -108,7 +108,7 @@ void Application::SetWindowSize(int width, int height)
 //TODO: Poll events at a higher frequency
 void Application::run()  
 {  
-	constexpr double target_fps = 100.0;  
+	constexpr double target_fps = 60.0;  
 	constexpr std::chrono::milliseconds frame_duration(static_cast<int>(1000.0 / target_fps));    
 	/*Needs to be created after window->Create since there is no 
 	valid GL context before that*/
@@ -124,11 +124,12 @@ void Application::run()
 		bool render = window->OnUpdate(); // Handles even polling return true if there is an event
 		auto start_time = std::chrono::steady_clock::now();
 		if (render || applicationManager->IsAnimating()) {
+			//BeginFrame()     <-- bind FBO
 			window->GL_ClearColorBuffer();
 			for (auto& element : UIElements) {
 				element->Render(*renderer);  
-				
 			}
+			//EndFrame()       <-- bind screen, draw FBO texture
 			window->GL_SwapWindow();
 		}
 
@@ -160,6 +161,9 @@ void Application::run()
 	   minimize->SetRadius(0);
 	   minimize->SetColor(Color::DarkGray);
 
+	   title = new Label(-1, 75);
+	   title->SetText("CFrame");
+
 	   minimize->SetOnLeave([&]() { minimize->SetColor(Color::DarkGray); });
 	   minimize->SetOnClick([&, this]() { window->MinimizeWindow();});
 	   minimize->SetOnHover([&]() {minimize->SetColor(Color::Gray);});
@@ -187,6 +191,7 @@ void Application::run()
 	   close->SetOnHover([&]() {close->SetColor(Color::Red);});
 	   close->SetOnClick([&, this]() {stop();});
 
+	   header->AddChild(title);
 	   header->AddChild(minimize);
 	   header->AddChild(toggleMaximize);
 	   header->AddChild(close);

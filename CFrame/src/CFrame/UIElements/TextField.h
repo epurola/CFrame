@@ -20,6 +20,7 @@ namespace CFrame {
 		void SetInput(const std::string& value);
 		std::string GetInput() const { return input; };
 		void UpdateVertexY(int offset);
+		void UpdateVertexX(int offset);
 
 		bool IsActive() const { return isActive; }
 		void AddCharacter(char c);
@@ -41,5 +42,7 @@ namespace CFrame {
 		float offsetX = 0.0f, offsetY = 0.0f;
 		int lineSpacing = 5;
 		int lineNumber = 0;
+		bool verticalScroll = false;
+		bool horizontalScroll = true;
 	};
 }

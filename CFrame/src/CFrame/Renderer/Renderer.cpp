@@ -25,6 +25,29 @@ namespace CFrame {
 	{
        
     }
+
+    /*
+    void Renderer::BeginFrame()
+    {
+        glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+        glViewport(0, 0, window.GetWidth(), window.GetHeight());
+
+        // Only clear the FBO once per frame, not per element!
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);  // Black or whatever background
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    }*/
+
+    /*void Renderer::EndFrame()
+{
+    // Bind the default framebuffer (screen)
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glViewport(0, 0, window.GetWidth(), window.GetHeight());
+
+    // Draw a full-screen quad with fboTexture bound
+    screenShader->Bind();
+    glBindTexture(GL_TEXTURE_2D, fboTexture);
+    drawFullScreenQuad(); // simple VAO that draws a 2-triangle fullscreen rectangle
+}*/
         
 
     //ToDo: Remove dependecy on SDL color here

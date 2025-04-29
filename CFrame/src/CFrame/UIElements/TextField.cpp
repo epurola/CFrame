@@ -81,17 +81,35 @@ namespace CFrame
                input += keyEvent->GetChar();   
                //UpdateChildSizes();
                AddCharacter(keyEvent->GetChar());
+               event.handled = true;
            }  
        }  
 
-       if (event.GetEventType() == CFrameEventType::MouseScroll) {
-           auto* mouseEvent = dynamic_cast<MouseScrolledEvent*>(&event);
-           if ((mouseEvent->GetMouseX() >= x && mouseEvent->GetMouseX() <= x + width) &&
-               (mouseEvent->GetMouseY() >= y && mouseEvent->GetMouseY() <= y + height)) 
-                { 
-                    UpdateVertexY(mouseEvent->GetDistanceY());
-                }
-            }
+       if (horizontalScroll) {
+           if (event.GetEventType() == CFrameEventType::MouseScroll) {
+               auto* mouseEvent = dynamic_cast<MouseScrolledEvent*>(&event);
+               if ((mouseEvent->GetMouseX() >= x && mouseEvent->GetMouseX() <= x + width) &&
+                   (mouseEvent->GetMouseY() >= y && mouseEvent->GetMouseY() <= y + height))
+               {
+                   UpdateVertexX(mouseEvent->GetDistanceX() * 15);
+                   event.handled = true;
+               }
+           }
+       }
+
+       if (verticalScroll) {
+           if (event.GetEventType() == CFrameEventType::MouseScroll) {
+               auto* mouseEvent = dynamic_cast<MouseScrolledEvent*>(&event);
+               if ((mouseEvent->GetMouseX() >= x && mouseEvent->GetMouseX() <= x + width) &&
+                   (mouseEvent->GetMouseY() >= y && mouseEvent->GetMouseY() <= y + height))
+               {
+                   UpdateVertexY(mouseEvent->GetDistanceY());
+                   event.handled = true;
+               }
+           }
+       }
+
+      
     }
 
 	void TextField::UpdateChildSizes()
@@ -158,12 +176,21 @@ namespace CFrame
         float charWidth = (float)glyph.width;
         float charHeight = (float)glyph.height;
 
-        if ((offsetX + glyph.advance + glyph.bearingX) > width - properties.padding) {
-            lineNumber++;
-            offsetX = (float)properties.padding; // Reset to start
-
-            UpdateVertexY(textProps.textHeight + lineSpacing); //Update old lines position
+        if (isHeightResizable) {
+            if ((offsetX + glyph.advance + glyph.bearingX) > width - properties.padding) {
+                lineNumber++;
+                offsetX = (float)properties.padding; // Reset to start
+                UpdateVertexY(textProps.textHeight + lineSpacing); //Update old lines position
+            }
         }
+        else {
+            if ((offsetX + glyph.advance + glyph.bearingX) > width - properties.padding){
+                UpdateVertexX(glyph.advance); //Update old lines position
+                //UpdateCursorPosition() ToDo fix this method
+                offsetX -= glyph.advance;
+            }
+        }
+        
 
         float xpos = GetX() + offsetX + glyph.bearingX;
         float ypos = GetY() + offsetY + (charHeight - glyph.bearingY);
@@ -243,6 +270,18 @@ namespace CFrame
                 }
                 i++;
             }
+    }
+    void TextField::UpdateVertexX(int offset)
+    {
+        int floatsPerVertex = 4;  // (x, y, u, v)
+        int i = 0;
+
+        for (float& v : textProps.vertices) {
+            if ((i % floatsPerVertex) == 0) {
+                v -= offset;
+            }
+            i++;
+        }
     }
 }
 

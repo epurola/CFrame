@@ -41,6 +41,7 @@ namespace CFrame
 	void Container::Render(Renderer& renderer)
 	{
 		if (!IsVisible()) return;
+		if (!IsDirty()) return;
 
 		renderer.DrawRectangle((float)x, (float)y , (float)width, (float)height,
 			GetProperties(), 1.0f, 1.0f, nullptr);

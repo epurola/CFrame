@@ -8,6 +8,7 @@
 #include "UIElements/UIElement.h"
 #include "UIElements/VBox.h"
 #include "UIElements/HBox.h"
+#include "UIElements/Label.h"
 #include "UIElements/Button.h"
 #include "Renderer/Renderer.h"
 #include "AnimationManager.h"
@@ -43,6 +44,8 @@ private:
 	Button* close;
 	Button* minimize;
 	Button* toggleMaximize;
+	Label* title;
+
 
 	bool running = true;
 	int windowWidth ;

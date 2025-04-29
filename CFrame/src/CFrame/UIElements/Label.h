@@ -27,6 +27,8 @@ namespace CFrame
         inline Texture* GetTexture() { return labelTexture.get(); };
         inline ElementType GetElementType() const override { return ElementType::LABEL; };
 
+        void SetText(std::string text);
+
   
 
     private:
