@@ -1,9 +1,14 @@
 # CFrame
-C++ GUI engine
-SDL3 is currently not included in the build
 
-ToDo:
+C++ GUI Engine
 
- Finish event system and expose it to the client.
- Refactor UpdateChildSizes().
- Add Blur() functionality
+## To-Do List
+
+- Refactor `UpdateChildSizes()` method
+- Add `Blur()` functionality
+- Implement dirty rendering with framebuffer
+- Fix build to ensure compatibility with all Windows machines
+- Remove Premake support
+- Remove SDL dependency and use Windows API
+- Fix paths
+
