@@ -2,7 +2,6 @@
 **/bin/
 bin-int/
 x64/
-CFrame/vendor/freetype/
 CFrame/src/CFrame/res/fonts/
 
 out/
