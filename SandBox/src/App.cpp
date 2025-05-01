@@ -37,16 +37,18 @@ public:
 
 		CFrame::Button* button = new CFrame::Button(90, 90);
 		                button->SetText("S");
-						button->setTextOpacity(0.8);
+						//button->setTextOpacity(0.8);
 						button->SetFontSize(34.0);
 		                button->SetMargin(0, 0, 50, 0);				 
 		                button->SetRadius(20,20,20,20);
 
 						button->SetOnLeave([button]() {
 							button->SetColor(Color::LightGray);
+							button->SetScale(1.0, 1.0);
 						});
 						button->SetOnHover([button]() {
 							button->SetColor(Color::Blue);
+							button->SetScale(1.5,1.4);
 						});
 		CFrame::Button* button1 = new CFrame::Button(90, 90);
 						button1->SetText("Wz");
@@ -154,7 +156,7 @@ public:
 							button5->SetBorder(2.5f);
 						    button5->SetBorderColor(Color::Cyan, Color::Red);
 						    button5->AnimateGradient(3.0);
-							button5->SetOpacity(0.2);
+							//button5->SetOpacity(0.2);
 							button5->SetColor(Color::LightGray);
 						});
 						
@@ -172,7 +174,7 @@ public:
 							button6->SetBorder(2.5f);
 							button6->SetBorderColor(Color::Cyan, Color::Red);
 							button6->AnimateGradient(3.0);
-							button6->SetOpacity(0.2);
+							//button6->SetOpacity(0.2);
 							button6->SetColor(Color::Gray);
 						});
 						
@@ -189,7 +191,7 @@ public:
 							button7->SetBorder(2.5f);
 							button7->SetBorderColor(Color::Cyan, Color::Red);
 							button7->AnimateGradient(3.0);
-							button7->SetOpacity(0.2);
+						
 							button7->SetColor(Color::Gray);
 						});
 		CFrame::Button* button8  = new CFrame::Button(-1, 75);
@@ -200,15 +202,16 @@ public:
 						button8->SetOnLeave([button8]() { 
 							button8->SetBorder(0.0f);
 							button8->SetColor(Color::DarkGray);
+							button8->SetBorderColor(Color::Blue, Color::Gold);
 							});
 						button8->SetOnHover([button8]() {
 							button8->SetBorder(2.5f);
 							button8->SetBorderColor(Color::Cyan, Color::Red);
 							button8->AnimateGradient(3.0);
-							button8->SetOpacity(0.2);
+					
 							button8->SetColor(Color::Gray);
 						});
-						button8->SetOpacity(0.5);
+					
 		CFrame::Button* button9 = new CFrame::Button(-1, 75);
 		                button9->SetColor(Color::DarkGray);
 						button9->SetTextAlign(CFrame::TextAlign::Start);
@@ -222,7 +225,7 @@ public:
 							button9->SetBorderColor(Color::Cyan, Color::Red);
 							button9->AnimateGradient(3.0);
 						});
-						button9->SetOpacity(0.5);
+						button9->SetOpacity(0.9);
 	  
 						
 						
@@ -246,7 +249,7 @@ public:
 		messageBox->SetBorder(2, 0, 0, 0);
 		messageBox->SetBorderColor(Color::LightGray);
 		messageBox->SetColor(Color::Gray);
-		messageBox->SetOpacity(0.3);
+		//messageBox->SetOpacity(0.3);
 		messageBox->SetPadding(25);
 		inputField->SetMargin(0, 0, 30, 0);
 		inputField->SetColor(Color::DarkGray);

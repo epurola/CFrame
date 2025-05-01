@@ -79,6 +79,9 @@ void Application::OnEvent(CFrameEvent& e)
 		window->SetWidth(width);
 		window->SetHeight(height);
 
+		for (auto& element : UIElements) {
+			element->SetIsDirty(true);
+		}
 		rootContainer->UpdateChildSizes(); 
 		
 		e.handled = true;  
@@ -118,18 +121,20 @@ void Application::run()
 		element->RegisterAnimator(applicationManager);
 	}
 
-	//Currently stops animation if mouse does not move
+
 	while (running ) {  
 		 
 		bool render = window->OnUpdate(); // Handles even polling return true if there is an event
 		auto start_time = std::chrono::steady_clock::now();
 		if (render || applicationManager->IsAnimating()) {
-			//BeginFrame()     <-- bind FBO
-			window->GL_ClearColorBuffer();
+			renderer->BeginFrame();    // bind FBO
+			//window->GL_ClearColorBuffer();
 			for (auto& element : UIElements) {
 				element->Render(*renderer);  
 			}
-			//EndFrame()       <-- bind screen, draw FBO texture
+			renderer->EndFrame();     //bind screen, draw FBO texture
+			CF_CORE_INFO("Elements redered: {0}", renderer->count);
+			renderer->count = 0;
 			window->GL_SwapWindow();
 		}
 

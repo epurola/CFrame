@@ -58,6 +58,7 @@ ServerInfoBox::ServerInfoBox(int x, int y, int w, int h)
 		});
 	logo2->SetOnHover([logo2]() {
 		logo2->SetColor({ 100, 100, 100, 255 });
+		logo2->SetIsDirty(true);
 		});
 	
 	
@@ -75,6 +76,7 @@ ServerInfoBox::ServerInfoBox(int x, int y, int w, int h)
 		});
 	button21->SetOnHover([button21]() {
 		button21->SetColor({ 100, 100, 100, 255 });
+		button21->SetIsDirty(true);
 		});
 
 	

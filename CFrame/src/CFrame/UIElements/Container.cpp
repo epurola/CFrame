@@ -6,7 +6,7 @@ namespace CFrame
 		:UIElement(x, y, w, h, parent), 
 		 xAlign(AlignItems::Start), yAlign(AlignItems::Start)
 	{
-
+		
 	}
 
 	Container::~Container()
@@ -41,16 +41,31 @@ namespace CFrame
 	void Container::Render(Renderer& renderer)
 	{
 		if (!IsVisible()) return;
-		if (!IsDirty()) return;
-
-		renderer.DrawRectangle((float)x, (float)y , (float)width, (float)height,
-			GetProperties(), 1.0f, 1.0f, nullptr);
-
+	
+		
+		//	renderer.ClearRegion(x, y, width, height);
+		renderer.DrawRectangle((float)x, (float)y, (float)width, (float)height,
+				GetProperties(), 1.0f, 1.0f, nullptr);
+		
 		for (auto& child : renderChildren) {
 			if (child->IsVisible()) {
 				child->Render(renderer);
 			}
 		}
+
+		//SetIsDirty(false);
+	}
+
+	void Container::SetIsDirty(bool b)
+	{
+		isDirty = b; // Always mark *this* firs
+		
+		if (b) {
+			for (auto& child : children) {
+			child->SetIsDirty(b);
+		}
+		}
+		
 	}
 
 	void Container::SetAlignment(AlignItems xAlign, AlignItems yAlign)
@@ -84,6 +99,7 @@ namespace CFrame
 					//toDo: use a different flag so the container does not divide equally
 					//CF_CORE_INFO("RESIZE! {0}", width + (mouseEvent->GetCurrentX() - mouseEvent->GetStartX()));
 				}
+				SetIsDirty(true);
 			}
 		}
 
@@ -99,6 +115,7 @@ namespace CFrame
 						child->UpdateChildSizes();
 						child->UpdateVertices();
 					}
+					SetIsDirty(true);
 				}
 			}
 		}

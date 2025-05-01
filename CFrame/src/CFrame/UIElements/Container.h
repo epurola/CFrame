@@ -28,6 +28,7 @@ namespace CFrame {
 
 		void SetAlignment(AlignItems xAlign, AlignItems yAlign );
 		void SetScrollEnabled(bool b);
+		void SetIsDirty(bool b) override;
 
 		inline int GetSpacing() const { return spacing; }
 		inline ElementType GetElementType() const override { return ElementType::CONTAINER; };

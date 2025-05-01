@@ -2,6 +2,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>    
 #include <glm/gtc/matrix_transform.hpp>
+#include "Container.h"
 
 namespace CFrame {
 #define M_PI 3.14159265358979323846
@@ -22,17 +23,23 @@ namespace CFrame {
 	//ToDo: Add flags if this needs to recalculate or not
 	void UIElement::UpdateVertices()
 	{
-		properties.vertices.bottomLeft.x = x;
-		properties.vertices.bottomLeft.y = y;
+		float centerX = x + width / 2.0f;
+		float centerY = y + height / 2.0f;
 
-		properties.vertices.bottomRight.x = x + width;
-		properties.vertices.bottomRight.y = y;
+		float scaledHalfWidth = (width / 2.0f) * properties.scaleX;
+		float scaledHalfHeight = (height / 2.0f) * properties.scaleY;
 
-		properties.vertices.topLeft.x = x;
-		properties.vertices.topLeft.y = y + height;
+		properties.vertices.bottomLeft.x = centerX - scaledHalfWidth;
+		properties.vertices.bottomLeft.y = centerY - scaledHalfHeight;
 
-		properties.vertices.topRight.x = x + width;
-		properties.vertices.topRight.y = y + height;
+		properties.vertices.bottomRight.x = centerX + scaledHalfWidth;
+		properties.vertices.bottomRight.y = centerY - scaledHalfHeight;
+
+		properties.vertices.topLeft.x = centerX - scaledHalfWidth;
+		properties.vertices.topLeft.y = centerY + scaledHalfHeight;
+
+		properties.vertices.topRight.x = centerX + scaledHalfWidth;
+		properties.vertices.topRight.y = centerY + scaledHalfHeight;
 
 		if (properties.angle > 0.0f) {
 
@@ -227,6 +234,8 @@ namespace CFrame {
 	{
 		this->properties.scaleX = scaleX;
 		this->properties.scaleY = scaleY;
+
+		UpdateVertices();
 	}
 
 	void UIElement::SetVisibility(bool visibility)
@@ -259,13 +268,14 @@ namespace CFrame {
 	{
 		overflow.overflow = allow;
 	}
+
 	void UIElement::SetIsDirty(bool b)
 	{
-		isDirty = b;
-		if (parent) {
-			parent->SetIsDirty(b);
+		isDirty = b; // Always mark *this* firs
+	
+		if (b && parent) {
+			parent->isDirty = true; //todo: Call Containers IsDirty that updates children to be dirty
 		}
-		
 	}
 
 	void UIElement::SetTextColor(Color color1, std::optional<Color> color2)

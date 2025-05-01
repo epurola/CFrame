@@ -4,7 +4,8 @@
 #include "../Window.h"
 #include "VertexBuffer.h"
 #include "VertexArray.h"
-#include "IndexBufferr.h"
+#include "IndexBufferr.h" //toDo: Rename this
+#include "FrameBuffer.h"
 #include "Shader.h"
 #include "Texture.h"
 #include "../UIElements/UIElement.h"
@@ -32,6 +33,12 @@ namespace CFrame {
 		void DrawLine(LineProperties p);
 		void ClipOverflow(int x, int y, int width, int height, int windowHeight);
 		void DisableOverflow();
+		void BeginFrame();
+		void EndFrame();
+		void DrawFullScreenQuad();
+		void ClearRegion(int x, int y, int w, int h);
+
+		int count = 0;
         
 		
 
@@ -56,6 +63,16 @@ namespace CFrame {
 		std::unique_ptr<VertexBufferLayout> lineLayout;
 		std::unique_ptr<IndexBuffer> lineIndices;
 
+		std::unique_ptr<FrameBuffer> FBO;
+		std::unique_ptr<Shader> screenShader;
+		std::unique_ptr<VertexArray> screenVA;
+		std::unique_ptr<VertexBuffer> screenVB;
+		std::unique_ptr<VertexBufferLayout> screenLayout;
+		std::unique_ptr<IndexBuffer> screenIndices;
+
 		unsigned int rectIndecies[6] = { 0, 1, 2, 2, 3, 0 };
+
+		
 	};
+
 }

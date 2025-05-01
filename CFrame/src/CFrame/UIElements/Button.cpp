@@ -32,7 +32,8 @@ namespace CFrame
     //For everytime button change change font size and position not everyframe.
 	void Button::Render(Renderer& renderer)
 	{
-        if (!IsDirty()) return;
+       // if (!IsDirty()) return;
+       // renderer.ClearRegion(x, y, width, height);
         int renderWidth  = width;
         int renderHeight = height;
 
@@ -57,7 +58,7 @@ namespace CFrame
 
 
        renderer.RenderText(text, (float)centeredX, (float)centeredY, textProps, labelTexture.get(), overflow );
-      
+      // SetIsDirty(false);
 	}
 
     void Button::UpdateChildSizes()
@@ -192,9 +193,12 @@ namespace CFrame
             CF_CORE_INFO("Button Clicked!");
             if (onClick) {
                 onClick();
+                SetIsDirty(true);
             }
+            
             event.handled = true;
         }
+
         if (event.GetEventType() == CFrameEventType::MouseMoved) {
 
             auto* mouseEvent = dynamic_cast<MouseMovedEvent*>(&event);
@@ -211,6 +215,7 @@ namespace CFrame
                     onLeave();
                     hovering = false;
                     applicationManager->RemoveAnimator(*this);
+                    SetIsDirty(true);
                 }
                 return;
             }
@@ -221,14 +226,18 @@ namespace CFrame
                 if (animProperties.speed > 0 ) {
                     applicationManager->RegisterAnimation(*this);
                 }  
+                SetIsDirty(true);
             }
+           
             event.handled = true;
         }
+
         if (event.GetEventType() == CFrameEventType::MouseLeaveWindow) {
             if (hovering) {
                 onLeave();
                 hovering = false;
                 applicationManager->RemoveAnimator(*this);
+                SetIsDirty(true);
             }
         }
     }

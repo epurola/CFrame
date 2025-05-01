@@ -26,6 +26,8 @@ namespace CFrame
 
 	void TextField::Render(Renderer& renderer)
 	{
+       // if (!IsDirty()) return;
+
         if (!overflow.overflow) {
             overflow.clipHeight = height;
             overflow.clipWidth = width;
@@ -45,10 +47,12 @@ namespace CFrame
                 renderer.DrawLine(lineProperties);
             }
         }
+       // SetIsDirty(false);
 	}
 
     void TextField::OnEvent(CFrameEvent& event)  
     {  
+        
         if (event.GetEventType() == CFrameEventType::MouseButtonDown) {
 
             auto* mouseEvent = dynamic_cast<MouseButtonDownEvent*>(&event);
@@ -73,6 +77,7 @@ namespace CFrame
             applicationManager->RegisterAnimation(*this);
             applicationManager->ActivateTextInput();
             isActive = true;
+            SetIsDirty(true);
         }
 
        if (event.GetEventType() == CFrameEventType::TextInput) {  
@@ -83,6 +88,7 @@ namespace CFrame
                AddCharacter(keyEvent->GetChar());
                event.handled = true;
            }  
+           SetIsDirty(true);
        }  
 
        if (horizontalScroll) {
@@ -94,6 +100,7 @@ namespace CFrame
                    UpdateVertexX(mouseEvent->GetDistanceX() * 15);
                    event.handled = true;
                }
+               SetIsDirty(true);
            }
        }
 
@@ -106,6 +113,7 @@ namespace CFrame
                    UpdateVertexY(mouseEvent->GetDistanceY());
                    event.handled = true;
                }
+               SetIsDirty(true);
            }
        }
 

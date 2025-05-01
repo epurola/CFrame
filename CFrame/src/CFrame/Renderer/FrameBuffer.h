@@ -16,5 +16,7 @@ namespace CFrame
 
 		void Bind() const;
 		void Unbind() const;
+		void BindTexture();
+		void Resize(int newWidth, int newHeight);
 	};
 }

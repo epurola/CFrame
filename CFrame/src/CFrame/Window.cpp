@@ -238,12 +238,9 @@ Window& Window::Create(unsigned int width, unsigned int height, const std::strin
 		
 	}
 	glEnable(GL_BLEND);
-	glDisable(GL_DEPTH_TEST);
-	//glDepthFunc(GL_LESS);
+	glDepthFunc(GL_LESS);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
 	
-
 
 	return *this;
 }

@@ -14,11 +14,11 @@ namespace CFrame {
         :window(window)
 	{
         shader = std::make_unique<Shader>("C:/dev/CFrame/CFrame/src/CFrame/res/shaders/basic.shader");
-
         textShader = std::make_unique<Shader>("C:/dev/CFrame/CFrame/src/CFrame/res/shaders/textShader.shader");
-
         lineShader = std::make_unique<Shader>("C:/dev/CFrame/CFrame/src/CFrame/res/shaders/lineShader.shader");
+        screenShader = std::make_unique<Shader>("C:/dev/CFrame/CFrame/src/CFrame/res/shaders/screenShader.shader");
 
+        FBO = std::make_unique<FrameBuffer>(window.GetWidth(), window.GetHeight());
 	}
 
 	Renderer::~Renderer()
@@ -26,28 +26,71 @@ namespace CFrame {
        
     }
 
-    /*
+    /* for (const auto& dirtyRect : dirtyRects)
+        {
+            glScissor(dirtyRect.x, dirtyRect.y, dirtyRect.width, dirtyRect.height);
+            glClear(GL_COLOR_BUFFER_BIT);
+        }*/
+    
     void Renderer::BeginFrame()
     {
-        glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-        glViewport(0, 0, window.GetWidth(), window.GetHeight());
+        int w = window.GetWidth();
+        int h = window.GetHeight();
+        FBO->Resize(w, h);  //Will return early if no resize needed
+       
+        glViewport(0, 0, w, h);
+        //Clear the default framebuffer to avoid flicker on window resieze
+        glClear(GL_COLOR_BUFFER_BIT);
 
-        // Only clear the FBO once per frame, not per element!
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);  // Black or whatever background
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    }*/
+        FBO->Bind();
+        glClear(GL_COLOR_BUFFER_BIT);
 
-    /*void Renderer::EndFrame()
-{
-    // Bind the default framebuffer (screen)
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    glViewport(0, 0, window.GetWidth(), window.GetHeight());
+       
+    }
 
-    // Draw a full-screen quad with fboTexture bound
-    screenShader->Bind();
-    glBindTexture(GL_TEXTURE_2D, fboTexture);
-    drawFullScreenQuad(); // simple VAO that draws a 2-triangle fullscreen rectangle
-}*/
+    void Renderer::ClearRegion(int x, int y, int w, int h) {
+        int invertedY = window.GetHeight() - y - h;
+
+        glEnable(GL_SCISSOR_TEST);
+        glScissor(x, invertedY, w, h);  
+        glClear(GL_COLOR_BUFFER_BIT);
+        glDisable(GL_SCISSOR_TEST);
+    }
+
+    void Renderer::EndFrame()
+    {
+        FBO->Unbind();
+        // Draw a full-screen quad with fboTexture bound
+        screenShader->Bind();
+        FBO->BindTexture();
+        DrawFullScreenQuad(); // simple VAO that draws a 2-triangle fullscreen rectangle
+    }
+
+    void Renderer::DrawFullScreenQuad()
+    {
+        if (!screenVA)
+        {
+            float quadVertices[] = {
+                // positions     // texCoords
+                -1.0f,  1.0f,     0.0f, 1.0f, // Top-left     = 0
+                -1.0f, -1.0f,     0.0f, 0.0f, // Bottom-left  = 1
+                 1.0f, -1.0f,     1.0f, 0.0f, // Bottom-right = 2
+                 1.0f,  1.0f,     1.0f, 1.0f  // Top-right    = 3
+            };
+            screenVA      = std::make_unique<VertexArray>();
+            screenLayout  = std::make_unique<VertexBufferLayout>();
+            screenVB      = std::make_unique<VertexBuffer>(quadVertices, sizeof(quadVertices));
+            screenIndices = std::make_unique<IndexBuffer>(rectIndecies, 6);
+            screenLayout->Push<float>(2);
+            screenLayout->Push<float>(2);
+            screenVA->AddBuffer(*screenVB, *screenLayout);
+        }
+
+        screenVA->Bind();
+        screenIndices->Bind();
+
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+    }
         
 
     //ToDo: Remove dependecy on SDL color here
@@ -55,6 +98,7 @@ namespace CFrame {
         ElementProperties p, float speed, float time,
         Texture* texture)
 	{
+        count++;
         bool hasTexture = false;
         if (texture != nullptr) {
             texture->Bind();
@@ -112,11 +156,11 @@ namespace CFrame {
             rectLayout->Push<float>(4); // Color Data r, g, b, a
             rectLayout->Push<float>(2); // Texture coordinates
             rectLayout->Push<float>(4); // Gradient Color Data r, g, b, a
+            rectVA->AddBuffer(*rectVB, *rectLayout);
         }
 
         rectVA->Bind();
         rectVB->SetData(vertices, 4 * 12 * sizeof(float));
-        rectVA->AddBuffer(*rectVB, *rectLayout);
         rectIndices->Bind();
 
         glm::mat4 proj = glm::ortho(0.0f, float(windowWidth),  // Left, Right
@@ -156,7 +200,7 @@ namespace CFrame {
 
     void Renderer::RenderText(const std::string& text, float x, float y, TextProperties t, Texture* atlas, OverFlowProperties o)
     {
-        
+        count++;
         int windowWidth = window.GetWidth();
         int windowHeight = window.GetHeight();
 
@@ -172,12 +216,13 @@ namespace CFrame {
 
             textLayout->Push<float>(2); // Position x, y
             textLayout->Push<float>(2); // Texture coordinates
+            textVA->AddBuffer(*textVB, *textLayout);
         }
 
         textVA->Bind();
         textVB->SetData(t.vertices.data(), static_cast<unsigned int>(t.vertices.size() * sizeof(float)));
         textIndices->SetData(t.indices.data(), static_cast<unsigned int>(t.indices.size()));
-        textVA->AddBuffer(*textVB, *textLayout);
+        
 
         if (atlas != nullptr) {
             atlas->Bind();

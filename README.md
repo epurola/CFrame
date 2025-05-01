@@ -11,4 +11,5 @@ C++ GUI Engine
 - Remove Premake support
 - Remove SDL dependency and use Windows API
 - Fix paths
+- Write a proper renderer
 

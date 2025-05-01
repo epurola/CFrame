@@ -166,7 +166,7 @@ namespace CFrame
         void SetWidthResizable(bool is) { isWidthResizable = is; };
         void SetAnchorPoint(PositionMode mode);
         void SetOverflow(bool b);
-        void SetIsDirty(bool b);
+        virtual void SetIsDirty(bool b);
         void SetTextColor(Color color1, std::optional<Color> color2 = std::nullopt);
         void SetTextAlign(TextAlign alignX);
 
