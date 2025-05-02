@@ -7,6 +7,9 @@ class SandBox : public CFrame::Application
 public:
 	SandBox() : CFrame::Application(2000, 1500)
 	{
+
+		CFrame::Scene* main = new CFrame::Scene();
+
 		CFrame::VBox* vbox = new CFrame::VBox();
 		CFrame::HBox* content     = new CFrame::HBox();
 		CFrame::VBox* sideBar     = new CFrame::VBox(150,-1);
@@ -259,11 +262,11 @@ public:
 		messageBox->AddChild(button16);
 		messageBox->AddChild(inputField);
 	
-		rootContainer->AddChild(vbox);
-		
-		
-		
+		main->AddElement(vbox);
+
+		AddScene(main);
 	}
+
 	~SandBox() 
 	{
 		

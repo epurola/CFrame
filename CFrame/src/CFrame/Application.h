@@ -3,6 +3,7 @@
 #include "CFrameEvent/CFrameEvent.h"
 #include <memory>
 #include <vector>
+#include <unordered_map>
 #include <chrono>
 #include <thread>
 #include "UIElements/UIElement.h"
@@ -11,6 +12,7 @@
 #include "UIElements/Label.h"
 #include "UIElements/Button.h"
 #include "Renderer/Renderer.h"
+#include "Renderer/Scene.h"
 #include "AnimationManager.h"
 
 namespace CFrame
@@ -23,19 +25,17 @@ public:
 
 	void OnEvent(CFrameEvent& e);
 
-	void addElement(UIElement* element);
 	void SetWindowSize(int width, int height);
 
 	void run();
 	void stop();
 	void ToggleFullScreen();
 	void InitTitleBar();
-	std::unique_ptr<VBox> rootContainer;
+
+	void AddScene(Scene* scene);
 
 private:
 	std::unique_ptr<EventDispatcher> eventDispatcher;
-	std::vector<UIElement*> UIElements;
-	
 	std::unique_ptr<Window> window;
 	std::unique_ptr<Renderer> renderer;
 	std::shared_ptr<ApplicationManager> applicationManager;
@@ -46,10 +46,14 @@ private:
 	Button* toggleMaximize;
 	Label* title;
 
+	std::unique_ptr<VBox> titleBarContainer;
+	std::unique_ptr<VBox> sceneContainer;
+
 
 	bool running = true;
 	int windowWidth ;
 	int windowHeight;
+	int headerHeight = 75;
 	
 };
 

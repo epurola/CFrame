@@ -193,7 +193,7 @@ namespace CFrame
             CF_CORE_INFO("Button Clicked!");
             if (onClick) {
                 onClick();
-                SetIsDirty(true);
+               
             }
             
             event.handled = true;
@@ -215,7 +215,6 @@ namespace CFrame
                     onLeave();
                     hovering = false;
                     applicationManager->RemoveAnimator(*this);
-                    SetIsDirty(true);
                 }
                 return;
             }
@@ -226,7 +225,6 @@ namespace CFrame
                 if (animProperties.speed > 0 ) {
                     applicationManager->RegisterAnimation(*this);
                 }  
-                SetIsDirty(true);
             }
            
             event.handled = true;
@@ -237,7 +235,6 @@ namespace CFrame
                 onLeave();
                 hovering = false;
                 applicationManager->RemoveAnimator(*this);
-                SetIsDirty(true);
             }
         }
     }

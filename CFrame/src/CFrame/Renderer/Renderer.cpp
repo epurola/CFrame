@@ -26,11 +26,10 @@ namespace CFrame {
        
     }
 
-    /* for (const auto& dirtyRect : dirtyRects)
-        {
-            glScissor(dirtyRect.x, dirtyRect.y, dirtyRect.width, dirtyRect.height);
-            glClear(GL_COLOR_BUFFER_BIT);
-        }*/
+    void Renderer::Resize(int w, int h)
+    {
+        FBO->Resize(w, h);
+    }
     
     void Renderer::BeginFrame()
     {
@@ -39,22 +38,12 @@ namespace CFrame {
         FBO->Resize(w, h);  //Will return early if no resize needed
        
         glViewport(0, 0, w, h);
-        //Clear the default framebuffer to avoid flicker on window resieze
+        //Clear the default framebuffer to avoid flicker on window resi
         glClear(GL_COLOR_BUFFER_BIT);
 
         FBO->Bind();
         glClear(GL_COLOR_BUFFER_BIT);
-
        
-    }
-
-    void Renderer::ClearRegion(int x, int y, int w, int h) {
-        int invertedY = window.GetHeight() - y - h;
-
-        glEnable(GL_SCISSOR_TEST);
-        glScissor(x, invertedY, w, h);  
-        glClear(GL_COLOR_BUFFER_BIT);
-        glDisable(GL_SCISSOR_TEST);
     }
 
     void Renderer::EndFrame()
@@ -194,7 +183,9 @@ namespace CFrame {
         shader->SetUniform1i("u_HasTexture", hasTexture);
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
-        texture->UnBind();
+
+        if(hasTexture)
+         texture->UnBind();
 
 	}
 

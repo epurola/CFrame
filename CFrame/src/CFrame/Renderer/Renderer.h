@@ -19,6 +19,12 @@ namespace CFrame {
 	struct OverFlowProperties;
 	struct LineProperties;
 
+	struct TextVertex {
+		glm::vec2 position;
+		glm::vec2 texCoord;
+		glm::vec4 color;
+	};
+
 	class Renderer
 	{
 	public:
@@ -36,7 +42,7 @@ namespace CFrame {
 		void BeginFrame();
 		void EndFrame();
 		void DrawFullScreenQuad();
-		void ClearRegion(int x, int y, int w, int h);
+		void Resize(int w, int h);
 
 		int count = 0;
         

@@ -9,20 +9,21 @@ namespace CFrame
 Application::Application(int width, int height)  
 	: windowWidth(width), windowHeight(height)  
 {  
-	eventDispatcher = std::make_unique<EventDispatcher>();  
+	eventDispatcher = std::make_unique<EventDispatcher>(); 
+
 	window = std::make_unique<Window>(*eventDispatcher);  
-	window->Create(windowWidth, windowHeight, "CFrame");
-	
-	window->SetHeight(windowHeight);  
+	window->Create(windowWidth, windowHeight + headerHeight, "CFrame");
+	window->SetHeight(windowHeight + headerHeight );  
 	window->SetWidth(windowWidth);  
 	
 	applicationManager = std::make_shared<ApplicationManager>(*window);
 	
-	rootContainer = std::make_unique <VBox>(windowWidth, windowHeight);  
-	rootContainer->SetAlignment(AlignItems::Start, AlignItems::Start);  
+	titleBarContainer = std::make_unique <VBox>(0,0, windowWidth, windowHeight);  
+	titleBarContainer->SetAlignment(AlignItems::Start, AlignItems::Start);  
 	InitTitleBar();
-	rootContainer->AddChild(header);
-	UIElements.push_back(rootContainer.get());  
+
+	titleBarContainer->AddChild(header);
+	sceneContainer = std::make_unique<VBox>(0, headerHeight, windowWidth, windowHeight);
 	
 	eventDispatcher->AddListener(CFrameEventType::WindowClosed,  
 		[this](CFrameEvent& event) { OnEvent(event); });  
@@ -62,6 +63,14 @@ Application::~Application()
 
 void Application::OnEvent(CFrameEvent& e)   
 {  
+
+	sceneContainer->OnEvent(e);
+	
+	if (e.handled) return;
+
+	titleBarContainer->OnEvent(e);
+	if (e.handled) return;
+
 	if (CFrameEventType::WindowClosed == e.GetEventType())   
 	{  
 		CF_CORE_INFO("Closing Window");  
@@ -74,38 +83,21 @@ void Application::OnEvent(CFrameEvent& e)
 		//The main pane should be updated  
 		int width  = dynamic_cast<WindowResizedEvent&>(e).GetWidth();
 		int height = dynamic_cast<WindowResizedEvent&>(e).GetHeight();
-		rootContainer->SetWidth(width);  
-		rootContainer->SetHeight(height);  
+		//renderer->Resize(width, height);
+		sceneContainer->SetWidth(width);  
+		sceneContainer->SetHeight(height - headerHeight); 
+		sceneContainer->UpdateChildSizes();
+		titleBarContainer->SetWidth(width);
 		window->SetWidth(width);
 		window->SetHeight(height);
 
-		for (auto& element : UIElements) {
-			element->SetIsDirty(true);
-		}
-		rootContainer->UpdateChildSizes(); 
+		 
+		titleBarContainer->UpdateChildSizes();
 		
 		e.handled = true;  
 	}  
+	
 
-	for (auto& element : UIElements) {  
-		if (e.handled) { return; }  
-		element->OnEvent(e); 
-	}  
-	if (e.GetEventType() == CFrameEventType::MouseDragged ) {
-		rootContainer->UpdateChildSizes();
-	 }
-}  
-
-
-void Application::addElement(UIElement* element)  
-{  
-	UIElements.push_back(element);  
-}  
-
-void Application::SetWindowSize(int width, int height)  
-{  
-	windowHeight = height;  
-	windowWidth = width;  
 }  
 
 //TODO: Poll events at a higher frequency
@@ -117,27 +109,26 @@ void Application::run()
 	valid GL context before that*/
 	renderer = std::make_unique<Renderer>(*window);
 	//Inject the manager into each UI element so they can send signals
-	for (auto& element : UIElements) {
-		element->RegisterAnimator(applicationManager);
-	}
 
-
+	titleBarContainer->RegisterAnimator(applicationManager);
+	sceneContainer->RegisterAnimator(applicationManager);
+	
 	while (running ) {  
 		 
 		bool render = window->OnUpdate(); // Handles even polling return true if there is an event
 		auto start_time = std::chrono::steady_clock::now();
-		if (render || applicationManager->IsAnimating()) {
+
+		if (render || applicationManager->IsAnimating()) 
+		{
 			renderer->BeginFrame();    // bind FBO
-			//window->GL_ClearColorBuffer();
-			for (auto& element : UIElements) {
-				element->Render(*renderer);  
-			}
-			renderer->EndFrame();     //bind screen, draw FBO texture
-			CF_CORE_INFO("Elements redered: {0}", renderer->count);
-			renderer->count = 0;
+	
+			titleBarContainer->Render(*renderer);
+			sceneContainer->Render(*renderer);
+
+			renderer->EndFrame();  //bind screen, draw FBO texture
 			window->GL_SwapWindow();
 		}
-
+		
 		auto end_time = std::chrono::steady_clock::now();  
 		auto elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);  
 
@@ -154,6 +145,21 @@ void Application::run()
    void Application::ToggleFullScreen()
    {
 	   window->SetFullScreen();
+   }
+
+   void Application::SetWindowSize(int width, int height)
+   {
+	   windowHeight = height;
+	   windowWidth = width;
+   }
+
+   void Application::AddScene(Scene* scene)
+   {
+	   if (!sceneContainer->children.empty()) {
+		   sceneContainer->children.clear();
+	   }
+
+	   sceneContainer->AddChild(scene->GetRoot());
    }
 
    void Application::InitTitleBar()
