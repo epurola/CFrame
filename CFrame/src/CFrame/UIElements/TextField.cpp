@@ -11,6 +11,8 @@ namespace CFrame
         SetTextColor(Color::White);
         SetRadius(20,20,20,20);
         SetPadding(10);
+        SetBorder(3);
+        SetBorderColor(Color::LightGray);
 
         lineProperties.color = Color::Blue; 
         cursorHeight = 20;
@@ -80,6 +82,20 @@ namespace CFrame
             SetIsDirty(true);
         }
 
+        if (event.GetEventType() == CFrameEventType::KeyPressed) {
+            auto* keyEvent = dynamic_cast<KeyPressedEvent*>(&event);
+            if (keyEvent) {
+                // Check for backspace key
+                if (keyEvent->GetKeyCode() == 0x00000008u) { //todo add definitions to keys
+                    if (!input.empty()) {
+                        input.pop_back();
+                        UpdateChildSizes();  //Todo remoe the last char from the vertices no need to always calculate every character
+                    }
+                    event.handled = true;
+                }
+            }
+        }
+
        if (event.GetEventType() == CFrameEventType::TextInput) {  
            auto* keyEvent = dynamic_cast<TextInputEvent*>(&event);  
            if (keyEvent) {  
@@ -116,8 +132,6 @@ namespace CFrame
                SetIsDirty(true);
            }
        }
-
-      
     }
 
 	void TextField::UpdateChildSizes()

@@ -256,6 +256,7 @@ public:
 		messageBox->SetPadding(25);
 		inputField->SetMargin(0, 0, 30, 0);
 		inputField->SetColor(Color::DarkGray);
+		
 		CFrame::Button* button16 = new CFrame::Button(-1, -1);
 		
 		button16->SetColor(Color::Blue);
