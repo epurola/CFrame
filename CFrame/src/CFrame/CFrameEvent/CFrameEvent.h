@@ -38,7 +38,7 @@ namespace CFrame
 	{
 	public:
 		KeyPressedEvent(int keycode, int repeatCount)
-			: keyCode(keycode), repeatCount(repeatCount) {}
+			: keyCode(keycode), repeatCount(repeatCount), character(' ') { }
 
 		inline int GetKeyCode() const { return keyCode; }
 		inline char GetChar() const { return character; }
@@ -48,7 +48,7 @@ namespace CFrame
 	private:
 		int keyCode;
 		int repeatCount;
-		char character;
+		char character ;
 	};
 
 	/*Key press event*/

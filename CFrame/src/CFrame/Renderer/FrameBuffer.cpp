@@ -3,7 +3,7 @@
 namespace CFrame 
 {
 	FrameBuffer::FrameBuffer(int width, int height)
-		:width(width), height(height)
+		:width(width), height(height), RendererId(0), TextureId(0)
 	{
 		glGenFramebuffers(1, &RendererId);
 		glBindFramebuffer(GL_FRAMEBUFFER, RendererId);

@@ -51,7 +51,7 @@ private:
 
 
 	bool running = true;
-	int windowWidth ;
+	int windowWidth;
 	int windowHeight;
 	int headerHeight = 75;
 	

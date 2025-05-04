@@ -6,7 +6,7 @@
 namespace CFrame 
 {
 	Animator::Animator(UIElement& element)
-		: isAnimating(false), element(element)
+		: isAnimating(false), element(element), elapsedTime(0)
 	{
 	
 	}

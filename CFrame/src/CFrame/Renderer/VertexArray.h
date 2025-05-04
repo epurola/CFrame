@@ -7,7 +7,7 @@ namespace CFrame {
     class VertexArray
     {
     private:
-        unsigned int RendererId;
+        unsigned int RendererId = 0;
 
 
     public:

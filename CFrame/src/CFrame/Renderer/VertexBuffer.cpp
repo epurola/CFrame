@@ -7,6 +7,7 @@
 namespace CFrame{
 
     VertexBuffer::VertexBuffer(const void* data, unsigned int size)
+        :RendererId(0), currSize(0)
     {
         glGenBuffers(1, &RendererId);
         

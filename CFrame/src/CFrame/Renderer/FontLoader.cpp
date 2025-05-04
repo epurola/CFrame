@@ -10,7 +10,14 @@
 namespace CFrame {
 
 	FontLoader::FontLoader(const std::string& fontPath, float fontSize)
-		:fontPath(fontPath),  fontSize(fontSize)
+		:fontPath(fontPath),  fontSize(fontSize), 
+		atlasWidth(0),
+		atlasHeight(0),
+		fontBuffer(),
+		ft(nullptr),
+		ftIcon(nullptr),
+		faceIcon(nullptr),
+		iconFace(nullptr)
 	{
 		
 	}

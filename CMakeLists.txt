@@ -54,16 +54,23 @@ link_directories(
 add_definitions(-DCF_PLATFORM_WINDOWS)
 
 # Handle configuration-specific settings
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    add_definitions(-DCF_DEBUG)
-    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g")
-elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
-    add_definitions(-DCF_RELEASE)
-    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
-elseif(CMAKE_BUILD_TYPE STREQUAL "Dist")
-    add_definitions(-DCF_DIST)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
+# Ensure MSVC-specific flags only apply to MSVC
+if (MSVC)
+    if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+        add_definitions(-DCF_DEBUG)
+        set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG}  /Zi /Od")
+        
+    elseif (CMAKE_BUILD_TYPE STREQUAL "Release")
+        add_definitions(-DCF_RELEASE)
+        set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /O2 /Zi /Od")
+
+        
+    elseif (CMAKE_BUILD_TYPE STREQUAL "Dist")
+        add_definitions(-DCF_DIST)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /O2")
+    endif()
 endif()
+
 
 
 

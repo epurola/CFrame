@@ -4,7 +4,7 @@
 namespace CFrame 
 {
     IndexBuffer::IndexBuffer(const unsigned int* data, unsigned int count)
-        :count(count)
+        :count(count), RendererId(0)
     {
         glGenBuffers(1, &RendererId);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, RendererId);

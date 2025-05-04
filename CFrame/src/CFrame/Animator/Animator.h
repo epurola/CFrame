@@ -19,9 +19,9 @@ namespace CFrame
 		inline bool IsAnimating() const { return isAnimating; }
 
 	private:
-		bool isAnimating;
+		bool isAnimating = false;
 		float animationDuration = 1.0f;
-		float elapsedTime;
+		float elapsedTime = 0.0;
 		UIElement& element;
 		
 	};

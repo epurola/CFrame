@@ -4,7 +4,7 @@ namespace CFrame
 {
 	Container::Container(int x, int y, int w, int h, UIElement* parent)
 		:UIElement(x, y, w, h, parent), 
-		 xAlign(AlignItems::Start), yAlign(AlignItems::Start)
+		 xAlign(AlignItems::Start), yAlign(AlignItems::Start) ,scrollEnabled(false), spacing(0)
 	{
 		
 	}
@@ -87,7 +87,6 @@ namespace CFrame
 		for (auto& child : children) {
 			//if (event.handled)  return;// CAUSES ARTIFACTsometimes hovered effect stays on button
 			child->OnEvent(event);
-			
 		}
 	
 		if (event.GetEventType() == CFrameEventType::MouseDragged) {
@@ -101,7 +100,7 @@ namespace CFrame
 					//toDo: use a different flag so the container does not divide equally
 					//CF_CORE_INFO("RESIZE! {0}", width + (mouseEvent->GetCurrentX() - mouseEvent->GetStartX()));
 				}
-				
+				return;     
 			}
 		}
 
@@ -117,7 +116,7 @@ namespace CFrame
 						child->UpdateChildSizes();
 						child->UpdateVertices();
 					}
-					
+					return;
 				}
 			}
 		}

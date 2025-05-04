@@ -28,6 +28,8 @@ bool Window::OnUpdate()
 {  
    SDL_Event event;
    bool isDragging;
+   bool b = false;
+
    while (SDL_PollEvent(&event)) {  
        switch (event.type) {  
        case SDL_EVENT_MOUSE_BUTTON_DOWN: 
@@ -35,14 +37,14 @@ bool Window::OnUpdate()
 		   MouseButtonDownEvent mouseButtonDownEvent(event.button.x, event.button.y);
 		   dispatcher.Dispatch(mouseButtonDownEvent);
 		   return true;
-           break;  
+            
 	   }   
        case SDL_EVENT_KEY_DOWN:  
        {  
            KeyPressedEvent keyEvent(event.key.key, event.key.repeat); 
 		   dispatcher.Dispatch(keyEvent);  
 		   return true;
-           break;  
+            
        } 
 	   case SDL_EVENT_TEXT_INPUT:
 	   {
@@ -50,7 +52,7 @@ bool Window::OnUpdate()
 			SDL_strlcat(text, event.text.text, sizeof(text));
 			TextInputEvent textEvent(text[0], 0);
 			dispatcher.Dispatch(textEvent);
-			return true;
+			b = true;
 			break;
 	   }
 	   case SDL_EVENT_MOUSE_MOTION:
@@ -106,7 +108,7 @@ bool Window::OnUpdate()
            break;  
        }  
    }  
-   return false;
+   return b;
 }
 
 
@@ -205,7 +207,7 @@ Window& Window::Create(unsigned int width, unsigned int height, const std::strin
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
-	window = SDL_CreateWindow(title.c_str(), width, height, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_BORDERLESS); //| SDL_WINDOW_BORDERLESS
+	window = SDL_CreateWindow(title.c_str(), width, height, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_BORDERLESS); 
 	if (window == nullptr) {
 		CF_CORE_ERROR("SDL_CreateWindow Error: {0}");
 	}
@@ -234,8 +236,7 @@ Window& Window::Create(unsigned int width, unsigned int height, const std::strin
 	}
 
 	if (!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress)) {
-		SDL_Log("Failed to initialize GLAD");
-		
+		CF_CORE_INFO("Failed to initialize GLAD");
 	}
 	glEnable(GL_BLEND);
 	glDepthFunc(GL_LESS);

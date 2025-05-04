@@ -40,7 +40,6 @@ namespace CFrame {
         glViewport(0, 0, w, h);
         //Clear the default framebuffer to avoid flicker on window resi
         glClear(GL_COLOR_BUFFER_BIT);
-
         FBO->Bind();
         glClear(GL_COLOR_BUFFER_BIT);
        
@@ -87,7 +86,6 @@ namespace CFrame {
         ElementProperties p, float speed, float time,
         Texture* texture)
 	{
-        count++;
         bool hasTexture = false;
         if (texture != nullptr) {
             texture->Bind();
@@ -155,11 +153,9 @@ namespace CFrame {
         glm::mat4 proj = glm::ortho(0.0f, float(windowWidth),  // Left, Right
                                     float(windowHeight), 0.0f, // Bottom, Top
                                    -1.0f, 1.0f);
-        
-        
+      
         //Bind the shader and set uniforms
         shader->Bind();
-        shader->SetUniform1f("u_ZIndex", p.zIndex);
         shader->SetUniform4f("u_Color", r, g, b, a);
         shader->SetUniform4f("u_Color2", rg, gg, bg, ag);
         shader->SetUniformMat4f("u_MVP", proj);
@@ -172,7 +168,6 @@ namespace CFrame {
         shader->SetUniform1f("u_Time", time);
         shader->SetUniform1f("u_Speed", speed);
         shader->SetUniform1f("u_Angle", p.angle);
-        //shader->SetUniform2f("u_Center", centerX, centerY);
         shader->SetUniform1f("u_BorderTop", p.borderTop);
         shader->SetUniform1f("u_BorderBottom", p.borderBottom);
         shader->SetUniform1f("u_BorderLeft", p.borderLeft);
@@ -183,7 +178,7 @@ namespace CFrame {
         shader->SetUniform1i("u_HasTexture", hasTexture);
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
-
+        
         if(hasTexture)
          texture->UnBind();
 
@@ -191,7 +186,7 @@ namespace CFrame {
 
     void Renderer::RenderText(const std::string& text, float x, float y, TextProperties t, Texture* atlas, OverFlowProperties o)
     {
-        count++;
+
         int windowWidth = window.GetWidth();
         int windowHeight = window.GetHeight();
 

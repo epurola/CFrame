@@ -63,9 +63,7 @@ Application::~Application()
 
 void Application::OnEvent(CFrameEvent& e)   
 {  
-
 	sceneContainer->OnEvent(e);
-	
 	if (e.handled) return;
 
 	titleBarContainer->OnEvent(e);
@@ -76,6 +74,7 @@ void Application::OnEvent(CFrameEvent& e)
 		CF_CORE_INFO("Closing Window");  
 		stop();
 		e.handled = true;  
+
 	}  
 
 	if (CFrameEventType::WindowResized == e.GetEventType())  
@@ -94,7 +93,8 @@ void Application::OnEvent(CFrameEvent& e)
 		 
 		titleBarContainer->UpdateChildSizes();
 		
-		e.handled = true;  
+		e.handled = true; 
+
 	}  
 	
 
@@ -114,17 +114,17 @@ void Application::run()
 	sceneContainer->RegisterAnimator(applicationManager);
 	
 	while (running ) {  
-		 
-		bool render = window->OnUpdate(); // Handles even polling return true if there is an event
 		auto start_time = std::chrono::steady_clock::now();
 
+		bool render = window->OnUpdate(); // Handles even polling return true if there is an event
+		
 		if (render || applicationManager->IsAnimating()) 
 		{
 			renderer->BeginFrame();    // bind FBO
-	
+
 			titleBarContainer->Render(*renderer);
 			sceneContainer->Render(*renderer);
-
+			
 			renderer->EndFrame();  //bind screen, draw FBO texture
 			window->GL_SwapWindow();
 		}

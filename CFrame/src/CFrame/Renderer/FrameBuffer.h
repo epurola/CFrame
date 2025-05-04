@@ -6,9 +6,10 @@ namespace CFrame
 	class FrameBuffer 
 	{
 	private:
-		unsigned int RendererId;
-		unsigned int TextureId;
-		int width, height;
+		unsigned int RendererId = 0;
+		unsigned int TextureId = 0;
+		int width = 0;
+		int height = 0;
 
 	public:
 		FrameBuffer(int width, int height);

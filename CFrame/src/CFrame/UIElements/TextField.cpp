@@ -17,8 +17,9 @@ namespace CFrame
         lineProperties.color = Color::Blue; 
         cursorHeight = 20;
         textProps.textHeight = 0;
-
-
+        characters.reserve(1024);
+        textProps.vertices.reserve(1024); 
+        textProps.indices.reserve(1024);
 	}
 
 	TextField::~TextField()
@@ -54,6 +55,16 @@ namespace CFrame
 
     void TextField::OnEvent(CFrameEvent& event)  
     {  
+        if (event.GetEventType() == CFrameEventType::TextInput) {
+            auto* keyEvent = dynamic_cast<TextInputEvent*>(&event);
+            if (keyEvent) {
+                input += keyEvent->GetChar();
+                currIndex++;
+                AddCharacter(keyEvent->GetChar(), currIndex);
+                event.handled = true;
+            }
+            return;
+        }
         
         if (event.GetEventType() == CFrameEventType::MouseButtonDown) {
 
@@ -71,15 +82,16 @@ namespace CFrame
                 applicationManager->DeActivatetextInput();
                 return; 
             }
+
             if (isActive) {
-                isActive = false;
-                applicationManager->RemoveAnimator(*this);
+                int i = GetCharacterIndex(xPos);
+                UpdateCursorPosition(i);
                 return;
             }
+
             applicationManager->RegisterAnimation(*this);
             applicationManager->ActivateTextInput();
             isActive = true;
-            SetIsDirty(true);
         }
 
         if (event.GetEventType() == CFrameEventType::KeyPressed) {
@@ -88,24 +100,19 @@ namespace CFrame
                 // Check for backspace key
                 if (keyEvent->GetKeyCode() == 0x00000008u) { //todo add definitions to keys
                     if (!input.empty()) {
-                        input.pop_back();
-                        UpdateChildSizes();  //Todo remoe the last char from the vertices no need to always calculate every character
+                        currIndex = std::max(currIndex - 1, 0);
+                        if (lineProperties.vertices.topLeft.x > x + properties.padding) {
+                            input.erase(currIndex, 1);
+                        }
+                        characters.erase(characters.begin() + currIndex);
+                        UpdateChildSizes();
+                        UpdateCursorPosition(currIndex);  //Todo remoe the last char from the vertices no need to always calculate every character
                     }
                     event.handled = true;
+                    return;
                 }
             }
-        }
-
-       if (event.GetEventType() == CFrameEventType::TextInput) {  
-           auto* keyEvent = dynamic_cast<TextInputEvent*>(&event);  
-           if (keyEvent) {  
-               input += keyEvent->GetChar();   
-               //UpdateChildSizes();
-               AddCharacter(keyEvent->GetChar());
-               event.handled = true;
-           }  
-           SetIsDirty(true);
-       }  
+        } 
 
        if (horizontalScroll) {
            if (event.GetEventType() == CFrameEventType::MouseScroll) {
@@ -113,10 +120,12 @@ namespace CFrame
                if ((mouseEvent->GetMouseX() >= x && mouseEvent->GetMouseX() <= x + width) &&
                    (mouseEvent->GetMouseY() >= y && mouseEvent->GetMouseY() <= y + height))
                {
-                   UpdateVertexX(mouseEvent->GetDistanceX() * 15);
+                   if ((x + mouseEvent->GetDistanceX() * 15) - ( width) > x + properties.padding) {
+                       UpdateVertexX(mouseEvent->GetDistanceX() * 15);
+                   }
                    event.handled = true;
+                   return;
                }
-               SetIsDirty(true);
            }
        }
 
@@ -129,7 +138,7 @@ namespace CFrame
                    UpdateVertexY(mouseEvent->GetDistanceY());
                    event.handled = true;
                }
-               SetIsDirty(true);
+               return;
            }
        }
     }
@@ -170,12 +179,12 @@ namespace CFrame
         textProps.indices.clear();
         textWidth = textProps.textWidth;
         lineNumber = 0;
-        
-        for (char c : input) {
-            AddCharacter(c);
-        }
 
-        UpdateCursorPosition(offsetX);
+        int index = 0;
+        for (char c : input) {
+            AddCharacter(c , index);
+            index++;
+        }
 	}
 
 	void TextField::SetIsActive(bool b)
@@ -183,7 +192,7 @@ namespace CFrame
 		isActive = b;
 	}
 
-    void TextField::AddCharacter(char c)
+    void TextField::AddCharacter(char c, int index)
     {
         fontInfo glyph = glyphs[c];
         
@@ -225,6 +234,17 @@ namespace CFrame
         float topY = ypos;
         float bottomY = ypos - h;
 
+        Character  q;
+        q.advance = glyph.advance;
+        q.character = c;
+        q.x = leftX;
+
+        if (index >= characters.size()) {
+            characters.resize(index + 1);  
+        }
+
+        characters[index] = q;
+
         textProps.vertices.push_back(leftX);                   //top-Left x
         textProps.vertices.push_back(topY);                   //Top-Left y
         textProps.vertices.push_back(texX1);                   //Texture coord x1
@@ -255,10 +275,32 @@ namespace CFrame
 
         offsetX += glyph.advance;
 
-        UpdateCursorPosition(offsetX);
+        AccumulateCursorPosition(offsetX);
     }
 
-    void TextField::UpdateCursorPosition(int offset)
+    //Todo keep track of curr line and only search that
+    void TextField::UpdateCursorPosition(int index)
+    {
+        if (index < 0) index = 0;
+        if (index >= characters.size()) index = (int)characters.size();
+
+        float cursorX = characters.empty() || index == 0
+            ? x + properties.padding
+            : characters[index - 1 ].x + characters[index - 1].advance;
+
+        lineProperties.vertices.topLeft.x = cursorX;
+        lineProperties.vertices.bottomLeft.x = cursorX;
+        lineProperties.vertices.topRight.x = cursorX + 3;
+        lineProperties.vertices.bottomRight.x = cursorX + 3;
+
+        //Reset to match font height
+        lineProperties.vertices.topLeft.y = y + (cursorHeight);
+        lineProperties.vertices.topRight.y = y + (cursorHeight);
+        lineProperties.vertices.bottomLeft.y = y + height - (cursorHeight);
+        lineProperties.vertices.bottomRight.y = y + height - (cursorHeight);
+    }
+
+    void TextField::AccumulateCursorPosition(int offset)
     {
         lineProperties.vertices.topLeft.x = x + offset;
         lineProperties.vertices.bottomLeft.x = x + offset;
@@ -269,6 +311,24 @@ namespace CFrame
         lineProperties.vertices.topRight.y = y + (cursorHeight);
         lineProperties.vertices.bottomLeft.y = y + height - (cursorHeight);
         lineProperties.vertices.bottomRight.y = y + height - (cursorHeight);
+    }
+
+    void TextField::SetCursorPosition(int offset)
+    {
+        
+    }
+
+    int TextField::GetCharacterIndex(int cursorX)
+    {
+        for (int i = 0; i < characters.size(); ++i) {
+            float charMid = characters[i].x + characters[i].advance * 0.5f;
+            if (cursorX < charMid) {
+                currIndex = i;
+                return i;
+            }
+        }
+        currIndex = (int)characters.size();
+        return (int)characters.size();
     }
 
 

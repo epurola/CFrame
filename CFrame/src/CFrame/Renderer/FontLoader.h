@@ -35,14 +35,15 @@ namespace CFrame {
 
 
 	private:
-		int atlasWidth, atlasHeight;
+		int atlasWidth = 0;
+		int atlasHeight = 0;
 		std::string fontPath;
 		std::vector<uint8_t> fontBuffer;
 		FT_Library ft;
 		FT_Face iconFace;
 		FT_Library ftIcon;
-		FT_Face faceIcon;
-		float fontSize;
+		FT_Face faceIcon ;
+		float fontSize = 24;
 		
 		std::map<char, fontInfo> glyphs;
 

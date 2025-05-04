@@ -99,10 +99,10 @@ namespace CFrame
         float borderBottom = 0;
         float borderLeft   = 0;
         float borderRight  = 0;
-        Color borderColor1;
-        Color borderColor2;
-        Color color1;
-        Color color2;
+        Color borderColor1 = Color::Gray;
+        Color borderColor2 = Color::Gray;
+        Color color1       = Color::Gray;
+        Color color2       = Color::Gray;;
         float scaleX       = 1;
         float scaleY       = 1;
         float angle        = 0.0f;
@@ -196,17 +196,19 @@ namespace CFrame
 
         void  SetOnHover(std::function<void()> onHover);
         void  SetOnLeave(std::function<void()> onLeave);
-
-        int index;
         
 
     protected:
         UIElement* parent;  // Todo: dont use a raw pointer
-        int x, y, width, height;
-        int localX, localY;
-        bool isWidthResizable;
-        bool isHeightResizable;
-        bool isVisible;
+        int x = 0;
+        int y = 0;
+        int width = 0;
+        int height = 0;
+        int localX = 0;
+        int localY = 0;
+        bool isWidthResizable = true;
+        bool isHeightResizable = true;
+        bool isVisible = true;
         bool isDirty = true;
         bool dragToResize;
         bool positionAbsolute = false;

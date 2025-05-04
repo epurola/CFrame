@@ -108,7 +108,7 @@ namespace CFrame
 
     unsigned int Shader::CompileShader(unsigned int type, const std::string& source)
     {
-        GLuint shaderObject;
+        GLuint shaderObject = 0;
 
         if (type == GL_VERTEX_SHADER)
         {
@@ -132,8 +132,7 @@ namespace CFrame
         {
             char infoLog[512];
             glGetShaderInfoLog(shaderObject, 512, nullptr, infoLog);
-            std::cerr << "Shader Compilation Error:\n"
-                << infoLog << std::endl;
+            CF_CORE_INFO("Shader compile errro");
         }
         return shaderObject;
     }
@@ -147,7 +146,7 @@ namespace CFrame
         int location = glGetUniformLocation(RendererId, name.c_str());
         if (location == -1)
         {
-            std::cout << "Uniform does not exist!" << std::endl;
+            CF_CORE_INFO("uniform does not exist!");
         }
         else
         {

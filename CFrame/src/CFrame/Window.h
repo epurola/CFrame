@@ -41,7 +41,7 @@ namespace CFrame
 	private:
 		unsigned int width = 1280;
 		unsigned int height = 720;
-		std::string title;
+		std::string title = "CFrame";
 		SDL_Window* window;
 		void* context; // holds SDL_GLContext
 		EventDispatcher& dispatcher;

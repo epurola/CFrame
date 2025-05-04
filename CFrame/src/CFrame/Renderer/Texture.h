@@ -9,15 +9,17 @@ namespace CFrame {
     class Texture
     {
     private:
-        unsigned int RendererId;
-        std::string filePath;
-        unsigned char* localBuffer;
-        int width, height, BPP;
+        unsigned int RendererId=0;
+        std::string filePath = "";
+        unsigned char* localBuffer = 0;
+        int width = 0;
+        int height =0;
+        int BPP = 0;
 
     public:
         Texture(const std::string& filePath);
         Texture(unsigned char* buffer, int width, int height);
-        Texture() {};
+       
         ~Texture();
 
         void Bind(unsigned int slot = 0);

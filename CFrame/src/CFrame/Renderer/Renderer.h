@@ -43,38 +43,35 @@ namespace CFrame {
 		void EndFrame();
 		void DrawFullScreenQuad();
 		void Resize(int w, int h);
-
-		int count = 0;
         
 		
 
 	private:
-		Window& window;
-		int width, height, xOffset, yOffset;
-		std::unique_ptr<Shader> shader;
-		std::unique_ptr<VertexArray> rectVA;
-		std::unique_ptr<VertexBuffer> rectVB;
-		std::unique_ptr<VertexBufferLayout> rectLayout;
-		std::unique_ptr<IndexBuffer> rectIndices;
+		Window& window ;
+		std::unique_ptr<Shader> shader = nullptr;
+		std::unique_ptr<VertexArray> rectVA = nullptr;
+		std::unique_ptr<VertexBuffer> rectVB = nullptr;
+		std::unique_ptr<VertexBufferLayout> rectLayout = nullptr;
+		std::unique_ptr<IndexBuffer> rectIndices = nullptr;
 
-		std::unique_ptr<Shader> textShader;
-		std::unique_ptr<VertexArray> textVA;
-		std::unique_ptr<VertexBuffer> textVB;
-		std::unique_ptr<VertexBufferLayout> textLayout;
-		std::unique_ptr<IndexBuffer> textIndices;
+		std::unique_ptr<Shader> textShader = nullptr;
+		std::unique_ptr<VertexArray> textVA = nullptr;
+		std::unique_ptr<VertexBuffer> textVB = nullptr;
+		std::unique_ptr<VertexBufferLayout> textLayout = nullptr;
+		std::unique_ptr<IndexBuffer> textIndices = nullptr;
 
-		std::unique_ptr<Shader> lineShader;
-		std::unique_ptr<VertexArray> lineVA;
-		std::unique_ptr<VertexBuffer> lineVB;
-		std::unique_ptr<VertexBufferLayout> lineLayout;
-		std::unique_ptr<IndexBuffer> lineIndices;
+		std::unique_ptr<Shader> lineShader = nullptr;
+		std::unique_ptr<VertexArray> lineVA = nullptr;
+		std::unique_ptr<VertexBuffer> lineVB = nullptr;
+		std::unique_ptr<VertexBufferLayout> lineLayout = nullptr;
+		std::unique_ptr<IndexBuffer> lineIndices = nullptr;
 
-		std::unique_ptr<FrameBuffer> FBO;
-		std::unique_ptr<Shader> screenShader;
-		std::unique_ptr<VertexArray> screenVA;
-		std::unique_ptr<VertexBuffer> screenVB;
-		std::unique_ptr<VertexBufferLayout> screenLayout;
-		std::unique_ptr<IndexBuffer> screenIndices;
+		std::unique_ptr<FrameBuffer> FBO = nullptr;
+		std::unique_ptr<Shader> screenShader = nullptr;
+		std::unique_ptr<VertexArray> screenVA = nullptr;
+		std::unique_ptr<VertexBuffer> screenVB = nullptr;
+		std::unique_ptr<VertexBufferLayout> screenLayout = nullptr;
+		std::unique_ptr<IndexBuffer> screenIndices = nullptr;
 
 		unsigned int rectIndecies[6] = { 0, 1, 2, 2, 3, 0 };
 

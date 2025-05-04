@@ -195,8 +195,8 @@ namespace CFrame
                 onClick();
                
             }
-            
             event.handled = true;
+            return;
         }
 
         if (event.GetEventType() == CFrameEventType::MouseMoved) {
@@ -236,6 +236,7 @@ namespace CFrame
                 hovering = false;
                 applicationManager->RemoveAnimator(*this);
             }
+
         }
     }
 
