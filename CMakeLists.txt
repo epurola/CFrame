@@ -53,8 +53,6 @@ link_directories(
 # Add the preprocessor definitions
 add_definitions(-DCF_PLATFORM_WINDOWS)
 
-# Handle configuration-specific settings
-# Ensure MSVC-specific flags only apply to MSVC
 if (MSVC)
     if (CMAKE_BUILD_TYPE STREQUAL "Debug")
         add_definitions(-DCF_DEBUG)
@@ -72,10 +70,6 @@ if (MSVC)
 endif()
 
 
-
-
-# Create SandBox executable
-
 # Set the source directory
 set(SOURCE_DIR "C:/dev/CFrame/SandBox/src")
 
@@ -83,13 +77,7 @@ set(SOURCE_DIR "C:/dev/CFrame/SandBox/src")
 file(GLOB SOURCES "${SOURCE_DIR}/*.cpp" "${SOURCE_DIR}/*.h")
 
 # Create the executable with the found files
-add_executable(SandBox ${SOURCES} "CFrame/src/CFrame/Renderer/FrameBuffer.h")
-
-#add_executable(SandBox
-#    "C:/dev/CFrame/SandBox/src/App.cpp"
-#    "C:/dev/CFrame/SandBox/src/ServerInfoBox.cpp"
-#    "C:/dev/CFrame/SandBox/src/ServerInfoBox.h"
-#)
+add_executable(SandBox ${SOURCES} )
 
 # Include directories for SandBox
 target_include_directories(SandBox PRIVATE

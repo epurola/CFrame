@@ -10,6 +10,7 @@ namespace CFrame {
 		int x;            // position in pixels
 		int advance;      // how much to move for the next character
 		bool selected;    // optional: for selection highlighting
+		bool visible;
 	};
 
 	class TextField : public UIElement 
@@ -57,6 +58,7 @@ namespace CFrame {
 		bool horizontalScroll = true;
 		int currentTextOffsetX = 0;
 		int currIndex = 0;
+		float scrollOffsetX = 0.0f;
 
 	};
 }

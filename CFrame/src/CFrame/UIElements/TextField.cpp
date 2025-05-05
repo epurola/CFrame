@@ -18,6 +18,7 @@ namespace CFrame
         cursorHeight = 20;
         textProps.textHeight = 0;
         characters.reserve(1024);
+        characters.clear();
         textProps.vertices.reserve(1024); 
         textProps.indices.reserve(1024);
 	}
@@ -29,8 +30,6 @@ namespace CFrame
 
 	void TextField::Render(Renderer& renderer)
 	{
-       // if (!IsDirty()) return;
-
         if (!overflow.overflow) {
             overflow.clipHeight = height;
             overflow.clipWidth = width;
@@ -50,7 +49,6 @@ namespace CFrame
                 renderer.DrawLine(lineProperties);
             }
         }
-       // SetIsDirty(false);
 	}
 
     void TextField::OnEvent(CFrameEvent& event)  
@@ -59,8 +57,8 @@ namespace CFrame
             auto* keyEvent = dynamic_cast<TextInputEvent*>(&event);
             if (keyEvent) {
                 input += keyEvent->GetChar();
-                currIndex++;
                 AddCharacter(keyEvent->GetChar(), currIndex);
+                currIndex++;
                 event.handled = true;
             }
             return;
@@ -98,19 +96,28 @@ namespace CFrame
             auto* keyEvent = dynamic_cast<KeyPressedEvent*>(&event);
             if (keyEvent) {
                 // Check for backspace key
-                if (keyEvent->GetKeyCode() == 0x00000008u) { //todo add definitions to keys
+                if (keyEvent->GetKeyCode() == 0x00000008u) { // Handle backspace key (0x00000008u)
                     if (!input.empty()) {
-                        currIndex = std::max(currIndex - 1, 0);
+                        // Check if we are in the visible range for the current index 
                         if (lineProperties.vertices.topLeft.x > x + properties.padding) {
+                            currIndex = std::max(currIndex - 1, 0);
                             input.erase(currIndex, 1);
+
+                            // Erase the character from the characters vector
+                            if (currIndex < characters.size()) {
+                                characters.erase(characters.begin() + currIndex);
+                            }
                         }
-                        characters.erase(characters.begin() + currIndex);
+
+                        // Update child sizes and cursor position after modification
                         UpdateChildSizes();
-                        UpdateCursorPosition(currIndex);  //Todo remoe the last char from the vertices no need to always calculate every character
+                        UpdateCursorPosition(currIndex);
+
                     }
-                    event.handled = true;
+                    event.handled = true;  // Mark the event as handled
                     return;
                 }
+
             }
         } 
 
@@ -120,9 +127,7 @@ namespace CFrame
                if ((mouseEvent->GetMouseX() >= x && mouseEvent->GetMouseX() <= x + width) &&
                    (mouseEvent->GetMouseY() >= y && mouseEvent->GetMouseY() <= y + height))
                {
-                   if ((x + mouseEvent->GetDistanceX() * 15) - ( width) > x + properties.padding) {
-                       UpdateVertexX(mouseEvent->GetDistanceX() * 15);
-                   }
+                   UpdateVertexX(mouseEvent->GetDistanceX() * 15);
                    event.handled = true;
                    return;
                }
@@ -180,6 +185,7 @@ namespace CFrame
         textWidth = textProps.textWidth;
         lineNumber = 0;
 
+        characters.clear();
         int index = 0;
         for (char c : input) {
             AddCharacter(c , index);
@@ -238,13 +244,13 @@ namespace CFrame
         q.advance = glyph.advance;
         q.character = c;
         q.x = leftX;
+        q.visible = leftX  > x ? true : false;
 
         if (index >= characters.size()) {
             characters.resize(index + 1);  
         }
-
         characters[index] = q;
-
+       
         textProps.vertices.push_back(leftX);                   //top-Left x
         textProps.vertices.push_back(topY);                   //Top-Left y
         textProps.vertices.push_back(texX1);                   //Texture coord x1
@@ -320,16 +326,19 @@ namespace CFrame
 
     int TextField::GetCharacterIndex(int cursorX)
     {
-        for (int i = 0; i < characters.size(); ++i) {
-            float charMid = characters[i].x + characters[i].advance * 0.5f;
+        for (int i = 0; i < characters.size(); i++) {
+            auto& ch = characters[i];
+            float charMid = ch.x + ch.advance * 0.5f;
+           
             if (cursorX < charMid) {
-                currIndex = i;
-                return i;
+                currIndex = i ; 
+                return i;      
             }
         }
-        currIndex = (int)characters.size();
+        currIndex = input.size();
         return (int)characters.size();
     }
+
 
 
     void TextField::RegisterAnimator(std::shared_ptr<ApplicationManager> manager)
@@ -341,6 +350,7 @@ namespace CFrame
     {
 
     }
+
     void TextField::UpdateVertexY(int offset)
     {
         int floatsPerVertex = 4;  // (x, y, u, v)
@@ -353,6 +363,7 @@ namespace CFrame
                 i++;
             }
     }
+
     void TextField::UpdateVertexX(int offset)
     {
         int floatsPerVertex = 4;  // (x, y, u, v)
@@ -363,6 +374,10 @@ namespace CFrame
                 v -= offset;
             }
             i++;
+        }
+        //Also update the charactr vector
+        for (Character& ch : characters) {
+            ch.x -= offset;
         }
     }
 }
