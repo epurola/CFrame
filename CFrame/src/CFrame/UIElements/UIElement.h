@@ -7,7 +7,7 @@
 #include "../Renderer/FontManager.h"
 #include "../CFrameEvent/CFrameEvent.h"
 #include "Color.h"
-#include "../AnimationManager.h"
+#include "../ApplicationManager.h"
 
 namespace CFrame 
 {
@@ -47,27 +47,31 @@ namespace CFrame
         float bottomRight = 0;
     };
 
-    struct TextProperties  
-    {  
-       std::vector<float> vertices;  
-       std::vector<unsigned int> indices;  
-       float offsetX = 0.0f; 
-       float offsetY = 0.0f; 
-       int textWidth = 0, textHeight = 0;  
-       float opacity = 1;  
-       float fontSize = 24;  
-       TextAlign textAlign = TextAlign::Center;
-       Font font = Font::Verdana;
+    struct TextProperties   {  
+       std::vector<unsigned int> indices;
+       std::vector<float> vertices; 
+
+       float fontSize = 24;
+       float offsetX  = 0.0f; 
+       float offsetY  = 0.0f; 
+       float opacity  = 1;
+
+       int textHeight = 0;
+       int textWidth = 0;
+   
+       Font font    = Font::Verdana;
        Color color1 = Color::White;
        Color color2 = Color::White;
+
+       TextAlign textAlign = TextAlign::Center;
     };
 
     struct OverFlowProperties {
         bool overflow = false;
-        int clipY;
         int clipHeight;
-        int clipX;
         int clipWidth;
+        int clipX;
+        int clipY;
     };
 
     struct Vertices {
@@ -79,9 +83,9 @@ namespace CFrame
 
     struct LineProperties {
         Vertices vertices;
-        int width;
-        int height;
-        Color color;
+        Color color = Color::Blue;
+        int height = 0;
+        int width  = 0; 
     };
 
 
@@ -92,26 +96,31 @@ namespace CFrame
         int marginTop      = 0;
         int marginBottom   = 0;
         int padding        = 0;
+
         Radius radius;
         Vertices vertices;
+
         float border       = 0;
         float borderTop    = 0;
         float borderBottom = 0;
         float borderLeft   = 0;
         float borderRight  = 0;
+        float zIndex = 0.0;
+
         Color borderColor1 = Color::Gray;
         Color borderColor2 = Color::Gray;
         Color color1       = Color::Gray;
-        Color color2       = Color::Gray;;
+        Color color2       = Color::Gray;
+
         float scaleX       = 1;
         float scaleY       = 1;
         float angle        = 0.0f;
         float opacity      = 1;
+
         int maxWidth       = -1;
         int maxHeight      = 0;
         int minHeight      = 0;
         int minWidth       = -1;
-        float zIndex       = 0.0;
     };
 
     struct AnimationProperties {
@@ -199,7 +208,7 @@ namespace CFrame
         
 
     protected:
-        UIElement* parent;  // Todo: dont use a raw pointer
+        UIElement* parent;
         int x = 0;
         int y = 0;
         int width = 0;
@@ -212,6 +221,7 @@ namespace CFrame
         bool isDirty = true;
         bool dragToResize;
         bool positionAbsolute = false;
+
         PositionMode pMode = PositionMode::TopLeft;
         std::unique_ptr<Texture> imageTexture;
         std::shared_ptr<ApplicationManager> applicationManager;

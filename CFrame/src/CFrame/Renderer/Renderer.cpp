@@ -98,7 +98,7 @@ namespace CFrame {
         SDL_Color c = p.color1.toSDLColor(p.opacity);
         SDL_Color c1 = p.color1.toSDLColor(p.opacity);
 
-        float r = c.r / 255.0f;
+        float r = p.color1.r / 255.0f;
         float g = c.g / 255.0f;
         float b = c.b / 255.0f;
         float a = c.a / 255.0f;

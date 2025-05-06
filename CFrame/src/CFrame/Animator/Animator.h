@@ -15,7 +15,6 @@ namespace CFrame
 		void StopAnimation();
 		float GetTime();
 		void SetSpeed(float speed);
-		//inline float GetSpeed() const { return speed; }
 		inline bool IsAnimating() const { return isAnimating; }
 
 	private:

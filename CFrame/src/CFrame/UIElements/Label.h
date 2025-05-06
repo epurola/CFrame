@@ -24,7 +24,7 @@ namespace CFrame
         void RegisterAnimator(std::shared_ptr<ApplicationManager> manager);
         void UpdateChildSizes() override;
         void OnEvent(CFrameEvent& event) override;
-        inline Texture* GetTexture() { return labelTexture.get(); };
+        inline Texture* GetTexture() { return atlasTexture.get(); };
         inline ElementType GetElementType() const override { return ElementType::LABEL; };
 
         void SetText(std::string text);
@@ -33,9 +33,12 @@ namespace CFrame
 
     private:
         std::string text;
-        std::shared_ptr<Texture> labelTexture;
+        std::shared_ptr<Texture> atlasTexture;
         std::optional<int> icon = std::nullopt;
         TextProperties textProps;
         std::map<char, fontInfo> glyphs;
+    private:
+        void InitFontAtlas();
+        void SetOverFlowProperties();
     };
 }

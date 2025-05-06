@@ -1,7 +1,6 @@
 #pragma once
 #include <unordered_set>
 #include "Window.h"
-//ToDo: rename this to applicationManager
 namespace CFrame 
 {
 	class UIElement;

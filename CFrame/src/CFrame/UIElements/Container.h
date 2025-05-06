@@ -39,6 +39,10 @@ namespace CFrame {
 		int spacing = 0;
 		AlignItems xAlign, yAlign;
 		bool scrollEnabled = false;
+
+	private:
+		bool HandleMouseDrag(MouseDraggedEvent& e);
+		bool HandleMouseScroll(MouseScrolledEvent& e);
 		
 	};
 

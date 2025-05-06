@@ -48,6 +48,7 @@ bool Window::OnUpdate()
        } 
 	   case SDL_EVENT_TEXT_INPUT:
 	   {
+		   //Todo refactor to use wide char
 		    char text[2] = { 0 };
 			SDL_strlcat(text, event.text.text, sizeof(text));
 			TextInputEvent textEvent(text[0], 0);

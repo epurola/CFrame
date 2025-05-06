@@ -8,51 +8,35 @@ namespace CFrame
         :UIElement(x, y, w, h, nullptr), text(text)
 	{
         SetOpacity(0);
-        
 	}
 
 	Label::~Label()
 	{
 
 	}
+
 	void Label::Render(Renderer& renderer)
 	{
-        renderer.DrawRectangle(x, y, width, height, GetProperties(), 0.0f, 0.0f, nullptr);
-        renderer.RenderText(text, x, y, textProps, labelTexture.get(), overflow);
+        if (properties.opacity > 0) 
+        {
+            renderer.DrawRectangle(x, y, width, height, GetProperties(), 0.0f, 0.0f, nullptr);
+        }
+        renderer.RenderText(text, x, y, textProps, atlasTexture.get(), overflow);
 	}
-
-    void Label::RegisterAnimator(std::shared_ptr<ApplicationManager> manager)
-    {
-        applicationManager = manager;
-    }
 
 	void Label::OnEvent(CFrameEvent& event)
 	{
-
+        return;
 	}
-
-    void Label::SetText(std::string text)
-    {
-        this->text = text;
-    }
 
 	void Label::UpdateChildSizes() {
 
-        if (!labelTexture) {
-            FontKey key = { textProps.font, textProps.fontSize };
-            FontManager& fm = FontManager::GetInstance();
-            std::pair<std::shared_ptr<Texture>, std::map<char, fontInfo>> font = fm.GetFont(key);
-            glyphs = font.second; //Info about the glyph and where it is in the atlas
-            labelTexture = font.first;
+        if (!atlasTexture) 
+        {
+            InitFontAtlas();
         }
 
-        if (!overflow.overflow) {
-            overflow.clipHeight = height;
-            overflow.clipWidth = width;
-            overflow.clipX = x;
-            overflow.clipY = y;
-        }
-
+        SetOverFlowProperties();
 
         float offsetX = 0.0f, offsetY = 0.0f;
         int textWidth = 0, textHeight = 0;
@@ -62,7 +46,8 @@ namespace CFrame
         textProps.indices.clear();
         //ToDo: Determine if you need to use the text or icon icons have PUA range
 
-        for (char c : text) {
+        for (char c : text) 
+        {
             fontInfo glyph = glyphs[c];
 
             float charWidth = (float)glyph.width;
@@ -71,15 +56,18 @@ namespace CFrame
             textProps.textHeight = (int)std::max((float)textProps.textHeight, charHeight);
         }
 
-        if (textProps.textAlign == TextAlign::Center) {
+        if (textProps.textAlign == TextAlign::Center) 
+        {
             offsetX = (float)(width / 2) - (textProps.textWidth / 2);
             offsetY = (float)(height / 2.0f) + (textProps.textHeight / 2.0f); //OpneGl goes from down up and screen up down so flip this
         }
-        else if (textProps.textAlign == TextAlign::Start) {
+        else if (textProps.textAlign == TextAlign::Start) 
+        {
             offsetX = (float)properties.padding;
             offsetY = (float)(height / 2.0f) + (textProps.textHeight / 2.0f);
         }
-        else {
+        else 
+        {
             offsetX = (float)width - textProps.textWidth - properties.padding;
             offsetY = (float)(height / 2.0f) + (textProps.textHeight / 2.0f);
         }
@@ -87,15 +75,16 @@ namespace CFrame
         for (char c : text) {
             //Store the current glyph info
             fontInfo glyph = glyphs[c];
-            if (icon.has_value()) {
+            if (icon.has_value()) 
+            {
                 glyph = glyphs[icon.value()];
             }
 
             //texture coordinates for the character
-            float texX1 = glyph.x / (float)labelTexture->GetWidth(); // width
-            float texY1 = glyph.y / (float)labelTexture->GetHeight(); //height
-            float texX2 = (glyph.x + glyph.width) / (float)labelTexture->GetWidth();
-            float texY2 = (glyph.y + glyph.height) / (float)labelTexture->GetHeight();
+            float texX1 = glyph.x / (float)atlasTexture->GetWidth(); // width
+            float texY1 = glyph.y / (float)atlasTexture->GetHeight(); //height
+            float texX2 = (glyph.x + glyph.width) / (float)atlasTexture->GetWidth();
+            float texY2 = (glyph.y + glyph.height) / (float)atlasTexture->GetHeight();
 
             float charWidth = (float)glyph.width;
             float charHeight = (float)glyph.height;
@@ -103,13 +92,10 @@ namespace CFrame
             float xpos = GetX() + offsetX + glyph.bearingX;
             float ypos = GetY() + offsetY + (charHeight - glyph.bearingY);
 
-            float w = (float)glyph.width;   // actual width of the glyph quad
-            float h = (float)glyph.height;  // actual height of the glyph quad
-
             float leftX = xpos;
-            float rightX = xpos + w;
+            float rightX = xpos + charWidth;
             float topY = ypos;
-            float bottomY = ypos - h;
+            float bottomY = ypos - charHeight;
 
             //Define 4 vertices for the current character
             textProps.vertices.push_back(leftX);                   //top-Left x
@@ -143,5 +129,35 @@ namespace CFrame
             offsetX += glyph.advance;
         }
 	}
+
+    void Label::SetText(std::string text)
+    {
+        this->text = text;
+    }
+
+    void Label::InitFontAtlas()
+    {
+        FontKey key = { textProps.font, textProps.fontSize };
+        FontManager& fm = FontManager::GetInstance();
+        std::pair<std::shared_ptr<Texture>, std::map<char, fontInfo>> font = fm.GetFont(key);
+        glyphs = font.second; //Info about the glyph and where it is in the atlas
+        atlasTexture = font.first;
+    }
+
+    void Label::SetOverFlowProperties()
+    {
+        if (!overflow.overflow) 
+        {
+            overflow.clipHeight = height;
+            overflow.clipWidth = width;
+            overflow.clipX = x;
+            overflow.clipY = y;
+        }
+    }
+
+    void Label::RegisterAnimator(std::shared_ptr<ApplicationManager> manager)
+    {
+        applicationManager = manager;
+    }
 }
 

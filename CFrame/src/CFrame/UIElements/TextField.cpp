@@ -13,14 +13,15 @@ namespace CFrame
         SetPadding(10);
         SetBorder(3);
         SetBorderColor(Color::LightGray);
+        SetFontSize(29);
 
         lineProperties.color = Color::Blue; 
         cursorHeight = 20;
         textProps.textHeight = 0;
         characters.reserve(1024);
-        characters.clear();
         textProps.vertices.reserve(1024); 
         textProps.indices.reserve(1024);
+
 	}
 
 	TextField::~TextField()
@@ -30,22 +31,19 @@ namespace CFrame
 
 	void TextField::Render(Renderer& renderer)
 	{
-        if (!overflow.overflow) {
-            overflow.clipHeight = height;
-            overflow.clipWidth = width;
-            overflow.clipX = x;
-            overflow.clipY = y;
-        }
-
 		renderer.DrawRectangle(x, y, width, height ,properties, 1.0f, 1.0f, nullptr);
-		renderer.RenderText(input, x, y, textProps, labelTexture.get(), overflow);
+		renderer.RenderText(input, x, y, textProps, atlasTexture.get(), overflow);
         
-        if (isActive) {
+        if (isActive) 
+        {
             elapsedTime += 0.016f;
-            if (elapsedTime > 1.0f) {
+
+            if (elapsedTime > 1.0f) 
+            {
                 elapsedTime = 0.0f;
             }
-            if (elapsedTime < 0.5f) {
+            if (elapsedTime < 0.5f) 
+            {
                 renderer.DrawLine(lineProperties);
             }
         }
@@ -53,128 +51,53 @@ namespace CFrame
 
     void TextField::OnEvent(CFrameEvent& event)  
     {  
-        if (event.GetEventType() == CFrameEventType::TextInput) {
-            auto* keyEvent = dynamic_cast<TextInputEvent*>(&event);
-            if (keyEvent) {
-                input += keyEvent->GetChar();
-                AddCharacter(keyEvent->GetChar(), currIndex);
-                currIndex++;
-                event.handled = true;
-            }
-            return;
-        }
-        
-        if (event.GetEventType() == CFrameEventType::MouseButtonDown) {
+        if (event.handled)  return;
 
-            auto* mouseEvent = dynamic_cast<MouseButtonDownEvent*>(&event);
-            if (!mouseEvent) {
-                return; // Early return if the event is not a MouseButtonDownEvent
-            }
-
-            int xPos = static_cast<int>(mouseEvent->GetX());
-            int yPos = static_cast<int>(mouseEvent->GetY());
-
-            if (xPos < x || xPos >(x + width) || yPos < y || yPos >(y + height)) {
-                isActive = false;
-                applicationManager->RemoveAnimator(*this);
-                applicationManager->DeActivatetextInput();
-                return; 
-            }
-
-            if (isActive) {
-                int i = GetCharacterIndex(xPos);
-                UpdateCursorPosition(i);
+        switch (event.GetEventType()) 
+        {
+            case CFrameEventType::TextInput: 
+            {
+                auto& keyEvent = static_cast<TextInputEvent&>(event);
+                event.handled = HandleTextInput(keyEvent);
                 return;
             }
 
-            applicationManager->RegisterAnimation(*this);
-            applicationManager->ActivateTextInput();
-            isActive = true;
-        }
-
-        if (event.GetEventType() == CFrameEventType::KeyPressed) {
-            auto* keyEvent = dynamic_cast<KeyPressedEvent*>(&event);
-            if (keyEvent) {
-                // Check for backspace key
-                if (keyEvent->GetKeyCode() == 0x00000008u) { // Handle backspace key (0x00000008u)
-                    if (!input.empty()) {
-                        // Check if we are in the visible range for the current index 
-                        if (lineProperties.vertices.topLeft.x > x + properties.padding) {
-                            currIndex = std::max(currIndex - 1, 0);
-                            input.erase(currIndex, 1);
-
-                            // Erase the character from the characters vector
-                            if (currIndex < characters.size()) {
-                                characters.erase(characters.begin() + currIndex);
-                            }
-                        }
-
-                        // Update child sizes and cursor position after modification
-                        UpdateChildSizes();
-                        UpdateCursorPosition(currIndex);
-
-                    }
-                    event.handled = true;  // Mark the event as handled
-                    return;
-                }
-
+            case CFrameEventType::MouseButtonDown: 
+            {
+                auto& mouseEvent = static_cast<MouseButtonDownEvent&>(event);
+                event.handled = HandleMouseButtonDown(mouseEvent);
+                return;
             }
-        } 
 
-       if (horizontalScroll) {
-           if (event.GetEventType() == CFrameEventType::MouseScroll) {
-               auto* mouseEvent = dynamic_cast<MouseScrolledEvent*>(&event);
-               if ((mouseEvent->GetMouseX() >= x && mouseEvent->GetMouseX() <= x + width) &&
-                   (mouseEvent->GetMouseY() >= y && mouseEvent->GetMouseY() <= y + height))
-               {
-                   UpdateVertexX(mouseEvent->GetDistanceX() * 15);
-                   event.handled = true;
-                   return;
-               }
-           }
-       }
+            case CFrameEventType::KeyPressed: 
+            {
+                auto& keyEvent = static_cast<KeyPressedEvent&>(event);
+                event.handled = HandleKeyPressed(keyEvent);
+                return;
+            }
 
-       if (verticalScroll) {
-           if (event.GetEventType() == CFrameEventType::MouseScroll) {
-               auto* mouseEvent = dynamic_cast<MouseScrolledEvent*>(&event);
-               if ((mouseEvent->GetMouseX() >= x && mouseEvent->GetMouseX() <= x + width) &&
-                   (mouseEvent->GetMouseY() >= y && mouseEvent->GetMouseY() <= y + height))
-               {
-                   UpdateVertexY(mouseEvent->GetDistanceY());
-                   event.handled = true;
-               }
-               return;
-           }
-       }
+            case CFrameEventType::MouseScroll: 
+            {
+                auto& mouseEvent = static_cast<MouseScrolledEvent&>(event);
+                event.handled = HandleMouseScroll(mouseEvent);
+                return;
+            }
+        }
+        return;
     }
 
 	void TextField::UpdateChildSizes()
 	{
-        if (!labelTexture) {
-            FontKey key = { textProps.font, textProps.fontSize };
-            FontManager& fm = FontManager::GetInstance();
-            std::pair<std::shared_ptr<Texture>, std::map<char, fontInfo>> font = fm.GetFont(key);
-            glyphs = font.second; //Info about the glyph and where it is in the atlas
-            labelTexture = font.first;
-           //Predetermine the tallest char for the AddCharFunction.
-            for (char c : "qwertyuiopasdfghjklöäzxcvbnmASDFGHJKLÖQWERTYUIOPZXCVBNM") {
-                fontInfo glyph = glyphs[c];
-                float charHeight = (float)glyph.height;
-                textProps.textHeight = (int)std::max((float)textProps.textHeight, charHeight);
-            }
-            //Set OffsetY based on the tallest one
-            offsetY = (float)(height / 2.0f) + (textProps.textHeight / 2.0f);
-            offsetX = (float)properties.padding;
-            
+        //Do here to make sure there is a valid OpenGl context
+        if (!atlasTexture) {
+            InitializeAtlas();
         }
-        //Recalculate when the textField size changes
-        for (char c : input) {
-            fontInfo glyph = glyphs[c];
-            float charWidth = (float)glyph.width;
-            float charHeight = (float)glyph.height;
-            textProps.textWidth += glyph.advance;
-            textProps.textHeight = (int)std::max((float)textProps.textHeight, charHeight);
-        }
+        
+        SetOverFlowProperties();
+        //Needed for text wrapping so text length is updated
+        // textProps.textWidth = 0;
+        // textProps.textHeight = 0;
+        // UpdateTextProperties();
 
         offsetY = (float)(height / 2.0f) + (textProps.textHeight / 2.0f);
         offsetX = (float)properties.padding;
@@ -182,20 +105,16 @@ namespace CFrame
         //Clear the vectors 
         textProps.vertices.clear();
         textProps.indices.clear();
+        characters.clear();
         textWidth = textProps.textWidth;
         lineNumber = 0;
 
-        characters.clear();
         int index = 0;
-        for (char c : input) {
+        for (char c : input) 
+        {
             AddCharacter(c , index);
             index++;
         }
-	}
-
-	void TextField::SetIsActive(bool b)
-	{
-		isActive = b;
 	}
 
     void TextField::AddCharacter(char c, int index)
@@ -203,42 +122,41 @@ namespace CFrame
         fontInfo glyph = glyphs[c];
         
         //texture coordinates for the character
-        float texX1 = glyph.x / (float)labelTexture->GetWidth(); // width
-        float texY1 = glyph.y / (float)labelTexture->GetHeight(); //height
-        float texX2 = (glyph.x + glyph.width) / (float)labelTexture->GetWidth();
-        float texY2 = (glyph.y + glyph.height) / (float)labelTexture->GetHeight();
+        float texX1 = glyph.x / atlasWidth; 
+        float texY1 = glyph.y / atlasHeight; 
+        float texX2 = (glyph.x + glyph.width) / atlasWidth;
+        float texY2 = (glyph.y + glyph.height) / atlasHeight;
 
         textWidth = textProps.textWidth;
         
         float charWidth = (float)glyph.width;
         float charHeight = (float)glyph.height;
 
-        if (isHeightResizable) {
-            if ((offsetX + glyph.advance + glyph.bearingX) > width - properties.padding) {
+        if (isHeightResizable) 
+        {
+            if ((offsetX + glyph.advance + glyph.bearingX) > width - properties.padding) 
+            {
                 lineNumber++;
                 offsetX = (float)properties.padding; // Reset to start
                 UpdateVertexY(textProps.textHeight + lineSpacing); //Update old lines position
             }
         }
-        else {
-            if ((offsetX + glyph.advance + glyph.bearingX) > width - properties.padding){
+        else 
+        {
+            if ((offsetX + glyph.advance + glyph.bearingX) > width - properties.padding)
+            {
                 UpdateVertexX(glyph.advance); //Update old lines position
-                //UpdateCursorPosition() ToDo fix this method
                 offsetX -= glyph.advance;
             }
         }
         
-
         float xpos = GetX() + offsetX + glyph.bearingX;
         float ypos = GetY() + offsetY + (charHeight - glyph.bearingY);
 
-        float w = (float)glyph.width;   // actual width of the glyph quad
-        float h = (float)glyph.height;  // actual height of the glyph quad
-
         float leftX = xpos;
-        float rightX = xpos + w;
+        float rightX = xpos + charWidth;
         float topY = ypos;
-        float bottomY = ypos - h;
+        float bottomY = ypos - charHeight;
 
         Character  q;
         q.advance = glyph.advance;
@@ -246,9 +164,11 @@ namespace CFrame
         q.x = leftX;
         q.visible = leftX  > x ? true : false;
 
-        if (index >= characters.size()) {
+        if (index >= characters.size()) 
+        {
             characters.resize(index + 1);  
         }
+
         characters[index] = q;
        
         textProps.vertices.push_back(leftX);                   //top-Left x
@@ -319,18 +239,15 @@ namespace CFrame
         lineProperties.vertices.bottomRight.y = y + height - (cursorHeight);
     }
 
-    void TextField::SetCursorPosition(int offset)
-    {
-        
-    }
-
     int TextField::GetCharacterIndex(int cursorX)
     {
-        for (int i = 0; i < characters.size(); i++) {
+        for (int i = 0; i < characters.size(); i++) 
+        {
             auto& ch = characters[i];
             float charMid = ch.x + ch.advance * 0.5f;
            
-            if (cursorX < charMid) {
+            if (cursorX < charMid) 
+            {
                 currIndex = i ; 
                 return i;      
             }
@@ -339,7 +256,94 @@ namespace CFrame
         return (int)characters.size();
     }
 
+    bool TextField::HandleMouseButtonDown(MouseButtonDownEvent& e)
+    {
+        int xPos = static_cast<int>(e.GetX());
+        int yPos = static_cast<int>(e.GetY());
 
+        if (xPos < x || xPos >(x + width) || yPos < y || yPos >(y + height)) {
+            isActive = false;
+            applicationManager->RemoveAnimator(*this);
+            applicationManager->DeActivatetextInput();
+            return false; // Event was not handled by this just deactivated the input reading
+        }
+
+        if (isActive) {
+            int i = GetCharacterIndex(xPos);
+            UpdateCursorPosition(i);
+            return true;
+        }
+
+        applicationManager->RegisterAnimation(*this);
+        applicationManager->ActivateTextInput();
+        isActive = true;
+        return true;
+    }
+
+    bool TextField::HandleTextInput(TextInputEvent& e)
+    {
+        char c = e.GetChar();
+        if (currIndex == input.size() - 1) {
+            AddCharacter(c, currIndex);
+        }
+        else 
+        {//Handle inserts in the middle of the string
+            input.insert(currIndex, 1, c);
+            UpdateChildSizes();
+            UpdateCursorPosition(currIndex + 1);
+        }
+        currIndex++;
+        return true;
+    }
+
+    bool TextField::HandleKeyPressed(KeyPressedEvent& e)
+    {
+        switch (e.GetKeyCode()) 
+        {
+             case 0x00000008u:
+             {
+                 if (input.empty()) return false;
+
+                 // Check if we are in the visible range for the current index 
+                 if (!(lineProperties.vertices.topLeft.x > x + properties.padding)) return false;
+
+                 //Erase the character and update currIndex
+                  currIndex = std::max(currIndex - 1, 0);
+                  input.erase(currIndex, 1);
+
+                  // Erase the character from the characters vector
+                  if (currIndex < characters.size())
+                  {
+                      characters.erase(characters.begin() + currIndex);
+                  }
+                 
+                 UpdateChildSizes();
+                 UpdateCursorPosition(currIndex);
+                 return true;
+             }
+        }
+        return false;
+    }
+
+    bool TextField::HandleMouseScroll(MouseScrolledEvent& e) {
+        // Check if the mouse is within the bounds of the TextField.
+        bool isInBounds = (e.GetMouseX() >= x && e.GetMouseX() <= x + width) &&
+            (e.GetMouseY() >= y && e.GetMouseY() <= y + height);
+
+        if (!isInBounds) return false;
+        
+        if (horizontalScroll) {
+            UpdateVertexX(e.GetDistanceX() * 15);
+            return true;
+        }
+
+        if (verticalScroll) {
+            UpdateVertexY(e.GetDistanceY());
+            return true;
+        }
+
+        return false;
+    }
 
     void TextField::RegisterAnimator(std::shared_ptr<ApplicationManager> manager)
     {
@@ -356,12 +360,14 @@ namespace CFrame
         int floatsPerVertex = 4;  // (x, y, u, v)
         int i = 0;
 
-            for (float& v : textProps.vertices) {
-                if ((i % floatsPerVertex) == 1) {
-                    v -= offset;
-                }
-                i++;
+        for (float& v : textProps.vertices) 
+        {
+            if ((i % floatsPerVertex) == 1) 
+            {
+                v -= offset;
             }
+            i++;
+        }
     }
 
     void TextField::UpdateVertexX(int offset)
@@ -369,16 +375,78 @@ namespace CFrame
         int floatsPerVertex = 4;  // (x, y, u, v)
         int i = 0;
 
-        for (float& v : textProps.vertices) {
-            if ((i % floatsPerVertex) == 0) {
+        for (float& v : textProps.vertices) 
+        {
+            if ((i % floatsPerVertex) == 0) 
+            {
                 v -= offset;
             }
             i++;
         }
         //Also update the charactr vector
-        for (Character& ch : characters) {
+        for (Character& ch : characters) 
+        {
             ch.x -= offset;
         }
+    }
+
+    void TextField::InitializeAtlas()
+    {
+        FontKey key = { textProps.font, textProps.fontSize };
+        FontManager& fm = FontManager::GetInstance();
+        std::pair<std::shared_ptr<Texture>, std::map<char, fontInfo>> font = fm.GetFont(key);
+
+        //Info about the glyph and where it is in the atlas
+        glyphs = font.second; 
+        atlasTexture = font.first;
+
+        //Predetermine the tallest char for the AddCharFunction.
+        for (char c : "qwertyuiopasdfghjklöäzxcvbnmASDFGHJKLÖQWERTYUIOPZXCVBNM") 
+        {
+            fontInfo glyph = glyphs[c];
+            float charHeight = (float)glyph.height;
+            textProps.textHeight = (int)std::max((float)textProps.textHeight, charHeight);
+        }
+
+        //Set OffsetY based on the tallest one
+        offsetY = (float)(height / 2.0f) + (textProps.textHeight / 2.0f);
+        offsetX = (float)properties.padding;
+
+        atlasWidth = atlasTexture->GetWidth();
+        atlasHeight = atlasTexture->GetHeight();
+    }
+
+    void TextField::UpdateTextProperties()
+    {
+        for (char c : input) 
+        {
+            fontInfo glyph = glyphs[c];
+            float charWidth = (float)glyph.width;
+            float charHeight = (float)glyph.height;
+            textProps.textWidth += glyph.advance;
+            textProps.textHeight = (int)std::max((float)textProps.textHeight, charHeight);
+        }
+    }
+
+    void TextField::SetOverFlowProperties()
+    {
+        if (!overflow.overflow)
+        {
+            overflow.clipHeight = height;
+            overflow.clipWidth = width;
+            overflow.clipX = x;
+            overflow.clipY = y;
+        }
+    }
+
+    void TextField::SetIsActive(bool b)
+    {
+        isActive = b;
+    }
+
+    void TextField::SetFontSize(float size)
+    {
+        textProps.fontSize = size;
     }
 }
 

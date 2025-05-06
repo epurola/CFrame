@@ -17,12 +17,8 @@ namespace CFrame
             std::function<void()> onClick =  []() {},
             UIElement* parent = nullptr);
 
-     
-
         explicit Button( int w, int h) 
-            : Button(0, 0, w, h, "Button", nullptr) {
-        }
-
+            : Button(0, 0, w, h, "Button", nullptr) { }
 
         ~Button();
 
@@ -39,7 +35,6 @@ namespace CFrame
         void SetFontSize(float size);
         void SetFont(Font font);
         
-
         inline ElementType GetElementType() const override { return ElementType::BUTTON; };
        
     private:
@@ -48,8 +43,18 @@ namespace CFrame
         std::optional<int> icon = std::nullopt;
         std::unique_ptr<Animator> animator;
         bool hovering = false;
-        std::shared_ptr<Texture> labelTexture;
+        std::shared_ptr<Texture> atlasTexture;
         std::map<char, fontInfo> glyphs;
-     
+
+        float atlasWidth = 0.0f;
+        float atlasHeight = 0.0f;
+
+    private:
+        bool HandleMouseButtonDown(MouseButtonDownEvent& e);
+        bool HandleMouseLeaveWindow();
+        bool HandleMouseMove(MouseMovedEvent& e);
+
+        void InitAtlasTexture();
+        void SetOverFlowProperties();
     };
 }

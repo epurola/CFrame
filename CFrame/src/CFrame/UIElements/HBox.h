@@ -14,21 +14,22 @@ namespace CFrame
 		HBox(int x, int y, int w, int h, UIElement* parent = nullptr);
 
 		explicit HBox()
-			: HBox(0, 0, -1, -1, nullptr) {
-		}
+			: HBox(0, 0, -1, -1, nullptr) {}
 
 		explicit HBox(int w, int h)
-			: HBox(0, 0, w, h, nullptr) {
-		}
+			: HBox(0, 0, w, h, nullptr) {}
 
 		~HBox();
 
 		void UpdateChildSizes() override;
 
-		
 		ElementType GetElementType() const override { return ElementType::CONTAINER; };
 
 	private:
+		void UpdateAlignment(int& xpos, int& ypos);
+		void ResetLayoutMetrics();
+		void PrecalculateLayoutMetrics();
+		void HandleAbsolutePosition(UIElement& child);
 
 	};
 }

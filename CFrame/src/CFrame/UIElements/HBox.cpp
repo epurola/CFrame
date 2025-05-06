@@ -32,7 +32,8 @@ namespace CFrame {
 
         for (auto* child : children)
         {
-            if (!child->IsVisible() || child->IsPositionAbsolute()) {
+            if (!child->IsVisible() || child->IsPositionAbsolute()) 
+            {
                 continue;
             }
 

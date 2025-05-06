@@ -12,22 +12,10 @@ namespace CFrame
 	Container::~Container()
 	{
 		for (auto& child : children)
-			if (child) {
+			if (child) 
+			{
 				delete child;
 			}
-	}
-
-	void Container::RegisterAnimator(std::shared_ptr<ApplicationManager> manager)
-	{
-		applicationManager = manager;
-		for (auto child : children) {
-			child->RegisterAnimator(manager);
-		}
-	}
-
-	void Container::SetSpacing(int spacing)
-	{
-		this->spacing = spacing;
 	}
 
 	void Container::AddChild(UIElement* child)
@@ -42,30 +30,102 @@ namespace CFrame
 	{
 		if (!IsVisible()) return;
 	
-		
-		//	renderer.ClearRegion(x, y, width, height);
 		renderer.DrawRectangle((float)x, (float)y, (float)width, (float)height,
 				GetProperties(), 1.0f, 1.0f, nullptr);
 		
-		for (auto& child : renderChildren) {
-			if (child->IsVisible()) {
+		for (auto& child : renderChildren) 
+		{
+			if (child->IsVisible()) 
+			{
 				child->Render(renderer);
 			}
 		}
+	}
 
-		//SetIsDirty(false);
+	void Container::OnEvent(CFrameEvent& event)
+	{
+		if (!IsVisible()) return;
+
+		for (auto& child : children) 
+		{
+			if (event.handled)  return; 
+			child->OnEvent(event);
+		}
+
+		switch (event.GetEventType()) 
+		{
+			case CFrameEventType::MouseDragged:
+			{
+				auto& mouseEvent = static_cast<MouseDraggedEvent&>(event);
+				event.handled = HandleMouseDrag(mouseEvent);
+				return;
+			}
+				
+			case CFrameEventType::MouseScroll: 
+			{
+				auto& mouseEvent = static_cast<MouseScrolledEvent&>(event);
+				event.handled = HandleMouseScroll(mouseEvent);
+				return;
+			}
+		}
+		return;
+	}
+
+	void Container::ToFront(UIElement* child)
+	{
+		auto it = std::find(renderChildren.begin(), renderChildren.end(), child);
+		if (it == renderChildren.end()) return;
+		UIElement* target = *it;
+		renderChildren.erase(it);
+		renderChildren.push_back(target);
+	}
+
+	void Container::ToBack(UIElement* child)
+	{
+
+	}
+
+	bool Container::HandleMouseDrag(MouseDraggedEvent& e)
+	{
+		if (!(e.GetStartX() > x + (width - 15) && e.GetStartX() < x + width)) return false;
+
+		if (!dragToResize) return false;
+			
+		SetWidth((width + (int)(e.GetCurrentX() - e.GetStartX())));
+		UpdateChildSizes();
+		parent->UpdateChildSizes();
+		//toDo: use a different flag so the container does not divide equally
+		return true;
+	}
+
+	bool Container::HandleMouseScroll(MouseScrolledEvent& e)
+	{
+		if (!(e.GetMouseX() >= x && e.GetMouseX() <= x + width) &&
+			(e.GetMouseY() >= y && e.GetMouseY() <= y + height))  return false;
+
+		if (!scrollEnabled) return false;
+
+		for (auto& child : children) 
+		{
+			int newY = child->GetY() + (e.GetDistanceY() * 10); //ToDo: Add variable to cotrol the sensitivity of scroll
+			child->SetY(newY);
+			child->UpdateChildSizes();
+			child->UpdateVertices();
+		}
+		return true;	
 	}
 
 	void Container::SetIsDirty(bool b)
 	{
-		isDirty = b; // Always mark *this* firs
-		
+		// Deprecated
+		isDirty = b;
+
 		if (b) {
-			for (auto& child : children) {
-			child->SetIsDirty(b);
+			for (auto& child : children)
+			{
+				child->SetIsDirty(b);
+			}
 		}
-		}
-		
 	}
 
 	void Container::SetAlignment(AlignItems xAlign, AlignItems yAlign)
@@ -79,64 +139,18 @@ namespace CFrame
 		scrollEnabled = b;
 	}
 
-	void Container::OnEvent(CFrameEvent& event)
+	void Container::RegisterAnimator(std::shared_ptr<ApplicationManager> manager)
 	{
-		//Add early return if not tracked event
-		if (!IsVisible()) return;
-
-		for (auto& child : children) {
-			//if (event.handled)  return;// CAUSES ARTIFACTsometimes hovered effect stays on button
-			child->OnEvent(event);
+		applicationManager = manager;
+		for (auto child : children)
+		{
+			child->RegisterAnimator(manager);
 		}
-	
-		if (event.GetEventType() == CFrameEventType::MouseDragged) {
-			auto* mouseEvent = dynamic_cast<MouseDraggedEvent*>(&event);
-			if (mouseEvent->GetStartX() > x + (width - 15) && mouseEvent->GetStartX() < x + width) {
-				if (dragToResize) {
-					SetWidth((width + (int)(mouseEvent->GetCurrentX() - mouseEvent->GetStartX())));
-					UpdateChildSizes();
-					parent->UpdateChildSizes();
-					event.handled = true;
-					//toDo: use a different flag so the container does not divide equally
-					//CF_CORE_INFO("RESIZE! {0}", width + (mouseEvent->GetCurrentX() - mouseEvent->GetStartX()));
-				}
-				return;     
-			}
-		}
-
-		if (event.GetEventType() == CFrameEventType::MouseScroll) {
-			auto* mouseEvent = dynamic_cast<MouseScrolledEvent*>(&event);
-			if ((mouseEvent->GetMouseX() >= x && mouseEvent->GetMouseX() <= x + width) &&
-				(mouseEvent->GetMouseY() >= y && mouseEvent->GetMouseY() <= y + height)) {
-				if (scrollEnabled) {
-					for (auto& child : children) {
-						//Break if going to overflow the top
-						int newY = child->GetY() + (mouseEvent->GetDistanceY() * 10); //ToDo: Add variable to cotrol the sensitivity of scroll
-						child->SetY(newY);
-						child->UpdateChildSizes();
-						child->UpdateVertices();
-					}
-					return;
-				}
-			}
-		}
-
-	}
-	void Container::ToFront(UIElement* child)
-	{
-		auto it = std::find(renderChildren.begin(), renderChildren.end(), child);
-
-		if (it == renderChildren.end())
-			return;
-
-		UIElement* target = *it;
-		renderChildren.erase(it);
-		renderChildren.push_back(target);
 	}
 
-	void Container::ToBack(UIElement* child)
+	void Container::SetSpacing(int spacing)
 	{
-
+		this->spacing = spacing;
 	}
 }
 
