@@ -2,7 +2,6 @@
 #include <iostream>
 #include <filesystem>
 #include <glad/glad.h>
-#include <SDL3/SDL.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp> 
 
@@ -94,19 +93,16 @@ namespace CFrame {
         int windowWidth = window.GetWidth();
         int windowHeight = window.GetHeight();
         //ClipOverflow(x, y, w, h, windowHeight);
-       
-        SDL_Color c = p.color1.toSDLColor(p.opacity);
-        SDL_Color c1 = p.color1.toSDLColor(p.opacity);
 
         float r = p.color1.r / 255.0f;
-        float g = c.g / 255.0f;
-        float b = c.b / 255.0f;
-        float a = c.a / 255.0f;
+        float g = p.color1.g / 255.0f;
+        float b = p.color1.b / 255.0f;
+        float a = p.opacity;
 
-        float rg = c1.r / 255.0f;
-        float gg = c1.g / 255.0f;
-        float bg = c1.b / 255.0f;
-        float ag = c1.a / 255.0f;
+        float rg = p.color2.r / 255.0f;
+        float gg = p.color2.g / 255.0f;
+        float bg = p.color2.b / 255.0f;
+        float ag = p.opacity ;
 
         float rb = p.borderColor1.r / 255.0f;
         float gb = p.borderColor1.g / 255.0f;
@@ -178,9 +174,6 @@ namespace CFrame {
         shader->SetUniform1i("u_HasTexture", hasTexture);
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
-        
-        if(hasTexture)
-         texture->UnBind();
 
 	}
 
@@ -218,17 +211,15 @@ namespace CFrame {
                                    float(windowHeight), 0.0f,  // Bottom, Top
                                                 -1.0f, 1.0f); 
         //Todo: Also use the second color
-        SDL_Color c = t.color1.toSDLColor(t.opacity);
-        SDL_Color c2 = t.color2.toSDLColor(t.opacity);
-        float r = c.r / 255.0f;
-        float g = c.g / 255.0f;
-        float b = c.b / 255.0f;
-        float a = c.a / 255.0f;
+        float r = t.color1.r / 255.0f;
+        float g = t.color1.g / 255.0f;
+        float b = t.color1.b / 255.0f;
+        float a = t.opacity;
 
-        float r2 = c2.r / 255.0f;
-        float g2 = c2.g / 255.0f;
-        float b2 = c2.b / 255.0f;
-        float a2 = c2.a / 255.0f;
+        float r2 = t.color2.r / 255.0f;
+        float g2 = t.color2.g / 255.0f;
+        float b2 = t.color2.b / 255.0f;
+        float a2 = t.color2.a / 255.0f;
 
         textShader->Bind();
         textShader->SetUniform4f("u_Color", r, b, g, a);
@@ -241,8 +232,6 @@ namespace CFrame {
 
         glDrawElements(GL_TRIANGLES, static_cast<unsigned int>(t.indices.size()), GL_UNSIGNED_INT, nullptr);
 
-        atlas->UnBind();
-
         if (!o.overflow) {
             DisableOverflow();
         }
@@ -253,12 +242,10 @@ namespace CFrame {
         int windowWidth = window.GetWidth();
         int windowHeight = window.GetHeight();
 
-        SDL_Color c = p.color.toSDLColor(1);
-
-        float r = c.r / 255.0f;
-        float g = c.g / 255.0f;
-        float b = c.b / 255.0f;
-        float a = c.a / 255.0f;
+        float r = p.color.r / 255.0f;
+        float g = p.color.g / 255.0f;
+        float b = p.color.b / 255.0f;
+        float a = p.color.a / 255.0f;
 
         /*Vertices of the rectangle. Calculates the top left as the origin*/
         float vertices[] = {

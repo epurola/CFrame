@@ -23,7 +23,7 @@ namespace CFrame
 		children.push_back(child);
 		renderChildren.push_back(child);
 		child->SetParent(this);
-		UpdateChildSizes();
+	//	UpdateChildSizes();
     }
 
 	void Container::Render(Renderer& renderer)

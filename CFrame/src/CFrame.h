@@ -14,6 +14,8 @@
 
 #include "CFrame/UIElements/HBox.h"
 
+#include "CFrame/UIElements/Grid.h"
+
 #include "CFrame/UIElements/Color.h"
 
 #include "CFrame/UIElements/TextField.h"

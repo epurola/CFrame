@@ -14,25 +14,129 @@ namespace CFrame {
 
 	}
 
-
-    //ToDo; Refactor this mess wtf
+    //ToDo: Refactor this...
 	void HBox::UpdateChildSizes()
 	{
-        if (children.empty())
-            return;
+        if (children.empty())return;
 
-        int fixedWidth = 0;
-        int flexWidth = 0;
-        int flexibleCount = 0;
-        int maxChildHeight = 0;
-        int totalMargins = 0; //For the flexible items
-
+        ResetLayoutMetrics();
+         //todo: Add margin here?
         int xpos = x + properties.padding;
         int ypos = y + properties.padding;
 
+        PrecalculateLayoutMetrics();
+
+        switch (xAlign)
+        {
+             case AlignItems::Center:
+                 xpos = x + (width / 2) - (fixedWidth + totalSpacing + (flexWidth * flexibleCount)) / 2;
+                 break;
+
+             case AlignItems::End:
+                 xpos = x + width - (fixedWidth + totalSpacing + properties.padding + (flexWidth * flexibleCount));
+                 break;
+
+             case AlignItems::Start:
+                 xpos = x + properties.padding;
+                 break;
+
+             default:
+                 xpos = xpos;
+                 break;
+        }
+
+
+        // Assign positions to each child
+        for (size_t i = 0; i < children.size(); i++)
+        {
+            UIElement* child = children[i];
+
+            if (!child->IsVisible()) continue;
+
+            if (child->IsPositionAbsolute()) {
+                HandleAbsolutePosition(*child);
+                continue;
+            }
+            
+            ElementProperties p = child->GetProperties();
+
+            switch (yAlign)
+            {
+                 case AlignItems::Center:
+                     ypos = y + (height / 2) - (child->GetHeight() / 2);
+                     break;
+                 case AlignItems::End:
+                     ypos = y + (height - maxChildHeight) - properties.padding;
+                     break;
+                 case AlignItems::Start:
+                     ypos = y + properties.padding;
+                     break;
+                 case AlignItems::Stretch:
+                     ypos = y + properties.padding;
+                     break;
+                 default:
+                     ypos = y + properties.padding;
+                     break;
+            }
+
+            xpos = xpos + p.marginLeft; 
+            ypos = ypos + p.marginTop;
+  
+            child->SetX(xpos);
+            child->SetY(ypos);
+            
+            if (child->GetElementType() == ElementType::CONTAINER && child->IsWidthResizable())
+            {
+                if (flexWidth > p.maxWidth && p.maxWidth > 0) {
+                    flexWidth = p.maxWidth;
+                }
+                child->SetWidth(flexWidth);
+                child->SetHeight(height - (properties.padding * 2));
+            }
+
+            if (child->IsWidthResizable())
+            {
+                child->SetWidth(flexWidth);
+            }
+
+            if (yAlign == AlignItems::Stretch)
+            {
+                child->SetHeight(height - (properties.padding * 2));
+            }
+
+            if (child->IsHeightResizable() || child->GetHeight() < 0)
+            {
+                child->SetHeight(height - (properties.padding * 2));
+                child->SetX(xpos + p.marginLeft);
+                child->SetY(ypos + p.marginTop);
+            }
+
+            xpos += child->GetWidth() + p.marginRight;
+
+            if (i < children.size() - 1)
+            {
+                xpos += spacing;
+            }
+
+            child->UpdateVertices();
+            child->UpdateChildSizes();
+        }
+	}
+
+    void HBox::ResetLayoutMetrics()
+    {
+        fixedWidth     = 0;
+        flexWidth      = 0;
+        flexibleCount  = 0;
+        maxChildHeight = 0;
+        totalMargins   = 0;
+    }
+
+    void HBox::PrecalculateLayoutMetrics()
+    {
         for (auto* child : children)
         {
-            if (!child->IsVisible() || child->IsPositionAbsolute()) 
+            if (!child->IsVisible() || child->IsPositionAbsolute())
             {
                 continue;
             }
@@ -52,161 +156,37 @@ namespace CFrame {
             }
         }
 
-        int totalSpacing = static_cast<int>(spacing * (children.size() - 1));
-        // Width is the width of the current hbox
-        int availableSpace = width - fixedWidth - totalSpacing - totalMargins - (properties.padding * 2);
+        totalSpacing = static_cast<int>(spacing * (children.size() - 1));
+        availableSpace = width - fixedWidth - totalSpacing - totalMargins - (properties.padding * 2);
+        flexWidth = (flexibleCount > 0) ? (availableSpace / flexibleCount) : 0;
 
-        if (flexibleCount > 0)
+        if (maxChildHeight == 0) 
         {
-            flexWidth = (availableSpace / flexibleCount);
-        }
-        else
-        {
-            flexWidth = 0;
-        }
-
-        if (maxChildHeight == 0) {
             maxChildHeight = height - (properties.padding * 2);
         }
+    }
 
-
-        switch (xAlign)
+    void HBox::HandleAbsolutePosition(UIElement& child)
+    {
+        if (child.IsWidthResizable()) 
         {
-        case AlignItems::Center:
-            xpos = x + (width / 2) - (fixedWidth + totalSpacing + (flexWidth * flexibleCount)) / 2;
-            break;
-        case AlignItems::End:
-            xpos = x + width - (fixedWidth + totalSpacing + properties.padding + (flexWidth * flexibleCount));
-            break;
-        case AlignItems::Start:
-            xpos = x + properties.padding;
-            break;
-        default:
-            xpos = xpos;
-            break;
+            child.SetWidth(width - child.GetLocalX() - properties.padding * 2 - child.GetProperties().marginRight);
         }
 
-
-        // Assign positions to each child
-        for (size_t i = 0; i < children.size(); i++)
+        if (child.GetAnchor() == PositionMode::BottomLeft) 
         {
-            UIElement* child = children[i];
-            if (!child->IsVisible() ) {
-                continue;
-            }
-
-            switch (yAlign)
-            {
-            case AlignItems::Center:
-                ypos = y + (height / 2) - (child->GetHeight() / 2) ;
-                break;
-            case AlignItems::End:
-                ypos = y + (height - maxChildHeight) - properties.padding;
-                break;
-            case AlignItems::Start:
-                ypos = y + properties.padding;
-                break;
-            case AlignItems::Stretch:
-                ypos = y + properties.padding;
-                break;
-            default:
-                ypos = y + properties.padding;
-                break;
-            }
-
-
-            xpos = xpos + child->GetProperties().marginLeft; 
-            ypos = ypos + child->GetProperties().marginTop;
-
-            if (!child->IsPositionAbsolute()) {
-                child->SetX(xpos);
-                child->SetY(ypos);
-            }
-
-            if (child->IsPositionAbsolute()) {
-                if (child->IsWidthResizable()) {
-                    child->SetWidth(width -child->GetLocalX() - properties.padding * 2 - child->GetProperties().marginRight);
-                }
-          
-                if (child->GetAnchor() == PositionMode::BottomLeft) {
-                    child->SetX(GetX() + child->GetLocalX());
-                    child->SetY(GetY() + GetHeight() - child->GetHeight() - child->GetProperties().marginBottom - child->GetLocalY());
-                }
-                else {
-                    child->SetX(GetX() + child->GetLocalX());
-                    child->SetY(GetY() + child->GetLocalY());
-                }
-                
-                child->UpdateChildSizes();
-                child->UpdateVertices();
-                
-                continue;
-            }
-            
-            if (child->GetElementType() == ElementType::CONTAINER && child->IsWidthResizable())
-            {
-                if (flexWidth > child->GetProperties().maxWidth && child->GetProperties().maxWidth > 0) {
-                    flexWidth = child->GetProperties().maxWidth;
-                }
-
-                child->SetWidth(flexWidth);
-              
-                child->SetHeight(height - (properties.padding * 2));
-                
-
-                if (!child->IsPositionAbsolute()) {
-                    child->SetX(xpos);
-                    child->SetY(ypos);
-                }
-                child->UpdateChildSizes();
-            }
-          
-
-            if (child->GetElementType() == ElementType::CONTAINER && !child->IsWidthResizable())
-            {
-                if (!child->IsPositionAbsolute()) {
-                    child->SetX(xpos);
-                    child->SetY(ypos);
-                }
-                child->UpdateChildSizes();
-            }
-
-            if (child->IsWidthResizable())
-            {
-                child->SetWidth(flexWidth);
-                child->UpdateChildSizes();
-            }
-
-            if (yAlign == AlignItems::Stretch)
-            {
-                child->SetHeight(height - (properties.padding * 2));
-            }
-
-            if (child->IsHeightResizable() || child->GetHeight() < 0)
-            {
-                child->SetHeight(height - (properties.padding * 2));
-                child->SetX(xpos + child->GetProperties().marginLeft);
-                child->SetY(ypos + child->GetProperties().marginTop);
-                child->UpdateChildSizes();
-            }
-            /*
-            if (child->GetHeight() > height) {
-                child->SetHeight(height - (properties.padding * 2));
-            }*/
-
-            if (child->GetElementType() == ElementType::BUTTON) {
-                child->UpdateChildSizes();
-            }
-
-            xpos += child->GetWidth() + child->GetProperties().marginRight;
-            if (i < children.size() - 1)
-            {
-                xpos += spacing;
-                //xpos-=  padding;
-            }
-            child->UpdateVertices();
+            child.SetX(GetX() + child.GetLocalX());
+            child.SetY(GetY() + GetHeight() - child.GetHeight() - child.GetProperties().marginBottom - child.GetLocalY());
         }
-	}
+        else 
+        {
+            child.SetX(GetX() + child.GetLocalX());
+            child.SetY(GetY() + child.GetLocalY());
+        }
+
+        child.UpdateChildSizes();
+        child.UpdateVertices();//Update the drawing info of the child
+    }
 
 	
 }

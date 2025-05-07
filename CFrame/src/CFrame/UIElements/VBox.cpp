@@ -4,7 +4,7 @@ namespace CFrame
 {
 
     VBox::VBox(int x, int y, int w, int h, UIElement* parent)
-        : Container(x, y, w, h, nullptr)
+        : Container(x, y, w, h, parent)
     {
         isHeightResizable = (h == -1); 
         isWidthResizable = (w == -1);
@@ -54,12 +54,6 @@ namespace CFrame
                 child->SetHeight(flexibleHeight);
             }
 
-            if (child->GetElementType() == ElementType::CONTAINER && !child->IsHeightResizable())
-            {
-                child->SetX(xpos);
-                child->SetY(ypos);
-            }
-
             if (child->IsHeightResizable())
             {
                 child->SetHeight(flexibleHeight);
@@ -88,8 +82,8 @@ namespace CFrame
                 ypos += spacing ;
             }
 
-            child->UpdateVertices();
             child->UpdateChildSizes();
+            child->UpdateVertices();
         }
 	}
 
@@ -189,7 +183,7 @@ namespace CFrame
             child.SetY(GetY() + child.GetLocalY());
         }
         child.UpdateChildSizes();
-        child.UpdateVertices();
+        child.UpdateVertices();//Update the drawing info of the child
     }
 }
 

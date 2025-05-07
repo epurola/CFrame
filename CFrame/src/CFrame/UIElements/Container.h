@@ -32,6 +32,7 @@ namespace CFrame {
 
 		inline int GetSpacing() const { return spacing; }
 		inline ElementType GetElementType() const override { return ElementType::CONTAINER; };
+
 		std::vector<UIElement*> children;
 		std::vector<UIElement*> renderChildren;
 

@@ -112,6 +112,8 @@ void Application::run()
 
 	titleBarContainer->RegisterAnimator(applicationManager);
 	sceneContainer->RegisterAnimator(applicationManager);
+	titleBarContainer->UpdateChildSizes();
+	sceneContainer->UpdateChildSizes();
 	
 	while (running ) {  
 		auto start_time = std::chrono::steady_clock::now();
