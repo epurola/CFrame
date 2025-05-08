@@ -18,7 +18,8 @@ namespace CFrame
         CONTAINER,
         BUTTON,
         LABEL,
-        INPUTFIELD
+        INPUTFIELD,
+        IMAGE
     };
 
     enum TextAlign {
@@ -150,10 +151,10 @@ namespace CFrame
         void SetPadding(int padding);
         void SetParent(UIElement* p);
         void SetRadius(float topLeft = 0, float topRight = 0, float bottoLeft = 0, float bottomRight = 0);
-        void SetHeight(int h);
-        void SetWidth(int w);
-        void SetX(int x);
-        void SetY(int y);
+        void SetHeight(float h);
+        void SetWidth(float w);
+        void SetX(float x);
+        void SetY(float y);
         void SetAngle(float angle);
         void SetBorder(float border);
         void SetBorder(float t, float b, float r, float l);
@@ -182,13 +183,13 @@ namespace CFrame
         void AnimateScale(float scaleX, float scaleY);
         void AnimateGradient(float speed);
 
-        int    GetX()       const  { return x; }
-        int    GetY()       const  { return y; }
+        float  GetX()       const  { return x; }
+        float  GetY()       const  { return y; }
         int    GetLocalX()  const  { return localX; }
         int    GetLocalY()  const  { return localY; }
         float  GetAngle()   const  { return properties.angle; }
-        int    GetWidth()   const  { return width; }
-        int    GetHeight()  const  { return height; }
+        float  GetWidth()   const  { return width; }
+        float  GetHeight()  const  { return height; }
         float  GetBorder()  const  { return properties.border; }
 
         bool  IsWidthResizable()        const  { return isWidthResizable; }
@@ -205,14 +206,23 @@ namespace CFrame
 
         void  SetOnHover(std::function<void()> onHover);
         void  SetOnLeave(std::function<void()> onLeave);
+
+    protected:
+        virtual bool MouseDragEvent(MouseDraggedEvent& event);
+        virtual bool MousePressEvent(MouseButtonDownEvent& event); 
+        virtual bool MouseReleaseEvent(MouseButtonReleasedEvent& event);  
+        virtual bool MouseMoveEvent(MouseMovedEvent& event);             
+       // virtual void MouseEnterEvent();                               
+       // virtual void MouseLeaveEvent();                            
+       // virtual void MouseDoubleClickEvent(MouseButtonDownEvent& event);
         
 
     protected:
         UIElement* parent;
-        int x = 0;
-        int y = 0;
-        int width = 0;
-        int height = 0;
+        float x = 0;
+        float y = 0;
+        float width = 0;
+        float height = 0;
         int localX = 0;
         int localY = 0;
         bool isWidthResizable = true;

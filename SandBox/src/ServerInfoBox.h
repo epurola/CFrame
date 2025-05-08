@@ -14,5 +14,4 @@ public:
 private:
 	CFrame::HBox* topPart;
 	CFrame::HBox* bottomPart;
-
 };

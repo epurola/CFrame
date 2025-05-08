@@ -30,9 +30,11 @@ namespace CFrame
 	{
 		if (!IsVisible()) return;
 	
-		renderer.DrawRectangle((float)x, (float)y, (float)width, (float)height,
-				GetProperties(), 1.0f, 1.0f, nullptr);
 		
+		renderer.DrawRectangle(x, y, (float)width, (float)height,
+				GetProperties(), 1.0f, 1.0f, imageTexture.get());
+		
+	
 		for (auto& child : renderChildren) 
 		{
 			if (child->IsVisible()) 
@@ -54,10 +56,24 @@ namespace CFrame
 
 		switch (event.GetEventType()) 
 		{
-			case CFrameEventType::MouseDragged:
+			case CFrameEventType::MouseButtonDown:
 			{
-				auto& mouseEvent = static_cast<MouseDraggedEvent&>(event);
-				event.handled = HandleMouseDrag(mouseEvent);
+				auto& mouseEvent = static_cast<MouseButtonDownEvent&>(event);
+				event.handled = MousePressEvent(mouseEvent);
+				return;
+			}
+
+			case CFrameEventType::MouseButtonReleased:
+			{
+				auto& mouseEvent = static_cast<MouseButtonReleasedEvent&>(event);
+				event.handled = MouseReleaseEvent(mouseEvent);
+				return;
+			}
+
+			case CFrameEventType::MouseMoved:
+			{
+				auto& mouseEvent = static_cast<MouseMovedEvent&>(event);
+				event.handled = MouseMoveEvent(mouseEvent);
 				return;
 			}
 				

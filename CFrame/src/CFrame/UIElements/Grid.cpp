@@ -8,7 +8,7 @@ namespace CFrame
 		isHeightResizable = (h == -1);
 		isWidthResizable = (w == -1);
 		SetColor(Color::LightGray2);
-
+		SetRadius(20,20,20,20);
 		cells.assign(rows * cols, Cell());
 	}
 
@@ -28,8 +28,8 @@ namespace CFrame
 		gridWidth = GetWidth() / cols;
 		gridHeight = GetHeight() / rows;
 
-		int xpos = GetX() + properties.padding;
-		int ypos = GetY() + properties.padding;
+		float xpos = GetX() +(float) properties.padding;
+		float ypos = GetY() +(float) properties.padding;
 
 		int col = 0;
 
@@ -72,5 +72,39 @@ namespace CFrame
 		cells[index].child = child;  
 	}
 
+	void Grid::SetLayout(int rows, int cols)
+	{
+		this->rows = rows;
+		this->cols = cols;
+		cells.assign(rows * cols, Cell());
+	}
+
+	UIElement* Grid::GetChild(int index)
+	{
+		if (index < 0 || index >= static_cast<int>(cells.size())) {
+			return nullptr; 
+		}
+
+		return cells[index].child;
+	}
+
+	void Grid::RemoveChild(int index)
+	{
+		if (index < 0 || index >= static_cast<int>(cells.size())) {
+			return;
+		}
+		cells[index].child = nullptr;
+	}
+
+	void Grid::InsertChild(UIElement* child, int index)
+	{
+		if (index < 0 || index >= static_cast<int>(cells.size())) {
+			return;
+		}
+
+		if (cells[index].child == nullptr) {
+			cells[index].child = child;
+		}
+	}
 }
 

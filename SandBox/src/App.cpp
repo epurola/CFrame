@@ -1,5 +1,6 @@
 #include <CFrame.h>
 #include "ServerInfoBox.h"
+#include "ChessBoard.h"
 
 
 class SandBox : public CFrame::Application 
@@ -257,38 +258,23 @@ public:
 		inputField->SetMargin(0, 0, 30, 0);
 		inputField->SetColor(Color::DarkGray);
 
-		CFrame::Button* b1 = new CFrame::Button(-1, -1);
-		b1->SetColor(Color::Red);
-		CFrame::Button* b2 = new CFrame::Button(-1, -1);
-		b2->SetColor(Color::Blue);
-		CFrame::Button* b3 = new CFrame::Button(-1, -1);
-		b3->SetColor(Color::Gold);
-		CFrame::Button* b4 = new CFrame::Button(-1, -1);
-		b4->SetColor(Color::LightGray2);
-		
-		CFrame::Grid* grid = new CFrame::Grid(500, -1);
+		ChessBoard* grid = new ChessBoard(-1, -1);
 		messageBox->AddChild(grid);
-
-		grid->AddChild(b1,0);
-		grid->AddChild(b2,15);
-		
-
-		grid->SetColor(Color::LightGray2);
 		
 		messageBox->AddChild(inputField);
 		
-	
 		main->AddElement(vbox);
 
 		AddScene(main);
 	}
 
-	~SandBox() 
+	~SandBox()
 	{
-		
-	}
 
+	}
 };
+
+
 
 /*Client implementasion of CreateApplication returns a new instance of users application
 * that inherits from CFrame::Application */

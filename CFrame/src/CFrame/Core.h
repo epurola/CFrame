@@ -9,5 +9,3 @@
 #else
 	#error CFrame only supports Windows!
 #endif
-
-#define BIND_FUNCTION(func) std::bind(&std::remove_reference<decltype(*this)>::type::func, this, std::placeholders::_1)

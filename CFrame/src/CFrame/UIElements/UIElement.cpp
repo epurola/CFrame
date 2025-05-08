@@ -107,7 +107,7 @@ namespace CFrame {
 		properties.radius.topRight = topRight;
 	}
 
-	void UIElement::SetHeight(int h)
+	void UIElement::SetHeight(float h)
 	{
 		this->height = h;
 		if (height < properties.minHeight && properties.minHeight != 0) {
@@ -115,7 +115,7 @@ namespace CFrame {
 		}
 	}
 
-	void UIElement::SetWidth(int w)
+	void UIElement::SetWidth(float w)
 	{
 		this->width = w;
 		if (width > properties.maxWidth && properties.maxWidth != -1) {
@@ -126,12 +126,12 @@ namespace CFrame {
 		}
 	}
 
-	void UIElement::SetX(int x)
+	void UIElement::SetX(float x)
 	{
 		this->x = x;
 	}
 
-	void UIElement::SetY(int y)
+	void UIElement::SetY(float y)
 	{
 		this->y = y;
 	}
@@ -223,6 +223,27 @@ namespace CFrame {
 	void UIElement::SetOnLeave(std::function<void()> onLeave)
 	{
 		this->onLeave = onLeave;
+	}
+
+	bool UIElement::MouseDragEvent(MouseDraggedEvent& event)
+	{
+		//Default implementasion for dragging here...
+		return false;
+	}
+
+	bool UIElement::MousePressEvent(MouseButtonDownEvent& event)
+	{
+		return false;
+	}
+
+	bool UIElement::MouseReleaseEvent(MouseButtonReleasedEvent& event)
+	{
+		return false;
+	}
+
+	bool UIElement::MouseMoveEvent(MouseMovedEvent& event)
+	{
+		return false;
 	}
 
 	void UIElement::SetOnHover(std::function<void()> onHover)

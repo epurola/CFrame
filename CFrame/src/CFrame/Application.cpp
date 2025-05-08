@@ -54,6 +54,9 @@ Application::Application(int width, int height)
 
 	eventDispatcher->AddListener(CFrameEventType::TextInput,
 		[this](CFrameEvent& event) { OnEvent(event); });
+
+	eventDispatcher->AddListener(CFrameEventType::MouseButtonReleased,
+		[this](CFrameEvent& event) { OnEvent(event); });
 }  
 
 Application::~Application()   

@@ -16,6 +16,8 @@
 
 #include "CFrame/UIElements/Grid.h"
 
+#include "CFrame/UIElements/Image.h"
+
 #include "CFrame/UIElements/Color.h"
 
 #include "CFrame/UIElements/TextField.h"

@@ -25,8 +25,13 @@ namespace CFrame
 		~Grid();
 
 		void UpdateChildSizes() override;
-
 		void AddChild(UIElement* child, int index);
+
+		void SetLayout(int rows, int cols);
+
+		UIElement* GetChild(int index);
+		void RemoveChild(int index);
+		void InsertChild(UIElement* child, int index);
 
 		ElementType GetElementType() const override { return ElementType::CONTAINER; };
 	private:

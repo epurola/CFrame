@@ -148,6 +148,22 @@ namespace CFrame
 		float mouseX, mouseY;
 	};
 
+	/*Mouse Button Down event*/
+	class CFRAME_API MouseButtonReleasedEvent : public CFrameEvent
+	{
+	public:
+		MouseButtonReleasedEvent(float x, float y)
+			: mouseX(x), mouseY(y) {
+		}
+
+		inline float GetX() const { return mouseX; }
+		inline float GetY() const { return mouseY; }
+
+		CFrameEventType GetEventType() const override { return CFrameEventType::MouseButtonReleased; }
+	private:
+		float mouseX, mouseY;
+	};
+
 	/*Mouse Dragged event*/
 	class CFRAME_API MouseDraggedEvent : public CFrameEvent
 	{

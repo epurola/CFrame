@@ -39,6 +39,13 @@ bool Window::OnUpdate()
 		   return true;
             
 	   }   
+	   case SDL_EVENT_MOUSE_BUTTON_UP:
+	   {
+		   MouseButtonReleasedEvent released(event.button.x, event.button.y);
+		   dispatcher.Dispatch(released);
+		   return true;
+
+	   }
        case SDL_EVENT_KEY_DOWN:  
        {  
            KeyPressedEvent keyEvent(event.key.key, event.key.repeat); 
