@@ -246,6 +246,11 @@ namespace CFrame {
 		return false;
 	}
 
+	bool UIElement::MouseLeaveEvent()
+	{
+		return false;
+	}
+
 	void UIElement::SetOnHover(std::function<void()> onHover)
 	{
 		this->onHover = onHover;

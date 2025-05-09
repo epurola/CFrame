@@ -65,7 +65,13 @@ bool ChessBoard::MouseReleaseEvent(CFrame::MouseButtonReleasedEvent& event)
 		int row = localY / cellHeight;
 		int toIndex = row * 8 + col;
 		//This can be used to place an child to a different cell after it was removed.
-		InsertChild(selectedPiece, toIndex); //Do not use AddChild() since it will also add to the child list
+		if (static_cast<ChessPiece*>(GetChild(toIndex)) == nullptr) {
+			InsertChild(selectedPiece, toIndex); //Do not use AddChild() since it will also add to the child list
+		}
+		else {
+			InsertChild(selectedPiece, index); //Put it back if the cell is already in use
+		}
+		
 		UpdateChildSizes();
 		selectedPiece = nullptr;
 		return true;
@@ -75,25 +81,25 @@ bool ChessBoard::MouseReleaseEvent(CFrame::MouseButtonReleasedEvent& event)
 
 void ChessBoard::InitializeBoard()
 {
-	ChessPiece* b1 = new ChessPiece(-1, -1, "C:/dev/CFrame/SandBox/src/Images/black-rook.png");
-	ChessPiece* b2 = new ChessPiece(-1, -1, "C:/dev/CFrame/SandBox/src/Images/black-knight.png");
-	ChessPiece* b3 = new ChessPiece(-1, -1, "C:/dev/CFrame/SandBox/src/Images/black-bishop.png");
-	ChessPiece* b4 = new ChessPiece(-1, -1, "C:/dev/CFrame/SandBox/src/Images/black-queen.png");
-	ChessPiece* b5 = new ChessPiece(-1, -1, "C:/dev/CFrame/SandBox/src/Images/black-king.png");
-	ChessPiece* b6 = new ChessPiece(-1, -1, "C:/dev/CFrame/SandBox/src/Images/black-bishop.png");
-	ChessPiece* b7 = new ChessPiece(-1, -1, "C:/dev/CFrame/SandBox/src/Images/black-knight.png");
-	ChessPiece* b8 = new ChessPiece(-1, -1, "C:/dev/CFrame/SandBox/src/Images/black-rook.png");
-	ChessPiece* b9 = new ChessPiece(-1, -1, "C:/dev/CFrame/SandBox/src/Images/black-pawn.png");
+	ChessPiece* b1 = new ChessPiece( "C:/dev/CFrame/SandBox/src/Images/black-rook.png");
+	ChessPiece* b2 = new ChessPiece( "C:/dev/CFrame/SandBox/src/Images/black-knight.png");
+	ChessPiece* b3 = new ChessPiece( "C:/dev/CFrame/SandBox/src/Images/black-bishop.png");
+	ChessPiece* b4 = new ChessPiece( "C:/dev/CFrame/SandBox/src/Images/black-queen.png");
+	ChessPiece* b5 = new ChessPiece( "C:/dev/CFrame/SandBox/src/Images/black-king.png");
+	ChessPiece* b6 = new ChessPiece( "C:/dev/CFrame/SandBox/src/Images/black-bishop.png");
+	ChessPiece* b7 = new ChessPiece( "C:/dev/CFrame/SandBox/src/Images/black-knight.png");
+	ChessPiece* b8 = new ChessPiece( "C:/dev/CFrame/SandBox/src/Images/black-rook.png");
+	ChessPiece* b9 = new ChessPiece( "C:/dev/CFrame/SandBox/src/Images/black-pawn.png");
 
-	ChessPiece* w1 = new ChessPiece(-1, -1, "C:/dev/CFrame/SandBox/src/Images/white-rook.png");
-	ChessPiece* w2 = new ChessPiece(-1, -1, "C:/dev/CFrame/SandBox/src/Images/white-knight.png");
-	ChessPiece* w3 = new ChessPiece(-1, -1, "C:/dev/CFrame/SandBox/src/Images/white-bishop.png");
-	ChessPiece* w4 = new ChessPiece(-1, -1, "C:/dev/CFrame/SandBox/src/Images/white-queen.png");
-	ChessPiece* w5 = new ChessPiece(-1, -1, "C:/dev/CFrame/SandBox/src/Images/white-king.png");
-	ChessPiece* w6 = new ChessPiece(-1, -1, "C:/dev/CFrame/SandBox/src/Images/white-bishop.png");
-	ChessPiece* w7 = new ChessPiece(-1, -1, "C:/dev/CFrame/SandBox/src/Images/white-knight.png");
-	ChessPiece* w8 = new ChessPiece(-1, -1, "C:/dev/CFrame/SandBox/src/Images/white-rook.png");
-	ChessPiece* w9 = new ChessPiece(-1, -1, "C:/dev/CFrame/SandBox/src/Images/white-pawn.png");
+	ChessPiece* w1 = new ChessPiece( "C:/dev/CFrame/SandBox/src/Images/white-rook.png");
+	ChessPiece* w2 = new ChessPiece( "C:/dev/CFrame/SandBox/src/Images/white-knight.png");
+	ChessPiece* w3 = new ChessPiece( "C:/dev/CFrame/SandBox/src/Images/white-bishop.png");
+	ChessPiece* w4 = new ChessPiece( "C:/dev/CFrame/SandBox/src/Images/white-queen.png");
+	ChessPiece* w5 = new ChessPiece( "C:/dev/CFrame/SandBox/src/Images/white-king.png");
+	ChessPiece* w6 = new ChessPiece( "C:/dev/CFrame/SandBox/src/Images/white-bishop.png");
+	ChessPiece* w7 = new ChessPiece( "C:/dev/CFrame/SandBox/src/Images/white-knight.png");
+	ChessPiece* w8 = new ChessPiece( "C:/dev/CFrame/SandBox/src/Images/white-rook.png");
+	ChessPiece* w9 = new ChessPiece( "C:/dev/CFrame/SandBox/src/Images/white-pawn.png");
 
 	SetLayout(8, 8);
 	SetBackgroundImage("C:/dev/CFrame/SandBox/src/Images/board.png");

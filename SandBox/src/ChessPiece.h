@@ -6,7 +6,7 @@
 class ChessPiece : public CFrame::Image 
 {
 public:
-	ChessPiece(int width, int height, std::string path);
+	ChessPiece( std::string path);
 	~ChessPiece();
 
 

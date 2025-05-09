@@ -13,7 +13,7 @@ namespace CFrame
 
 	}
 
-	void Image::Render(Renderer& renderer)
+	void Image::Render(Renderer1& renderer)
 	{
 		renderer.DrawRectangle(
 			GetX(),
@@ -30,10 +30,38 @@ namespace CFrame
 	{
 		switch (event.GetEventType()) 
 		{
-			case CFrameEventType::MouseDragged: 
+			case CFrameEventType::MouseButtonDown:
 			{
-				auto& dragEvent = static_cast<MouseDraggedEvent&>(event);
-				MouseDragEvent(dragEvent);
+				auto& mouseEvent = static_cast<MouseButtonDownEvent&>(event);
+				if (mouseEvent.GetX() >= x && mouseEvent.GetX() <= x + width &&
+					mouseEvent.GetY() >= y && mouseEvent.GetY() <= y + height)
+				event.handled = MousePressEvent(mouseEvent);
+				return;
+			}
+
+			case CFrameEventType::MouseMoved:
+			{
+				auto& mouseEvent = static_cast<MouseMovedEvent&>(event);
+				if (mouseEvent.GetX() >= x && mouseEvent.GetX() <= x + width &&
+					mouseEvent.GetY() >= y && mouseEvent.GetY() <= y + height)
+				event.handled = MouseMoveEvent(mouseEvent); 
+				return;
+			}
+
+			case CFrameEventType::MouseDragged:
+			{
+				auto& mouseEvent = static_cast<MouseDraggedEvent&>(event);
+				event.handled = MouseDragEvent(mouseEvent);
+				return;
+			}
+
+			case CFrameEventType::MouseButtonReleased:
+			{
+				auto& mouseEvent = static_cast<MouseButtonReleasedEvent&>(event);
+				if (mouseEvent.GetX() >= x && mouseEvent.GetX() <= x + width &&
+					mouseEvent.GetY() >= y && mouseEvent.GetY() <= y + height)
+				event.handled = MouseReleaseEvent(mouseEvent);
+				return;
 			}
 		}
 	}
@@ -42,5 +70,6 @@ namespace CFrame
 	{
 		this->onEvent = onEvent;
 	}
+
 }
 

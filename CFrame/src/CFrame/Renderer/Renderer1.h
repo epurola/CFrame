@@ -25,12 +25,12 @@ namespace CFrame {
 		glm::vec4 color;
 	};
 
-	class Renderer
+	class Renderer1
 	{
 	public:
-		Renderer(Window& window);
+		Renderer1(Window& window);
 
-		~Renderer();
+		~Renderer1();
 
 		void DrawRectangle(float x, float y, float w, float h,
 			ElementProperties p, float speed, float time, Texture* texture );
@@ -43,9 +43,11 @@ namespace CFrame {
 		void EndFrame();
 		void DrawFullScreenQuad();
 		void Resize(int w, int h);
-        
-		
 
+	private:
+		void AddToBatch(ElementProperties p);
+		void Flush();
+        
 	private:
 		Window& window ;
 		std::unique_ptr<Shader> shader = nullptr;
@@ -75,7 +77,12 @@ namespace CFrame {
 
 		unsigned int rectIndecies[6] = { 0, 1, 2, 2, 3, 0 };
 
-		
+		std::vector<float> batchVertices;
+		std::vector<unsigned int> batchIndices;
+		std::unique_ptr<VertexArray> VA = nullptr;
+		std::unique_ptr<VertexBuffer> VB = nullptr;
+		std::unique_ptr<VertexBufferLayout> Layout = nullptr;
+		std::unique_ptr<IndexBuffer> Indices = nullptr;
 	};
 
 }

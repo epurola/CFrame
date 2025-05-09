@@ -3,6 +3,7 @@
 #include "../Renderer/Texture.h"
 #include "../Renderer/FontLoader.h"
 #include "UIElement.h"
+#include "../Renderer/Renderer1.h"
 
 
 namespace CFrame
@@ -20,7 +21,7 @@ namespace CFrame
 
         ~Label();
 
-        void Render(Renderer& renderer) override;
+        void Render(Renderer1& renderer) override;
         void RegisterAnimator(std::shared_ptr<ApplicationManager> manager);
         void UpdateChildSizes() override;
         void OnEvent(CFrameEvent& event) override;

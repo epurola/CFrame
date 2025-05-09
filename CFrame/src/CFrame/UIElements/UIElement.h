@@ -3,15 +3,15 @@
 #include <cmath>
 #include <optional>
 #include "../Core.h"
-#include "../Renderer/Renderer.h"
 #include "../Renderer/FontManager.h"
 #include "../CFrameEvent/CFrameEvent.h"
 #include "Color.h"
 #include "../ApplicationManager.h"
+#include "../Renderer/Renderer1.h"
 
 namespace CFrame 
 {
-    class Renderer;
+    class Renderer1;
 
     enum ElementType
     {
@@ -138,7 +138,7 @@ namespace CFrame
         UIElement(int x = 0, int y = 0, int w = -1, int h = -1, UIElement* parent = nullptr);
         virtual ~UIElement() = default;
 
-        virtual void Render(Renderer& renderer) = 0;
+        virtual void Render(Renderer1& renderer) = 0;
         virtual void UpdateChildSizes() {}
         virtual void OnEvent(CFrameEvent& event);
         virtual ElementType GetElementType() const = 0;
@@ -213,7 +213,7 @@ namespace CFrame
         virtual bool MouseReleaseEvent(MouseButtonReleasedEvent& event);  
         virtual bool MouseMoveEvent(MouseMovedEvent& event);             
        // virtual void MouseEnterEvent();                               
-       // virtual void MouseLeaveEvent();                            
+        virtual bool MouseLeaveEvent();                            
        // virtual void MouseDoubleClickEvent(MouseButtonDownEvent& event);
         
 

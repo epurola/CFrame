@@ -26,7 +26,7 @@ namespace CFrame
 	//	UpdateChildSizes();
     }
 
-	void Container::Render(Renderer& renderer)
+	void Container::Render(Renderer1& renderer)
 	{
 		if (!IsVisible()) return;
 	
@@ -59,6 +59,8 @@ namespace CFrame
 			case CFrameEventType::MouseButtonDown:
 			{
 				auto& mouseEvent = static_cast<MouseButtonDownEvent&>(event);
+				if (mouseEvent.GetX() >= x && mouseEvent.GetX() <= x + width &&
+					mouseEvent.GetY() >= y && mouseEvent.GetY() <= y + height)
 				event.handled = MousePressEvent(mouseEvent);
 				return;
 			}
@@ -66,6 +68,8 @@ namespace CFrame
 			case CFrameEventType::MouseButtonReleased:
 			{
 				auto& mouseEvent = static_cast<MouseButtonReleasedEvent&>(event);
+				if (mouseEvent.GetX() >= x && mouseEvent.GetX() <= x + width &&
+					mouseEvent.GetY() >= y && mouseEvent.GetY() <= y + height)
 				event.handled = MouseReleaseEvent(mouseEvent);
 				return;
 			}
@@ -73,6 +77,8 @@ namespace CFrame
 			case CFrameEventType::MouseMoved:
 			{
 				auto& mouseEvent = static_cast<MouseMovedEvent&>(event);
+				if (mouseEvent.GetX() >= x && mouseEvent.GetX() <= x + width &&
+					mouseEvent.GetY() >= y && mouseEvent.GetY() <= y + height)
 				event.handled = MouseMoveEvent(mouseEvent);
 				return;
 			}

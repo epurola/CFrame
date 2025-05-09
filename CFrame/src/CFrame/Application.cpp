@@ -1,7 +1,6 @@
 #include "Application.h"  
 #include "Log.h"  
 #include "Window.h"  
-#include "Renderer/Renderer.h"  
 #include <chrono>  
 
 namespace CFrame  
@@ -110,7 +109,7 @@ void Application::run()
 	constexpr std::chrono::milliseconds frame_duration(static_cast<int>(1000.0 / target_fps));    
 	/*Needs to be created after window->Create since there is no 
 	valid GL context before that*/
-	renderer = std::make_unique<Renderer>(*window);
+	renderer = std::make_unique<Renderer1>(*window);
 	//Inject the manager into each UI element so they can send signals
 
 	titleBarContainer->RegisterAnimator(applicationManager);

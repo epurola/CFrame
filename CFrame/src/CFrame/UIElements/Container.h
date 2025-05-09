@@ -1,8 +1,6 @@
 #pragma once
 #include "UIElement.h"
-#include "../Renderer/Renderer.h"
-
-
+#include "../Renderer/Renderer1.h"
 
 namespace CFrame {
 
@@ -19,7 +17,7 @@ namespace CFrame {
 		virtual void UpdateChildSizes() = 0;
 		void AddChild(UIElement* child);
 
-		void Render(Renderer& renderer) override;
+		void Render(Renderer1& renderer) override;
 		void OnEvent(CFrameEvent& event) override;
 		void RegisterAnimator(std::shared_ptr<ApplicationManager> manager) override;
 

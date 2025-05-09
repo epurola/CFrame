@@ -30,7 +30,7 @@ namespace CFrame
     }
 
     //For everytime button change change font size and position not everyframe.
-	void Button::Render(Renderer& renderer)
+	void Button::Render(Renderer1& renderer)
 	{
         int renderWidth  = width;
         int renderHeight = height;
@@ -169,14 +169,14 @@ namespace CFrame
             case CFrameEventType::MouseButtonDown: 
             {
                 auto& mouseEvent = static_cast<MouseButtonDownEvent&>(event);
-                event.handled = HandleMouseButtonDown(mouseEvent);
+                event.handled = MousePressEvent(mouseEvent);
                 return;
             }
 
             case CFrameEventType::MouseMoved: 
             {
                 auto& mouseEvent = static_cast<MouseMovedEvent&>(event);
-                event.handled = HandleMouseMove(mouseEvent); //Return false everytime to avoid buttons with old frames
+                event.handled = MouseMoveEvent(mouseEvent); //Return false everytime to avoid buttons with old frames
                 return;
             }
 
@@ -185,23 +185,22 @@ namespace CFrame
                 event.handled = HandleMouseLeaveWindow(); //Also returns false so other elements can get this
                 return;
             }
+
+            case CFrameEventType::MouseDragged:
+            {
+                auto& mouseEvent = static_cast<MouseDraggedEvent&>(event);
+                event.handled = MouseDragEvent(mouseEvent); 
+                return;
+            }
+
+            case CFrameEventType::MouseButtonReleased:
+            {
+                auto& mouseEvent = static_cast<MouseButtonReleasedEvent&>(event);
+                event.handled = MouseReleaseEvent(mouseEvent);
+                return;
+            }
         }
         return;
-    }
-
-    bool Button::HandleMouseButtonDown(MouseButtonDownEvent& e)
-    {
-        int xPos = static_cast<int>(e.GetX());
-        int yPos = static_cast<int>(e.GetY());
-
-        // Early return if the click is outside the button
-        if (xPos < x || xPos >(x + width) || yPos < y || yPos >(y + height)) return false; 
-        
-        if (onClick) 
-        {
-            onClick();
-        }
-        return true;
     }
 
     bool Button::HandleMouseLeaveWindow()
@@ -215,15 +214,40 @@ namespace CFrame
         return false;
     }
 
-    bool Button::HandleMouseMove(MouseMovedEvent& e)
+    bool Button::MouseDragEvent(MouseDraggedEvent& event)
+    {
+        return false;
+    }
+
+    bool Button::MousePressEvent(MouseButtonDownEvent& e)
+    {
+        int xPos = static_cast<int>(e.GetX());
+        int yPos = static_cast<int>(e.GetY());
+
+        // Early return if the click is outside the button
+        if (xPos < x || xPos >(x + width) || yPos < y || yPos >(y + height)) return false;
+
+        if (onClick)
+        {
+            onClick();
+        }
+        return true;
+    }
+
+    bool Button::MouseReleaseEvent(MouseButtonReleasedEvent& event)
+    {
+        return false;
+    }
+
+    bool Button::MouseMoveEvent(MouseMovedEvent& e)
     {
         int xPos = static_cast<int>(e.GetX());
         int yPos = static_cast<int>(e.GetY());
 
         // Check if the mouse position is inside the button's bounds
-        if (xPos < x || xPos >(x + width) || yPos < y || yPos >(y + height)) 
+        if (xPos < x || xPos >(x + width) || yPos < y || yPos >(y + height))
         {
-            if (hovering) 
+            if (hovering)
             {
                 onLeave();
                 hovering = false;
@@ -234,15 +258,20 @@ namespace CFrame
 
         hovering = true;
 
-        if (onHover) 
+        if (onHover)
         {
             onHover();
-            if (animProperties.speed > 0) 
+            if (animProperties.speed > 0)
             {
                 applicationManager->RegisterAnimation(*this);
             }
             return false;
         }
+    }
+
+    bool Button::MouseLeaveEvent()
+    {
+        return false;
     }
 
     void Button::InitAtlasTexture()

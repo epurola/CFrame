@@ -27,7 +27,7 @@ namespace CFrame
 		sceneContainer->OnEvent(e);
 	}
 
-	void Scene::OnRender(Renderer& renderer, float time)
+	void Scene::OnRender(Renderer1& renderer, float time)
 	{
 		sceneContainer->Render(renderer);
 	}

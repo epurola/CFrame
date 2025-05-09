@@ -6,6 +6,7 @@
 #include "../Animator/Animator.h"
 #include <map>
 #include <optional>
+#include "../Renderer/Renderer1.h"
 
 
 namespace CFrame 
@@ -22,7 +23,7 @@ namespace CFrame
 
         ~Button();
 
-        void Render(Renderer& renderer) override;
+        void Render(Renderer1& renderer) override;
         void UpdateChildSizes() override; 
         void OnEvent(CFrameEvent& event) override;
         void RegisterAnimator(std::shared_ptr<ApplicationManager> manager) override;
@@ -36,6 +37,12 @@ namespace CFrame
         void SetFont(Font font);
         
         inline ElementType GetElementType() const override { return ElementType::BUTTON; };
+    protected:
+        bool MouseDragEvent(MouseDraggedEvent& event) override;
+        bool MousePressEvent(MouseButtonDownEvent& event) override;
+        bool MouseReleaseEvent(MouseButtonReleasedEvent& event) override;
+        bool MouseMoveEvent(MouseMovedEvent& event) override;
+        bool MouseLeaveEvent() override;
        
     private:
         std::function<void()> onClick;
@@ -50,9 +57,7 @@ namespace CFrame
         float atlasHeight = 0.0f;
 
     private:
-        bool HandleMouseButtonDown(MouseButtonDownEvent& e);
         bool HandleMouseLeaveWindow();
-        bool HandleMouseMove(MouseMovedEvent& e);
 
         void InitAtlasTexture();
         void SetOverFlowProperties();

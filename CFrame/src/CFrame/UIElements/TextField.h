@@ -20,7 +20,7 @@ namespace CFrame {
 		~TextField();
 
 		void OnEvent(CFrameEvent& event) override;
-		void Render(Renderer& renderer) override;
+		void Render(Renderer1& renderer) override;
 		void SetInput(const std::string& value);
 		void UpdateChildSizes() override;
 

@@ -15,7 +15,7 @@ namespace CFrame {
 		virtual void OnCreate(int width, int height);
 		virtual void OnDestroy();
 		virtual void OnEvent(CFrameEvent& e, float deltaTime);
-		virtual void OnRender(Renderer& renderer, float time);
+		virtual void OnRender(Renderer1& renderer, float time);
 
 		UIElement* GetRoot();
 

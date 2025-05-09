@@ -15,7 +15,7 @@ namespace CFrame
 
 	}
 
-	void Label::Render(Renderer& renderer)
+	void Label::Render(Renderer1& renderer)
 	{
         if (properties.opacity > 0) 
         {

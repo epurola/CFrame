@@ -29,7 +29,7 @@ namespace CFrame
 
 	}
 
-	void TextField::Render(Renderer& renderer)
+	void TextField::Render(Renderer1& renderer)
 	{
 		renderer.DrawRectangle(x, y, width, height ,properties, 1.0f, 1.0f, nullptr);
 		renderer.RenderText(input, x, y, textProps, atlasTexture.get(), overflow);

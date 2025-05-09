@@ -1,13 +1,14 @@
 #include "ChessPiece.h"
 
-ChessPiece::ChessPiece(int width, int height, std::string path)
-	:Image(width, height, path)
+ChessPiece::ChessPiece( std::string path)
+	:Image(path)
 {
 	SetBorder(5);
-	SetBorderColor(Color::Blue);
+	SetBorderColor(Color::Gold);
 	SetRadius(5, 5, 5, 5);
-	SetColor(Color::Blue);
+	//SetColor(Color::Blue);
 	//SetAngle(20);
+	SetOpacity(0);
 }
 
 ChessPiece::~ChessPiece()

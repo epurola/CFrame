@@ -2,9 +2,8 @@
 #pragma once
 
 #include "Container.h"
-#include "../Core.h"
-#include "../Renderer/Renderer.h"
 #include "../CFrameEvent/CFrameEvent.h"
+#include "../Renderer/Renderer1.h"
 
 namespace CFrame
 {

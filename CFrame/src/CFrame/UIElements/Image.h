@@ -2,6 +2,7 @@
 
 #include "UIElement.h"
 #include "../Renderer/texture.h"
+#include "../Renderer/Renderer1.h"
 
 namespace CFrame 
 {
@@ -19,7 +20,7 @@ namespace CFrame
 			: Image(0, 0, w, h, path, nullptr) {
 		}
 
-		void Render(Renderer& renderer) override;
+		void Render(Renderer1& renderer) override;
 		void OnEvent(CFrameEvent& event) override;
 		void SetOnEvent(std::function<void()> onEvent);
 

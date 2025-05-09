@@ -123,7 +123,7 @@ void main()
      if (dist < 0.0) {
         // Inside the shape
         if(u_HasTexture){
-            color = texColor;
+            color = mix(gradientColor, texColor, texColor.a);
         }else{
             color = gradientColor;
         }

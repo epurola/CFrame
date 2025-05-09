@@ -11,7 +11,7 @@
 #include "UIElements/HBox.h"
 #include "UIElements/Label.h"
 #include "UIElements/Button.h"
-#include "Renderer/Renderer.h"
+#include "Renderer/Renderer1.h"
 #include "Renderer/Scene.h"
 #include "ApplicationManager.h"
 
@@ -37,7 +37,7 @@ public:
 private:
 	std::unique_ptr<EventDispatcher> eventDispatcher;
 	std::unique_ptr<Window> window;
-	std::unique_ptr<Renderer> renderer;
+	std::unique_ptr<Renderer1> renderer;
 	std::shared_ptr<ApplicationManager> applicationManager;
 
 	HBox* header;

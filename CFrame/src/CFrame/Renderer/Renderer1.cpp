@@ -1,15 +1,13 @@
-#include "Renderer.h"
+#include "Renderer1.h"
 #include <iostream>
 #include <filesystem>
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp> 
 
-
-
 namespace CFrame {
 
-	Renderer::Renderer(Window& window)
+	Renderer1::Renderer1(Window& window)
         :window(window)
 	{
         shader = std::make_unique<Shader>("C:/dev/CFrame/CFrame/src/CFrame/res/shaders/basic.shader");
@@ -20,17 +18,93 @@ namespace CFrame {
         FBO = std::make_unique<FrameBuffer>(window.GetWidth(), window.GetHeight());
 	}
 
-	Renderer::~Renderer()
+	Renderer1::~Renderer1()
 	{
        
     }
 
-    void Renderer::Resize(int w, int h)
+    void Renderer1::Resize(int w, int h)
     {
         FBO->Resize(w, h);
     }
+
+    void Renderer1::AddToBatch(ElementProperties p)
+    {
+        float r = p.color1.r / 255.0f;
+        float g = p.color1.g / 255.0f;
+        float b = p.color1.b / 255.0f;
+        float a = p.opacity;
+
+        float rg = p.color2.r / 255.0f;
+        float gg = p.color2.g / 255.0f;
+        float bg = p.color2.b / 255.0f;
+        float ag = p.opacity;
+
+        float rb = p.borderColor1.r / 255.0f;
+        float gb = p.borderColor1.g / 255.0f;
+        float bb = p.borderColor1.b / 255.0f;
+        float ab = p.borderColor1.a / 255.0f;
+
+        float rgb = p.borderColor2.r / 255.0f;
+        float ggb = p.borderColor2.g / 255.0f;
+        float bgb = p.borderColor2.b / 255.0f;
+        float agb = p.borderColor2.a / 255.0f;
+
+        glm::vec2 uv[4] = { {0,1}, {1,1}, {1,0}, {0,0} };
+
+        glm::vec2 pos[4] = {
+            glm::vec2(p.vertices.topLeft.x,     p.vertices.topLeft.y),
+            glm::vec2(p.vertices.topRight.x,    p.vertices.topRight.y),
+            glm::vec2(p.vertices.bottomRight.x, p.vertices.bottomRight.y),
+            glm::vec2(p.vertices.bottomLeft.x,  p.vertices.bottomLeft.y)
+        };
+
+        for (int i = 0; i < 4; i++) {
+            batchVertices.insert(batchVertices.end(), {
+                pos[i].x, pos[i].y, r, g, b, a, uv[i].x, uv[i].y, rg, gg, bg, ag
+                });
+        }
+
+        unsigned int baseVertex = batchVertices.size() / 12; // 12 floats per vertex
+
+        batchIndices.insert(batchIndices.end(), {
+            baseVertex + 0,
+            baseVertex + 1,
+            baseVertex + 2,
+            baseVertex + 2,
+            baseVertex + 3,
+            baseVertex + 0
+            });
+    }
+
+    void Renderer1::Flush()
+    {
+        int windowWidth = window.GetWidth();
+        int windowHeight = window.GetHeight();
+
+        if (!VA) {
+            VA = std::make_unique<VertexArray>();
+            Layout = std::make_unique<VertexBufferLayout>();
+            VB = std::make_unique<VertexBuffer>(batchVertices.data(), static_cast<unsigned int>(batchVertices.size() * sizeof(float)));
+            Indices = std::make_unique<IndexBuffer>(batchIndices.data(), static_cast<unsigned int>(batchIndices.size()));
+
+            Layout->Push<float>(2); // Position x, y
+            Layout->Push<float>(4); // Color Data r, g, b, a
+            Layout->Push<float>(2); // Texture coordinates
+            Layout->Push<float>(4); // Gradient Color Data r, g, b, a
+            VA->AddBuffer(*textVB, *textLayout);
+        }
+
+        VA->Bind();
+        VB->SetData(batchVertices.data(), static_cast<unsigned int>(batchVertices.size() * sizeof(float)));
+        Indices->SetData(batchIndices.data(), static_cast<unsigned int>(batchIndices.size()));
+
+        glm::mat4 proj = glm::ortho(0.0f, float(windowWidth), // Left, Right
+            float(windowHeight), 0.0f,  // Bottom, Top
+            -1.0f, 1.0f);
+    }
     
-    void Renderer::BeginFrame()
+    void Renderer1::BeginFrame()
     {
         int w = window.GetWidth();
         int h = window.GetHeight();
@@ -44,8 +118,10 @@ namespace CFrame {
        
     }
 
-    void Renderer::EndFrame()
+    void Renderer1::EndFrame()
     {
+        
+       // Flush();
         FBO->Unbind();
         // Draw a full-screen quad with fboTexture bound
         screenShader->Bind();
@@ -53,7 +129,7 @@ namespace CFrame {
         DrawFullScreenQuad(); // simple VAO that draws a 2-triangle fullscreen rectangle
     }
 
-    void Renderer::DrawFullScreenQuad()
+    void Renderer1::DrawFullScreenQuad()
     {
         if (!screenVA)
         {
@@ -81,7 +157,7 @@ namespace CFrame {
         
 
     //ToDo: Remove dependecy on SDL color here
-	void Renderer::DrawRectangle(float x, float y, float w, float h, 
+	void Renderer1::DrawRectangle(float x, float y, float w, float h, 
         ElementProperties p, float speed, float time,
         Texture* texture)
 	{
@@ -90,6 +166,11 @@ namespace CFrame {
             texture->Bind();
             hasTexture = true;
         }
+        else {
+           // AddToBatch(p);
+            //return;
+        }
+
         int windowWidth = window.GetWidth();
         int windowHeight = window.GetHeight();
         //ClipOverflow(x, y, w, h, windowHeight);
@@ -155,8 +236,8 @@ namespace CFrame {
         shader->SetUniform4f("u_Color", r, g, b, a);
         shader->SetUniform4f("u_Color2", rg, gg, bg, ag);
         shader->SetUniformMat4f("u_MVP", proj);
-        shader->SetUniform2f("u_RectMin", x, y);  
-        shader->SetUniform2f("u_RectMax", x + w, y + h);      
+        shader->SetUniform2f("u_RectMin", x, y);
+        shader->SetUniform2f("u_RectMax", x + w, y + h);
         shader->SetUniform1f("u_BottomRight", float(p.radius.bottomRight));
         shader->SetUniform1f("u_BottomLeft", float(p.radius.bottomLeft));
         shader->SetUniform1f("u_TopRight", float(p.radius.topRight));
@@ -177,7 +258,7 @@ namespace CFrame {
 
 	}
 
-    void Renderer::RenderText(const std::string& text, float x, float y, TextProperties t, Texture* atlas, OverFlowProperties o)
+    void Renderer1::RenderText(const std::string& text, float x, float y, TextProperties t, Texture* atlas, OverFlowProperties o)
     {
 
         int windowWidth = window.GetWidth();
@@ -237,7 +318,7 @@ namespace CFrame {
         }
     }
 
-    void Renderer::DrawLine(LineProperties p)
+    void Renderer1::DrawLine(LineProperties p)
     {
         int windowWidth = window.GetWidth();
         int windowHeight = window.GetHeight();
@@ -281,14 +362,14 @@ namespace CFrame {
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
     }
 
-    void Renderer::ClipOverflow(int x, int y, int width, int height, int windowHeight)
+    void Renderer1::ClipOverflow(int x, int y, int width, int height, int windowHeight)
     {
         int flippedY = windowHeight - y - height;
         glEnable(GL_SCISSOR_TEST);
         glScissor(x, flippedY, width, height);
     }
 
-    void Renderer::DisableOverflow()
+    void Renderer1::DisableOverflow()
     {
         glDisable(GL_SCISSOR_TEST);
     }
