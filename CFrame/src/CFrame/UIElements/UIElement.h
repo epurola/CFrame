@@ -139,6 +139,7 @@ namespace CFrame
         virtual ~UIElement() = default;
 
         virtual void Render(Renderer1& renderer) = 0;
+        virtual void Render() = 0;
         virtual void UpdateChildSizes() {}
         virtual void OnEvent(CFrameEvent& event);
         virtual ElementType GetElementType() const = 0;

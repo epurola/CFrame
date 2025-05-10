@@ -71,8 +71,6 @@ namespace CFrame {
 
     }
 
-   
-
     Texture::~Texture()
     {
 

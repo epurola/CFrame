@@ -18,6 +18,7 @@ namespace CFrame {
 		void AddChild(UIElement* child);
 
 		void Render(Renderer1& renderer) override;
+		void Render() override;
 		void OnEvent(CFrameEvent& event) override;
 		void RegisterAnimator(std::shared_ptr<ApplicationManager> manager) override;
 

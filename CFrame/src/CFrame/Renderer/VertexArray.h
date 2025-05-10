@@ -10,11 +10,12 @@ namespace CFrame {
         unsigned int RendererId = 0;
 
 
+
     public:
         VertexArray();
         ~VertexArray();
 
-        void AddBuffer(const VertexBuffer& vb, const VertexBufferLayout layout);
+        void AddBuffer(const VertexBuffer& vb, const VertexBufferLayout layout, bool instanced = false, int start = 0);
         void Bind() const;
         void UnBind() const;
 

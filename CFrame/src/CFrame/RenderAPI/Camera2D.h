@@ -30,6 +30,9 @@ namespace CFrame
 			viewProjection = glm::ortho(0.0f, width, height, 0.0f, -1.0f, 1.0f) * view;
 		}
 
+		float GetWidth()  const { return width; }
+		float GetHeight()  const { return height; }
+
 	private:
 		glm::mat4 viewProjection;
 		float width = 0;

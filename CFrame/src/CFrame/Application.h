@@ -14,6 +14,7 @@
 #include "Renderer/Renderer1.h"
 #include "Renderer/Scene.h"
 #include "ApplicationManager.h"
+#include "RenderAPI/Camera2D.h"
 
 namespace CFrame
 {
@@ -39,6 +40,7 @@ private:
 	std::unique_ptr<Window> window;
 	std::unique_ptr<Renderer1> renderer;
 	std::shared_ptr<ApplicationManager> applicationManager;
+	std::unique_ptr<Camera2D> camera;
 
 	HBox* header;
 	Button* close;

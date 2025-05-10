@@ -1,7 +1,7 @@
 #include "VertexArray.h"
 #include <glad/glad.h>
 
-namespace CFrame 
+namespace CFrame
 {
     VertexArray::VertexArray()
     {
@@ -23,7 +23,7 @@ namespace CFrame
         glBindVertexArray(0);
     }
 
-    void VertexArray::AddBuffer(const VertexBuffer& vb, const VertexBufferLayout layout)
+    void VertexArray::AddBuffer(const VertexBuffer& vb, const VertexBufferLayout layout, bool instanced, int start)
     {
         Bind();
         vb.Bind();
@@ -32,17 +32,22 @@ namespace CFrame
 
         for (unsigned int i = 0; i < elements.size(); i++)
         {
+            const int index = start + i;
             const auto& element = elements[i];
-            glEnableVertexAttribArray(i);
-            glVertexAttribPointer(i,
+            glEnableVertexAttribArray(index);
+            glVertexAttribPointer(
+                index,
                 element.count,
                 element.type,
                 element.normalized,
                 layout.GetStride(),
                 (const void*)(uintptr_t)offset);
 
+            if (instanced) {
+                glVertexAttribDivisor(index , 1);
+            }
+
             offset += element.count * VertexBufferElement::GetSizeOfType(element.type);
         }
-
     }
 }

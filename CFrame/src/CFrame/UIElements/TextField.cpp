@@ -1,4 +1,5 @@
 #include "TextField.h"
+#include "../RenderAPI/Renderer2D.h"
 
 namespace CFrame 
 {
@@ -32,7 +33,7 @@ namespace CFrame
 	void TextField::Render(Renderer1& renderer)
 	{
 		renderer.DrawRectangle(x, y, width, height ,properties, 1.0f, 1.0f, nullptr);
-		renderer.RenderText(input, x, y, textProps, atlasTexture.get(), overflow);
+		renderer.RenderText( x, y, textProps, atlasTexture.get(), overflow);
         
         if (isActive) 
         {
@@ -48,6 +49,36 @@ namespace CFrame
             }
         }
 	}
+
+    void TextField::Render()
+    {
+        QuadInstance instance{};
+
+        instance.position = { x, y };
+        instance.size = { width * properties.scaleX, height * properties.scaleY };
+
+        // Base colors (RGBA)
+        instance.color1 = { properties.color1.r / 255.0f,properties.color1.g / 255.0f,properties.color1.b / 255.0f , properties.opacity }; // White base
+        instance.color2 = { properties.color2.r / 255.0f,properties.color2.g / 255.0f,properties.color2.b / 255.0f , properties.opacity }; // Slight gradient
+
+        // Border colors 
+        instance.borderColor1 = { properties.borderColor1.r / 255.0f,properties.borderColor1.g / 255.0f,properties.borderColor1.b / 255.0f , properties.opacity }; // Black
+        instance.borderColor2 = { properties.borderColor2.r / 255.0f,properties.borderColor2.g / 255.0f,properties.borderColor2.b / 255.0f, properties.opacity };
+
+        // Border sizes (top, right, bottom, left)
+        instance.borderSizes = { properties.borderTop, properties.borderRight, properties.borderBottom, properties.borderLeft };
+
+        // Radius for corners
+        instance.radius = { properties.radius.topLeft, properties.radius.topRight, properties.radius.bottomLeft, properties.radius.bottomRight };
+
+        // Animation parameters
+        instance.time = 0.0f;  //  pass actual elapsed time
+        instance.speed = 0.0f;
+        instance.angle = 0.0f;
+
+        Renderer2D::DrawQuad(instance);
+        Renderer2D::DrawTex({ (float)x, (float)y, textProps, atlasTexture.get(), overflow });
+    }
 
     void TextField::OnEvent(CFrameEvent& event)  
     {  

@@ -101,7 +101,6 @@ void main()
     vec4 r = vec4(u_BottomRight , u_TopRight, u_BottomLeft, u_TopLeft); //Bottom right, top right, bottom left, top left
 
     // Compute signed distance from the fragment to the rounded box
-
     float thickness = selectBorderThickness(p, b);
     float dist = sdRoundedBox(p, b, r) + thickness ;
 

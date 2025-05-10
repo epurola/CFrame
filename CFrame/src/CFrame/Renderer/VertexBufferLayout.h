@@ -44,7 +44,7 @@ namespace CFrame {
 
         template<typename T>
         void Push(unsigned int count) {
-            stattic_assert(false);
+            static_assert(false);
         }
 
         template<>

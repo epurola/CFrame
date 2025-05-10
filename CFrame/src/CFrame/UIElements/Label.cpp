@@ -1,5 +1,5 @@
 #include "Label.h"
-
+#include "../RenderAPI/Renderer2D.h"
 
 namespace CFrame 
 {
@@ -21,8 +21,13 @@ namespace CFrame
         {
             renderer.DrawRectangle(x, y, width, height, GetProperties(), 0.0f, 0.0f, nullptr);
         }
-        renderer.RenderText(text, x, y, textProps, atlasTexture.get(), overflow);
+        renderer.RenderText(x, y, textProps, atlasTexture.get(), overflow);
 	}
+
+    void Label::Render()
+    {
+        Renderer2D::DrawTex({ (float)x, (float)y, textProps, atlasTexture.get(), overflow });
+    }
 
 	void Label::OnEvent(CFrameEvent& event)
 	{

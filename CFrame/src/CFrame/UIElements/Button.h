@@ -24,6 +24,7 @@ namespace CFrame
         ~Button();
 
         void Render(Renderer1& renderer) override;
+        void Render() override;
         void UpdateChildSizes() override; 
         void OnEvent(CFrameEvent& event) override;
         void RegisterAnimator(std::shared_ptr<ApplicationManager> manager) override;

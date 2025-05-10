@@ -30,51 +30,7 @@ namespace CFrame {
 
     void Renderer1::AddToBatch(ElementProperties p)
     {
-        float r = p.color1.r / 255.0f;
-        float g = p.color1.g / 255.0f;
-        float b = p.color1.b / 255.0f;
-        float a = p.opacity;
-
-        float rg = p.color2.r / 255.0f;
-        float gg = p.color2.g / 255.0f;
-        float bg = p.color2.b / 255.0f;
-        float ag = p.opacity;
-
-        float rb = p.borderColor1.r / 255.0f;
-        float gb = p.borderColor1.g / 255.0f;
-        float bb = p.borderColor1.b / 255.0f;
-        float ab = p.borderColor1.a / 255.0f;
-
-        float rgb = p.borderColor2.r / 255.0f;
-        float ggb = p.borderColor2.g / 255.0f;
-        float bgb = p.borderColor2.b / 255.0f;
-        float agb = p.borderColor2.a / 255.0f;
-
-        glm::vec2 uv[4] = { {0,1}, {1,1}, {1,0}, {0,0} };
-
-        glm::vec2 pos[4] = {
-            glm::vec2(p.vertices.topLeft.x,     p.vertices.topLeft.y),
-            glm::vec2(p.vertices.topRight.x,    p.vertices.topRight.y),
-            glm::vec2(p.vertices.bottomRight.x, p.vertices.bottomRight.y),
-            glm::vec2(p.vertices.bottomLeft.x,  p.vertices.bottomLeft.y)
-        };
-
-        for (int i = 0; i < 4; i++) {
-            batchVertices.insert(batchVertices.end(), {
-                pos[i].x, pos[i].y, r, g, b, a, uv[i].x, uv[i].y, rg, gg, bg, ag
-                });
-        }
-
-        unsigned int baseVertex = batchVertices.size() / 12; // 12 floats per vertex
-
-        batchIndices.insert(batchIndices.end(), {
-            baseVertex + 0,
-            baseVertex + 1,
-            baseVertex + 2,
-            baseVertex + 2,
-            baseVertex + 3,
-            baseVertex + 0
-            });
+      
     }
 
     void Renderer1::Flush()
@@ -258,7 +214,7 @@ namespace CFrame {
 
 	}
 
-    void Renderer1::RenderText(const std::string& text, float x, float y, TextProperties t, Texture* atlas, OverFlowProperties o)
+    void Renderer1::RenderText(float x, float y, TextProperties t, Texture* atlas, OverFlowProperties o)
     {
 
         int windowWidth = window.GetWidth();

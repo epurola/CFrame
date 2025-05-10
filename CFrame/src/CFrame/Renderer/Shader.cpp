@@ -146,7 +146,7 @@ namespace CFrame
         int location = glGetUniformLocation(RendererId, name.c_str());
         if (location == -1)
         {
-            CF_CORE_INFO("uniform does not exist!");
+            CF_CORE_INFO("uniform does not exist!" + name);
         }
         else
         {

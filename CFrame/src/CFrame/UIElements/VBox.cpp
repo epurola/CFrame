@@ -83,7 +83,7 @@ namespace CFrame
             }
 
             child->UpdateChildSizes();
-            child->UpdateVertices();
+           // child->UpdateVertices();
         }
 	}
 

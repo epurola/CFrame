@@ -2,6 +2,7 @@
 #include "Log.h"  
 #include "Window.h"  
 #include <chrono>  
+#include "RenderAPI/Renderer2D.h"
 
 namespace CFrame  
 {  
@@ -10,10 +11,11 @@ Application::Application(int width, int height)
 {  
 	eventDispatcher = std::make_unique<EventDispatcher>(); 
 
-	window = std::make_unique<Window>(*eventDispatcher);  
+	window = std::make_unique<Window>(*eventDispatcher); 
 	window->Create(windowWidth, windowHeight + headerHeight, "CFrame");
 	window->SetHeight(windowHeight + headerHeight );  
-	window->SetWidth(windowWidth);  
+	window->SetWidth(windowWidth);
+	camera = std::make_unique<Camera2D>(window->GetWidth(), window->GetHeight());
 	
 	applicationManager = std::make_shared<ApplicationManager>(*window);
 	
@@ -91,8 +93,8 @@ void Application::OnEvent(CFrameEvent& e)
 		titleBarContainer->SetWidth(width);
 		window->SetWidth(width);
 		window->SetHeight(height);
+		camera->SetSize(width, height);
 
-		 
 		titleBarContainer->UpdateChildSizes();
 		
 		e.handled = true; 
@@ -102,14 +104,16 @@ void Application::OnEvent(CFrameEvent& e)
 
 }  
 
-//TODO: Poll events at a higher frequency
 void Application::run()  
 {  
 	constexpr double target_fps = 60.0;  
 	constexpr std::chrono::milliseconds frame_duration(static_cast<int>(1000.0 / target_fps));    
 	/*Needs to be created after window->Create since there is no 
 	valid GL context before that*/
-	renderer = std::make_unique<Renderer1>(*window);
+	//renderer = std::make_unique<Renderer1>(*window);
+	
+	Renderer2D::Init(*camera);
+
 	//Inject the manager into each UI element so they can send signals
 
 	titleBarContainer->RegisterAnimator(applicationManager);
@@ -124,12 +128,14 @@ void Application::run()
 		
 		if (render || applicationManager->IsAnimating()) 
 		{
-			renderer->BeginFrame();    // bind FBO
+			Renderer2D::Begin();
 
-			titleBarContainer->Render(*renderer);
-			sceneContainer->Render(*renderer);
-			
-			renderer->EndFrame();  //bind screen, draw FBO texture
+			//  Render containers 
+			titleBarContainer->Render();  
+			sceneContainer->Render();
+
+			// End rendering frame
+			Renderer2D::End();
 			window->GL_SwapWindow();
 		}
 		

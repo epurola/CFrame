@@ -35,7 +35,7 @@ namespace CFrame {
 		void DrawRectangle(float x, float y, float w, float h,
 			ElementProperties p, float speed, float time, Texture* texture );
 
-		void RenderText(const std::string& text, float x, float y, TextProperties t, Texture* atlas, OverFlowProperties o);
+		void RenderText(float x, float y, TextProperties t, Texture* atlas, OverFlowProperties o);
 		void DrawLine(LineProperties p);
 		void ClipOverflow(int x, int y, int width, int height, int windowHeight);
 		void DisableOverflow();
