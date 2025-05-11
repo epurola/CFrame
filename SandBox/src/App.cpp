@@ -141,7 +141,7 @@ public:
 						button5->SetOverflow(true);
 						button5->SetPadding(20);
 						button5->SetTextAlign(CFrame::TextAlign::Start);
-						button5->SetColor(Color::DarkGray);
+						button5->SetColor(Color::Gray);
 						button5->SetOnLeave([button5]() { 
 							button5->SetBorder(0.0f);
 							button5->SetColor(Color::DarkGray);
@@ -163,7 +163,7 @@ public:
 							//button5->SetOpacity(0.2);
 							button5->SetColor(Color::LightGray);
 						});
-						
+						button5->SetOpacity(1.0);
 		CFrame::Button* button6  = new CFrame::Button(-1, 75);
 						button6->SetText("Kirjasto");
 						//button6->SetAngle(25.0);
@@ -189,7 +189,7 @@ public:
 						button7->SetColor(Color::DarkGray);
 						button7->SetOnLeave([button7]() { 
 							button7->SetBorder(0.0f);
-							button7->SetColor(Color::DarkGray);
+							button7->SetColor(Color::Gray);
 						});
 						button7->SetOnHover([button7]() {
 							button7->SetBorder(2.5f);
@@ -202,7 +202,7 @@ public:
 	                    button8->SetText("Kauppa");
 						button8->SetTextAlign(CFrame::TextAlign::Start);
 						button8->SetPadding(20);
-						button8->SetColor(Color::DarkGray);						
+						button8->SetColor(Color::Gray);						
 						button8->SetOnLeave([button8]() { 
 							button8->SetBorder(0.0f);
 							button8->SetColor(Color::DarkGray);
@@ -217,7 +217,7 @@ public:
 						});
 					
 		CFrame::Button* button9 = new CFrame::Button(-1, 75);
-		                button9->SetColor(Color::DarkGray);
+		                button9->SetColor(Color::Gray);
 						button9->SetTextAlign(CFrame::TextAlign::Start);
 						button9->SetPadding(20);
 						button9->SetOnLeave([button9, friendList]() { 

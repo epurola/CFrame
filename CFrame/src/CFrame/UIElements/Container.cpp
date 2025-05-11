@@ -70,9 +70,41 @@ namespace CFrame
 		instance.speed = 0.0f;
 		instance.angle = 0.0f;
 
+		if (!imageTexture) 
+		{
+			Renderer2D::DrawQuad(instance);
+		}
+        else 
+		{
+			QuadInstanceT instancet{};
 
-		Renderer2D::DrawQuad(instance);
+			instancet.position = { x, y };
+			instancet.size = { width , height  };
 
+			// Base colors (RGBA)
+			instancet.color1 = { properties.color1.r / 255.0f,properties.color1.g / 255.0f,properties.color1.b / 255.0f , properties.opacity };
+			instancet.color2 = { properties.color2.r / 255.0f,properties.color2.g / 255.0f,properties.color2.b / 255.0f , properties.opacity };
+
+			// Border colors 
+			instancet.borderColor1 = { properties.borderColor1.r / 255.0f,properties.borderColor1.g / 255.0f,properties.borderColor1.b / 255.0f , properties.opacity };
+			instancet.borderColor2 = { properties.borderColor2.r / 255.0f,properties.borderColor2.g / 255.0f,properties.borderColor2.b / 255.0f, properties.opacity };
+
+			// Border sizes (top, right, bottom, left)
+			instancet.borderSizes = { properties.borderTop, properties.borderRight, properties.borderBottom, properties.borderLeft };
+
+			// Radius for corners
+			instancet.radius = { properties.radius.topLeft, properties.radius.topRight, properties.radius.bottomLeft, properties.radius.bottomRight };
+
+			// Animation parameters
+			instancet.time = 1.0f;  
+			instancet.speed = 1.0f;
+			instancet.angle = 0.0f;
+			instancet.texture = imageTexture.get();
+			instancet.p = GetProperties();
+
+			Renderer2D::DrawTextured(instancet);
+		}
+		
 		for (auto& child : renderChildren)
 		{
 			if (child->IsVisible())

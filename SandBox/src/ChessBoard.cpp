@@ -103,6 +103,7 @@ void ChessBoard::InitializeBoard()
 
 	SetLayout(8, 8);
 	SetBackgroundImage("C:/dev/CFrame/SandBox/src/Images/board.png");
+	SetColor(Color::Blue);
 	AddChild(b1, 0);
 	AddChild(b2, 1);
 	AddChild(b3, 2);

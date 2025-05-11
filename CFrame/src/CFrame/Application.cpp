@@ -16,6 +16,7 @@ Application::Application(int width, int height)
 	window->SetHeight(windowHeight + headerHeight );  
 	window->SetWidth(windowWidth);
 	camera = std::make_unique<Camera2D>(window->GetWidth(), window->GetHeight());
+	Renderer2D::Init(*camera);
 	
 	applicationManager = std::make_shared<ApplicationManager>(*window);
 	
@@ -111,8 +112,7 @@ void Application::run()
 	/*Needs to be created after window->Create since there is no 
 	valid GL context before that*/
 	//renderer = std::make_unique<Renderer1>(*window);
-	
-	Renderer2D::Init(*camera);
+
 
 	//Inject the manager into each UI element so they can send signals
 

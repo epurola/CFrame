@@ -29,34 +29,32 @@ namespace CFrame
 
 	void Image::Render()
 	{
-		QuadInstance instance{};
+		QuadInstanceT instancet{};
 
-		// Position and size (example values — should be based on your layout system)
-		instance.position = { x, y };         // Replace with actual position
-		instance.size = { width, height }; // Replace with actual size
+		instancet.position = { x, y };
+		instancet.size = { width , height };
 
 		// Base colors (RGBA)
-		instance.color1 = { properties.color1.r,properties.color1.g,properties.color1.b , properties.opacity }; // White base
-		instance.color2 = { properties.color2.r,properties.color2.g,properties.color2.b , properties.opacity }; // Slight gradient
+		instancet.color1 = { properties.color1.r / 255.0f,properties.color1.g / 255.0f,properties.color1.b / 255.0f , properties.opacity };
+		instancet.color2 = { properties.color2.r / 255.0f,properties.color2.g / 255.0f,properties.color2.b / 255.0f , properties.opacity };
 
-		// Border colors (optional)
-		instance.borderColor1 = { properties.borderColor1.r,properties.borderColor1.g,properties.borderColor1.b , properties.opacity }; // Black
-		instance.borderColor2 = { properties.borderColor2.r,properties.borderColor2.g,properties.borderColor2.b , properties.opacity };
+		// Border colors 
+		instancet.borderColor1 = { properties.borderColor1.r / 255.0f,properties.borderColor1.g / 255.0f,properties.borderColor1.b / 255.0f , properties.opacity };
+		instancet.borderColor2 = { properties.borderColor2.r / 255.0f,properties.borderColor2.g / 255.0f,properties.borderColor2.b / 255.0f, properties.opacity };
 
 		// Border sizes (top, right, bottom, left)
-		instance.borderSizes = { properties.borderTop, properties.borderRight, properties.borderBottom, properties.borderLeft };
+		instancet.borderSizes = { properties.borderTop, properties.borderRight, properties.borderBottom, properties.borderLeft };
 
 		// Radius for corners
-		instance.radius = { properties.radius.topLeft, properties.radius.topRight, properties.radius.bottomLeft, properties.radius.bottomRight };
+		instancet.radius = { properties.radius.topLeft, properties.radius.topRight, properties.radius.bottomLeft, properties.radius.bottomRight };
 
 		// Animation parameters
-		instance.time = 0.0f;  //  pass actual elapsed time
-		instance.speed = 0.0f;
-		instance.angle = 0.0f;
-
-
-		// Submit to renderer
-		Renderer2D::DrawQuad(instance);
+		instancet.time = 0.0f;  //  pass actual elapsed time
+		instancet.speed = 0.0f;
+		instancet.angle = 0.0f;
+		instancet.texture = imageTexture.get();
+		instancet.p = GetProperties();
+		Renderer2D::DrawTextured(instancet);
 	}
 
 	void Image::OnEvent(CFrameEvent& event)
