@@ -331,7 +331,7 @@ namespace CFrame
     {
         switch (e.GetKeyCode()) 
         {
-             case 0x00000008u:
+             case CF_Key_BACKSPACE:
              {
                  if (input.empty()) return false;
 

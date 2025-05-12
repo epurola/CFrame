@@ -33,7 +33,7 @@ add_subdirectory(CFrame/vendor/SDL3/SDL)
 file(GLOB_RECURSE CFRAME_SRC "${CMAKE_SOURCE_DIR}/CFrame/src/*.cpp" "${CMAKE_SOURCE_DIR}/CFrame/src/*.h")
 
 # Define the CFrame Staticlib target
-add_library(CFrame STATIC ${CFRAME_SRC}   )
+add_library(CFrame STATIC ${CFRAME_SRC}    "CFrame/src/CFrame/CFrameEvent/KeyCode.h")
 
 # Link libraries
 target_link_libraries(CFrame
@@ -77,7 +77,7 @@ set(SOURCE_DIR "C:/dev/CFrame/SandBox/src")
 file(GLOB SOURCES "${SOURCE_DIR}/*.cpp" "${SOURCE_DIR}/*.h")
 
 # Create the executable with the found files
-add_executable(SandBox ${SOURCES} )
+add_executable(SandBox ${SOURCES}  "CFrame/src/CFrame/CFrameEvent/KeyCode.h")
 
 # Include directories for SandBox
 target_include_directories(SandBox PRIVATE

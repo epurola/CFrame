@@ -65,7 +65,6 @@ bool Window::OnUpdate()
 	   }
 	   case SDL_EVENT_MOUSE_MOTION:
 	   {
-		  
 		   MouseMovedEvent mouseMovedEvent(event.motion.x, event.motion.y);
 		   dispatcher.Dispatch(mouseMovedEvent);
 			   if (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON_MASK(SDL_BUTTON_LEFT)) {
