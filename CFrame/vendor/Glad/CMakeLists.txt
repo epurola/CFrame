@@ -14,7 +14,7 @@ add_library(Glad STATIC
 
 # Include directories for Glad
 target_include_directories(Glad PUBLIC
-    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
 # Set properties for Windows-specific configurations

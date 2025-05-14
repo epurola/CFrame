@@ -59,7 +59,7 @@ namespace CFrame {
 		FontManager& operator=(const FontManager&) = delete;
 
 		std::pair <std::shared_ptr<Texture>, std::map<char, fontInfo>>& GetFont(FontKey key);
-		std::string FontManager::GetFontPath(Font font);
+		std::string GetFontPath(Font font);
 
 
 	private:
