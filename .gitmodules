@@ -3,3 +3,6 @@
 	path = CFrame/vendor/spdlog
 	url = https://github.com/gabime/spdlog.git
 
+[submodule "CFrame/vendor/SDL3/SDL"]
+	path = CFrame/vendor/SDL3/SDL
+	url = https://github.com/libsdl-org/SDL.git
