@@ -13,19 +13,27 @@ Application::Application(int width, int height)
 
 	window = std::make_unique<Window>(*eventDispatcher); 
 	window->Create(windowWidth, windowHeight + headerHeight, "CFrame");
-	window->SetHeight(windowHeight + headerHeight );  
+	float scale = window->GetScale();
+	windowWidth = window->GetWidth() * scale;
+	windowHeight = window->GetHeight() * scale;
+	headerHeight *= scale;
+	
+	window->ResizeWindow(windowWidth , windowHeight );
+	window->SetHeight(windowHeight);  
 	window->SetWidth(windowWidth);
 	camera = std::make_unique<Camera2D>(window->GetWidth(), window->GetHeight());
 	Renderer2D::Init(*camera);
+
 	
 	applicationManager = std::make_shared<ApplicationManager>(*window);
-	
-	titleBarContainer = std::make_unique <VBox>(0,0, windowWidth, windowHeight);  
+	titleBarContainer = std::make_unique <VBox>(0,0, windowWidth, headerHeight);  
 	titleBarContainer->SetAlignment(AlignItems::Start, AlignItems::Start);  
 	InitTitleBar();
 
 	titleBarContainer->AddChild(header);
-	sceneContainer = std::make_unique<VBox>(0, headerHeight, windowWidth, windowHeight);
+	//Place at y = 40 since original header height is that and it will be later updated in run method
+	//to be the correct pos. Maybe refactor the scaling later...
+	sceneContainer = std::make_unique<VBox>(0, 40, windowWidth, windowHeight - headerHeight);
 	
 	eventDispatcher->AddListener(CFrameEventType::WindowClosed,  
 		[this](CFrameEvent& event) { OnEvent(event); });  
@@ -99,7 +107,6 @@ void Application::OnEvent(CFrameEvent& e)
 		titleBarContainer->UpdateChildSizes();
 		
 		e.handled = true; 
-
 	}  
 	
 
@@ -112,14 +119,18 @@ void Application::run()
 	/*Needs to be created after window->Create since there is no 
 	valid GL context before that*/
 	//renderer = std::make_unique<Renderer1>(*window);
-
-
 	//Inject the manager into each UI element so they can send signals
 
 	titleBarContainer->RegisterAnimator(applicationManager);
 	sceneContainer->RegisterAnimator(applicationManager);
+
 	titleBarContainer->UpdateChildSizes();
 	sceneContainer->UpdateChildSizes();
+
+	float scale = window->GetScale();
+
+	titleBarContainer->SetScaleFactor(scale);
+	sceneContainer->SetScaleFactor(scale);
 	
 	while (running ) {  
 		auto start_time = std::chrono::steady_clock::now();
@@ -174,24 +185,25 @@ void Application::run()
 
    void Application::InitTitleBar()
    {
-	   header = new HBox(-1, 75);
-	   minimize = new Button(75, 75);
+	   header = new HBox(-1, 40);
+
+	   minimize = new Button(40 , 40);
 	   minimize->SetIcon(0xE738);
-	   minimize->SetFontSize(24);
+	   minimize->SetFontSize(20 );
 	   minimize->SetTextColor(Color::White);
 	   minimize->SetRadius(0);
 	   minimize->SetColor(Color::DarkGray);
 
-	   title = new Label(-1, 75);
+	   title = new Label(-1, 40 );
 	   title->SetText("CFrame");
 
 	   minimize->SetOnLeave([&]() { minimize->SetColor(Color::DarkGray); });
 	   minimize->SetOnClick([&, this]() { window->MinimizeWindow();});
 	   minimize->SetOnHover([&]() {minimize->SetColor(Color::Gray);});
 
-	   toggleMaximize = new Button(75, 75);
+	   toggleMaximize = new Button(40 , 40 );
 	   toggleMaximize->SetIcon(0xE71A);
-	   toggleMaximize->SetFontSize(24);
+	   toggleMaximize->SetFontSize(20 );
 	   toggleMaximize->SetRadius(0);
 	   toggleMaximize->SetTextColor(Color::White);
 	   toggleMaximize->SetColor(Color::DarkGray);
@@ -201,9 +213,9 @@ void Application::run()
 	   toggleMaximize->SetOnHover([&]() {toggleMaximize->SetColor(Color::Gray);});
 	   toggleMaximize->SetOnClick([&, this]() { ToggleFullScreen();});
 
-	   close = new Button(75, 75);
+	   close = new Button(40 , 40);
 	   close->SetIcon(0xE711);
-	   close->SetFontSize(24);
+	   close->SetFontSize(20);
 	   close->SetRadius(0);
 	   close->SetTextColor(Color::White);
 	   close->SetColor(Color::DarkGray);

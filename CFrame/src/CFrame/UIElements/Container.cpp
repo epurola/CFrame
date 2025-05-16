@@ -244,5 +244,27 @@ namespace CFrame
 	{
 		this->spacing = spacing;
 	}
+
+	void Container::SetScaleFactor(float scale) 
+	{
+		scaleFactor = scale;
+		x = x * scale;
+		y = y * scale;
+		width = width * scale;
+		height = height * scale;
+		textProps.fontSize = static_cast<int>(textProps.fontSize * scale);
+
+		// Also scale margins and paddings
+		
+
+		spacing *= scale;
+		properties.padding *= scale;
+
+		for (auto& child : children) 
+		{
+			child->SetScaleFactor(scale);	
+		}
+	}
+
 }
 

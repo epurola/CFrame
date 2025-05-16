@@ -4,6 +4,7 @@ ChessBoard::ChessBoard(int w, int h)
 	:Grid(w, h)
 {
 	InitializeBoard();
+	SetRadius(5, 5, 5, 5);
 }
 
 ChessBoard::~ChessBoard()

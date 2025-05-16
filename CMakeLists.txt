@@ -29,7 +29,7 @@ endif()
 
 
 # Set the source directory
-set(SOURCE_DIR "C:/dev/CFrame/SandBox/src")
+set(SOURCE_DIR "${CMAKE_SOURCE_DIR}/SandBox/src")
 
 # Use file(GLOB ...) to include all .cpp and .h files from the directory
 file(GLOB SOURCES "${SOURCE_DIR}/*.cpp" "${SOURCE_DIR}/*.h")

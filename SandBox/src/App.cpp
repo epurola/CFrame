@@ -6,18 +6,17 @@
 class SandBox : public CFrame::Application 
 {
 public:
-	SandBox() : CFrame::Application(2000, 1500)
+	SandBox() : CFrame::Application(920, 680)
 	{
-
 		CFrame::Scene* main = new CFrame::Scene();
 
 		CFrame::VBox* vbox = new CFrame::VBox();
 		CFrame::HBox* content     = new CFrame::HBox();
-		CFrame::VBox* sideBar     = new CFrame::VBox(150,-1);
+		CFrame::VBox* sideBar     = new CFrame::VBox(60,-1);
 		CFrame::VBox* friendList  = new CFrame::VBox(-1,-1);
 		CFrame::VBox* messageBox  = new CFrame::VBox(-1, -1);
-		CFrame::HBox* contentLeft = new CFrame::HBox(600,-1);
-		ServerInfoBox* info       = new ServerInfoBox(20, 20, 600, -1); //H = 120;
+		CFrame::HBox* contentLeft = new CFrame::HBox(250,-1);
+		ServerInfoBox* info       = new ServerInfoBox(20, 20, 250, -1); //H = 120;
 		info->SetMargin(0,20,0,0);
 		info->SetPositionAbsolute(true);
 		info->SetAnchorPoint(CFrame::PositionMode::BottomLeft); // Set the origin where absolute positioning is calculated from
@@ -39,12 +38,12 @@ public:
 		
 		content->SetColor(Color::Gray);
 
-		CFrame::Button* button = new CFrame::Button(90, 90);
+		CFrame::Button* button = new CFrame::Button(50, 50);
 		                button->SetText("S");
 						//button->setTextOpacity(0.8);
 						button->SetFontSize(34.0);
-		                button->SetMargin(0, 0, 50, 0);				 
-		                button->SetRadius(20,20,20,20);
+		                button->SetMargin(0, 0, 25, 0);				 
+		                button->SetRadius(10,10,10,10);
 
 						button->SetOnLeave([button]() {
 							button->SetColor(Color::LightGray);
@@ -54,32 +53,32 @@ public:
 							button->SetColor(Color::Blue);
 							button->SetScale(1.5,1.4);
 						});
-		CFrame::Button* button1 = new CFrame::Button(90, 90);
+		CFrame::Button* button1 = new CFrame::Button(50, 50);
 						button1->SetText("Wz");
 						button1->SetFontSize(34.0);
-		                button1->SetRadius(20, 20, 20, 20);
+		                button1->SetRadius(10, 10, 10, 10);
 						button1->SetOnLeave([button1]() {
 							button1->SetColor(Color::LightGray);
 							});
 						button1->SetOnHover([button1]() {
 							button1->SetColor(Color::Blue);
 							});
-		CFrame::Button* button2 = new CFrame::Button(90, 90);
+		CFrame::Button* button2 = new CFrame::Button(50, 50);
 						button2->SetText("EMG");
 						button2->SetFont(CFrame::Font::Verdana);
 						button2->SetFontSize(34.0);
-		                button2->SetRadius(20,20,20,20);
+		                button2->SetRadius(10,10,10,10);
 						button2->SetOnLeave([button2]() {
 							button2->SetColor(Color::LightGray);
 						});
 						button2->SetOnHover([button2]() {
 							button2->SetColor(Color::Blue);
 						});
-		CFrame::Button* button3 = new CFrame::Button(90, 90);
+		CFrame::Button* button3 = new CFrame::Button(50, 50);
 						button3->SetText("FN");
 						button3->SetFont(CFrame::Font::Verdana);
 						button3->SetFontSize(34.0);
-		                button3->SetRadius(20,20,20,20);
+		                button3->SetRadius(10,10,10,10);
 						button3->SetOnLeave([button3]() {
 							button3->SetColor(Color::LightGray);
 						});
@@ -87,20 +86,20 @@ public:
 							button3->SetColor(Color::Blue);
 						});
 						
-		CFrame::Button* button4 = new CFrame::Button(90, 90);
+		CFrame::Button* button4 = new CFrame::Button(50, 50);
 						button4->SetFontSize(34.0);
 						button4->SetText("E.m");
-		                button4->SetRadius(20,20,20,20);
+		                button4->SetRadius(10,10,10,10);
 						button4->SetOnLeave([button4]() {
 							button4->SetColor(Color::LightGray);
 						});
 						button4->SetOnHover([button4]() {
 							button4->SetColor(Color::Blue);
 						});
-	    CFrame::Button* button45 = new CFrame::Button(90, 90);
+	    CFrame::Button* button45 = new CFrame::Button(50, 50);
 						button45->SetText("Il");
 						button45->SetFontSize(34.0);
-		                button45->SetRadius(20,20,20,20);
+		                button45->SetRadius(10,10,10,10);
 						button45->SetOnLeave([button45, friendList,content]() {
 							button45->SetColor(Color::LightGray);
 							
@@ -135,7 +134,7 @@ public:
 		sideBar->SetScrollEnabled(true);
 		
 
-		CFrame::Button* button5 = new CFrame::Button(-1, 75);
+		CFrame::Button* button5 = new CFrame::Button(-1, 50);
 						button5->SetTextColor(Color::White);
 						button5->SetText("Kaverit");
 						button5->SetOverflow(true);
@@ -164,7 +163,7 @@ public:
 							button5->SetColor(Color::LightGray);
 						});
 						button5->SetOpacity(1.0);
-		CFrame::Button* button6  = new CFrame::Button(-1, 75);
+		CFrame::Button* button6  = new CFrame::Button(-1, 50);
 						button6->SetText("Kirjasto");
 						//button6->SetAngle(25.0);
 		                button6->SetColor(Color::DarkGray);
@@ -182,7 +181,7 @@ public:
 							button6->SetColor(Color::Gray);
 						});
 						
-		CFrame::Button* button7  = new CFrame::Button(-1, 75);
+		CFrame::Button* button7  = new CFrame::Button(-1, 50);
 						button7->SetText("Nitro");
 						button7->SetTextAlign(CFrame::TextAlign::Start);
 						button7->SetPadding(20);
@@ -198,7 +197,7 @@ public:
 						
 							button7->SetColor(Color::Gray);
 						});
-		CFrame::Button* button8  = new CFrame::Button(-1, 75);
+		CFrame::Button* button8  = new CFrame::Button(-1, 50);
 	                    button8->SetText("Kauppa");
 						button8->SetTextAlign(CFrame::TextAlign::Start);
 						button8->SetPadding(20);
@@ -216,7 +215,7 @@ public:
 							button8->SetColor(Color::Gray);
 						});
 					
-		CFrame::Button* button9 = new CFrame::Button(-1, 75);
+		CFrame::Button* button9 = new CFrame::Button(-1, 50);
 		                button9->SetColor(Color::Gray);
 						button9->SetTextAlign(CFrame::TextAlign::Start);
 						button9->SetPadding(20);
@@ -248,14 +247,14 @@ public:
 		friendList->SetBorderColor(Color::LightGray);
 		friendList->SetBorder(2,0,2,2);
 		
-		CFrame::TextField* inputField = new CFrame::TextField(-1, -1, -1, 75, nullptr);
+		CFrame::TextField* inputField = new CFrame::TextField(-1, -1, -1, 35, nullptr);
 		//messageBox->SetColor(Color::DarkGray);
 		messageBox->SetBorder(2, 0, 0, 0);
 		messageBox->SetBorderColor(Color::LightGray);
 		messageBox->SetColor(Color::Gray);
 		//messageBox->SetOpacity(0.3);
-		messageBox->SetPadding(25);
-		inputField->SetMargin(0, 0, 30, 0);
+		messageBox->SetPadding(5);
+		messageBox->SetSpacing(10);
 		inputField->SetColor(Color::DarkGray);
 
 		ChessBoard* grid = new ChessBoard(-1, -1);

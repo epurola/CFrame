@@ -8,7 +8,6 @@ namespace CFrame
 		isHeightResizable = (h == -1);
 		isWidthResizable = (w == -1);
 		SetColor(Color::LightGray2);
-		SetRadius(20,20,20,20);
 		cells.assign(rows * cols, Cell());
 	}
 

@@ -4,9 +4,6 @@ project(CFrame LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Confirm we're in the correct directory
-message(STATUS "Project Root: ${CMAKE_CURRENT_SOURCE_DIR}")
-
 # Collect source files
 file(GLOB_RECURSE CFRAME_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/CFrame/*.cpp)
 file(GLOB_RECURSE CFRAME_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/src/CFrame/*.h)
@@ -42,6 +39,7 @@ target_link_libraries(CFrame
     Glad
     SDL3-shared
     freetype
+    Shcore
 )
 
 # Platform define

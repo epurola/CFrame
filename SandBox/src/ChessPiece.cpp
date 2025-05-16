@@ -3,9 +3,9 @@
 ChessPiece::ChessPiece( std::string path)
 	:Image(path)
 {
-	SetBorder(5);
+	SetBorder(2);
 	SetBorderColor(Color::Gold);
-	SetRadius(5, 5, 5, 5);
+	SetRadius(2, 2, 2, 2);
 	//SetColor(Color::Blue);
 	//SetAngle(20);
 	SetOpacity(0);

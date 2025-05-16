@@ -30,11 +30,14 @@ namespace CFrame
 		void MinimizeWindow();
 		void StartTextInput();
 		void StopTextInput();
+		void ResizeWindow(int width, int height);
 
 		void SetBorderColor(HWND hwnd, COLORREF borderColor);
+
+		float GetScaleFactorForWindow(HWND hwnd);
+
+		float GetScale() const { return scaleFactor; }
 		
-
-
 		 Window& Create(unsigned int width = 1280, 
 			unsigned int height = 720, 
 			const std::string& title = "CFrame Window");
@@ -45,5 +48,6 @@ namespace CFrame
 		SDL_Window* window;
 		void* context; // holds SDL_GLContext
 		EventDispatcher& dispatcher;
+		float scaleFactor;
 	};
 }

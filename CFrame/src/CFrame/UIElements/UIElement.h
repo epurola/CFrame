@@ -143,6 +143,7 @@ namespace CFrame
         virtual void UpdateChildSizes() {}
         virtual void OnEvent(CFrameEvent& event);
         virtual ElementType GetElementType() const = 0;
+        virtual void SetScaleFactor(float scale);
 
         void UpdateVertices();
         void RotatePoint(Point& p, float angle, float cosA, float sinA, float cX, float cY);
@@ -192,6 +193,7 @@ namespace CFrame
         float  GetWidth()   const  { return width; }
         float  GetHeight()  const  { return height; }
         float  GetBorder()  const  { return properties.border; }
+        float  GetScaleFactor() const { return scaleFactor; }
 
         bool  IsWidthResizable()        const  { return isWidthResizable; }
         bool  IsHeightResizable()       const  { return isHeightResizable; }
@@ -224,6 +226,7 @@ namespace CFrame
         float y = 0;
         float width = 0;
         float height = 0;
+        float scaleFactor = 1.0;
         int localX = 0;
         int localY = 0;
         bool isWidthResizable = true;

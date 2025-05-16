@@ -21,6 +21,7 @@ namespace CFrame {
 		void Render() override;
 		void OnEvent(CFrameEvent& event) override;
 		void RegisterAnimator(std::shared_ptr<ApplicationManager> manager) override;
+		void SetScaleFactor(float scale) override;
 
 		void ToFront(UIElement* child);
 		void ToBack(UIElement* child);

@@ -10,9 +10,9 @@ namespace CFrame
 		isHeightResizable = (h == -1);
         SetColor(Color::White, Color::White);
         SetTextColor(Color::White);
-        SetRadius(20,20,20,20);
+        SetRadius(10,10,10,10);
         SetPadding(10);
-        SetBorder(3);
+        SetBorder(1);
         SetBorderColor(Color::LightGray);
         SetFontSize(29);
 

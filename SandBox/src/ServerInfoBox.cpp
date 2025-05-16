@@ -18,11 +18,11 @@ ServerInfoBox::ServerInfoBox(int x, int y, int w, int h)
 	bottomPart->SetPadding(10);
 	bottomPart->SetSpacing(10);
 
-	CFrame::Button* button20 = new CFrame::Button(10,10,100, 100);
-	CFrame::Button* button21 = new CFrame::Button(55,10, 300, 100);
+	CFrame::Button* button20 = new CFrame::Button(0,0,50, 50);
+	CFrame::Button* button21 = new CFrame::Button(55,10, 200, 50);
 	button21->SetWidthResizable(true);
 	 
-	CFrame::Button* logo  = new CFrame::Button( 55, 55);
+	CFrame::Button* logo  = new CFrame::Button( 35, 35);
 	logo->SetIcon(0xE74F);
 	logo->SetFontSize(44);
 	logo->SetFont(CFrame::Font::SegoeMDL2Assets);
@@ -34,7 +34,7 @@ ServerInfoBox::ServerInfoBox(int x, int y, int w, int h)
 	logo->SetOnHover([logo]() {
 		logo->SetColor({ 100, 100, 100, 255 });
 		});
-	CFrame::Button* logo1 = new CFrame::Button( 55, 55);
+	CFrame::Button* logo1 = new CFrame::Button( 35, 35);
 	//logo1->SetAngle(45.0);
 	logo1->SetIcon(0xE720);
 	logo1->SetFontSize(44);
@@ -47,7 +47,7 @@ ServerInfoBox::ServerInfoBox(int x, int y, int w, int h)
 	logo1->SetOnHover([logo1]() {
 		logo1->SetColor({ 100, 100, 100, 255 });
 		});
-	CFrame::Button* logo2 = new CFrame::Button( 55, 55);
+	CFrame::Button* logo2 = new CFrame::Button( 35, 35);
 	//logo2->SetAngle(45.0);
 	logo2->SetIcon(0xE713);
 	logo2->SetFontSize(44);
@@ -62,7 +62,7 @@ ServerInfoBox::ServerInfoBox(int x, int y, int w, int h)
 		});
 	
 	
-	button20->SetRadius(55, 55, 55, 55);
+	button20->SetRadius(25, 25, 25, 25);
 	button20->SetBackgroundImage("C:/Users/eelip/Pictures/aaaaaaaape.jpg");
 	button20->SetAnchorPoint(CFrame::PositionMode::BottomLeft);
 	button20->SetPositionAbsolute(true);
@@ -87,13 +87,13 @@ ServerInfoBox::ServerInfoBox(int x, int y, int w, int h)
 	button21->SetMargin(50,0,0,0);
 
 
-	button21->SetPadding(60);
+	button21->SetPadding(20);
 	button21->SetAnchorPoint(CFrame::PositionMode::BottomLeft);
 	
 	
 	topPart->SetAlignment(CFrame::AlignItems::Start, CFrame::AlignItems::Start);
 	
-	SetRadius(20,20,20,20);
+	SetRadius(10,10,10,10);
 	SetBorder(2);
 	
 	//SetPadding(10);
@@ -103,12 +103,13 @@ ServerInfoBox::ServerInfoBox(int x, int y, int w, int h)
 	bottomPart->AddChild(logo1);
 	bottomPart->AddChild(logo2);
 	bottomPart->ToFront(logo1);
-	SetMinHeight(120);
+	SetMinHeight(60);
 	AddChild(topPart);
 	topPart->SetVisibility(false);
 	AddChild(bottomPart);
 	SetColor(Color::LightGray);
 	SetPadding(2);
+
 }
 
 

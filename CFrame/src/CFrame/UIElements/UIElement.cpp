@@ -321,6 +321,24 @@ namespace CFrame {
 		textProps.textAlign = alignX;
 	}
 
+	void UIElement::SetScaleFactor(float scale)
+	{
+		scaleFactor = scale;
+		// Scale position and size
+		x *= scale;
+		y *= scale;
+		width *= scale;
+		height *= scale;
+
+		// Scale text font size properly
+		textProps.fontSize = static_cast<int>(textProps.fontSize * scale);
+
+		properties.padding *= scale;
+		localX *= scale;
+		localY *= scale;
+	}
+
+
 	
 
 }

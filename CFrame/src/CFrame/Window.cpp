@@ -3,6 +3,7 @@
 #include "SDL3/SDL.h"
 #include <windows.h>
 #include <dwmapi.h>
+#include <ShellScalingApi.h>
 #pragma comment(lib, "dwmapi.lib") 
 
 
@@ -199,9 +200,48 @@ static SDL_HitTestResult SDL_HitTest(SDL_Window* win, const SDL_Point* pos, void
 	return SDL_HITTEST_NORMAL;
 }
 
+float Window::GetScaleFactorForWindow(HWND hwnd) {
+	// Get the DPI for the window 
+	UINT dpiX, dpiY;
+	HRESULT hr = GetDpiForMonitor(MonitorFromWindow(hwnd, MONITOR_DEFAULTTONEAREST), MDT_EFFECTIVE_DPI, &dpiX, &dpiY);
+	if (SUCCEEDED(hr)) {
+		return dpiX / 96.0f; // 96 DPI is baseline scale factor 1.0
+	}
+	else {
+		// Fallback: use system DPI
+		HDC screen = GetDC(NULL);
+		int dpi = GetDeviceCaps(screen, LOGPIXELSX);
+		ReleaseDC(NULL, screen);
+		return dpi / 96.0f;
+	}
+}
+
+void Window::ResizeWindow(int w, int h) {
+	int displayIndex = SDL_GetDisplayForWindow(window);
+
+	// Get screen resolution
+	const SDL_DisplayMode* displayMode;
+	displayMode = SDL_GetCurrentDisplayMode(displayIndex);
+	int screenWidth = displayMode->w;
+	int screenHeight = displayMode->h;
+
+	// Clamp size to screen 
+	w = std::min(w, screenWidth);
+	h = std::min(h, screenHeight);
+
+	// Resize the window
+	SDL_SetWindowSize(window, w, h);
+	glViewport(0, 0, w, h);
+
+	// Re-center the window manually
+	int x = (screenWidth - w) / 2;
+	int y = (screenHeight - h) / 2;
+	SDL_SetWindowPosition(window, x, y);
+}
+
 Window& Window::Create(unsigned int width, unsigned int height, const std::string& title)
 {
-	this->width = width;
+	this->width = width ;
 	this->height = height;
 	this->title = title;
     if (!SDL_Init(SDL_INIT_VIDEO)) {
@@ -230,6 +270,8 @@ Window& Window::Create(unsigned int width, unsigned int height, const std::strin
 	COLORREF discordBlue = RGB(114, 137, 218);  // Discord Blue color
 	SetBorderColor(hwnd, discordBlue);
 
+	scaleFactor = GetScaleFactorForWindow(hwnd);
+
 	if (SDL_SetWindowHitTest(window, SDL_HitTest, this)) {
 		
 	}
@@ -249,7 +291,6 @@ Window& Window::Create(unsigned int width, unsigned int height, const std::strin
 	glDepthFunc(GL_LESS);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
-
 	return *this;
 }
 
