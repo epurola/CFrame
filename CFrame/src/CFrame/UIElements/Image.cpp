@@ -39,6 +39,8 @@ namespace CFrame
 		instancet.color2 = properties.colors.background2;
 
 		// Border colors 
+		properties.colors.background1.a = properties.opacity;
+		properties.colors.background2.a = properties.opacity;
 		instancet.borderColor1 = properties.colors.border1;
 		instancet.borderColor2 = properties.colors.border2;
 

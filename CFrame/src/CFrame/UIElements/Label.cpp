@@ -26,7 +26,8 @@ namespace CFrame
 
     void Label::Render(float timestep)
     {
-
+        properties.colors.background1.a = properties.opacity;
+        properties.colors.background2.a = properties.opacity;
         Renderer2D::DrawTex({ (float)x, (float)y, textProps, atlasTexture.get(), overflow });
     }
 

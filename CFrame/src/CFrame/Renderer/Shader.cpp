@@ -30,6 +30,10 @@ namespace CFrame
     {
         glUniform4f(GetuniformLocation(name), v0, v1, v2, v3);
     }
+    void Shader::SetUniform4f(const std::string& name, const glm::vec4& vec)
+    {
+        glUniform4f(GetuniformLocation(name), vec.r, vec.g, vec.b, vec.a);
+    }
 
     void Shader::SetUniform2f(const std::string name, float v0, float v1)
     {

@@ -1,6 +1,5 @@
 #include "Renderer2D.h"
-#include "Renderer2D.h"
-#include "Renderer2D.h"
+#define GLM_VEC4_ARGS(v) (v).r, (v).g, (v).b, (v).a
 
 namespace CFrame 
 {
@@ -207,36 +206,14 @@ namespace CFrame
 		float windowHeight = s_Camera->GetHeight();
 		//ClipOverflow(x, y, w, h, windowHeight);
 
-		float r = p.colors.background1.r;
-		float g = p.colors.background1.g;
-		float b = p.colors.background1.b;
-		float a = p.opacity;
-
-		float rg = p.colors.background2.r;
-		float gg = p.colors.background2.g;
-		float bg = p.colors.background2.b;
-		float ag = p.opacity;
-
-		float rb = p.colors.border1.r ;
-		float gb = p.colors.border1.g ;
-		float bb = p.colors.border1.b ;
-		float ab = p.colors.border1.a ;
-
-		float rgb = p.colors.border2.r ;
-		float ggb = p.colors.border2.g ;
-		float bgb = p.colors.border2.b ;
-		float agb = p.colors.border2.a ;
-
-
 		/*Vertices of the rectangle. Calculates the top left as the origin*/
 		float vertices[] = {
-			/* x, y,                                        r, g, b, a         texture coordinates      Gradient color
-			location = 0                                    location = 1       location = 2             location = 3*/
-		   p.vertices.topLeft.x , p.vertices.topLeft.y,           r, g, b, a,     0.0f, 1.0f,     rg, gg, bg, ag,     // Top-left
-		   p.vertices.topRight.x, p.vertices.topRight.y,          r, g, b, a,     1.0f, 1.0f,     rg, gg, bg, ag,     // Top-right
-		   p.vertices.bottomRight.x , p.vertices.bottomRight.y,   r, g, b, a,     1.0f, 0.0f,     rg, gg, bg, ag,     // Bottom-right
-		   p.vertices.bottomLeft.x, p.vertices.bottomLeft.y,      r, g, b, a,     0.0f, 0.0f,     rg, gg, bg, ag,
+			p.vertices.topLeft.x,     p.vertices.topLeft.y,    GLM_VEC4_ARGS(p.colors.background1), 0.0f, 1.0f, GLM_VEC4_ARGS(p.colors.background2),
+			p.vertices.topRight.x,    p.vertices.topRight.y,   GLM_VEC4_ARGS(p.colors.background1), 1.0f, 1.0f, GLM_VEC4_ARGS(p.colors.background2),
+			p.vertices.bottomRight.x, p.vertices.bottomRight.y,GLM_VEC4_ARGS(p.colors.background1), 1.0f, 0.0f, GLM_VEC4_ARGS(p.colors.background2),
+			p.vertices.bottomLeft.x,  p.vertices.bottomLeft.y, GLM_VEC4_ARGS(p.colors.background1), 0.0f, 0.0f, GLM_VEC4_ARGS(p.colors.background2),
 		};
+
 
 		/*create vertex buffer with the vertices and the size of the data
 		4 vertices with 12 data point that are floats.
@@ -263,8 +240,8 @@ namespace CFrame
 
 		//Bind the shader and set uniforms
 		shader->Bind();
-		shader->SetUniform4f("u_Color", r, g, b, a);
-		shader->SetUniform4f("u_Color2", rg, gg, bg, ag);
+		shader->SetUniform4f("u_Color", p.colors.background1);
+		shader->SetUniform4f("u_Color2", p.colors.background2);
 		shader->SetUniformMat4f("u_MVP", proj);
 		shader->SetUniform2f("u_RectMin", x, y);
 		shader->SetUniform2f("u_RectMax", x + w, y + h);
@@ -279,8 +256,8 @@ namespace CFrame
 		shader->SetUniform1f("u_BorderBottom", p.border.bottom);
 		shader->SetUniform1f("u_BorderLeft", p.border.left);
 		shader->SetUniform1f("u_BorderRight", p.border.right);
-		shader->SetUniform4f("u_BorderColor1", rb, gb, bb, ab);
-		shader->SetUniform4f("u_BorderColor2", rgb, ggb, bgb, agb);
+		shader->SetUniform4f("u_BorderColor1", p.colors.border1);
+		shader->SetUniform4f("u_BorderColor2", p.colors.border2);
 		shader->SetUniform1i("u_Texture", 0);
 		shader->SetUniform1i("u_HasTexture", hasTexture);
 

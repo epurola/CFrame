@@ -56,6 +56,8 @@ namespace CFrame
 		instance.size = { width * properties.scaleX, height * properties.scaleY };
 
 		// Base colors (RGBA)
+		properties.colors.background1.a = properties.opacity;
+		properties.colors.background2.a = properties.opacity;
 		instance.color1 = properties.colors.background1;
 		instance.color2 = properties.colors.background2;
 
