@@ -9,14 +9,13 @@ namespace CFrame
 {
 	Button::Button(int x, int y, int w, int h, const std::string& text, 
           std::function<void()> onClick, UIElement* parent) 
-		:UIElement(x, y, w, h, parent), onClick(onClick), text(text),
-        animator(std::make_unique<Animator>(*this))
+		:UIElement(x, y, w, h, parent), onClick(onClick), text(text)
 	{
         isWidthResizable = (w == -1);
         isHeightResizable = (h == -1);
 		SetRadius(15,15,15,15);
         SetColor(Color::Gray);
-        SetFontSize(24);
+        SetFontSize(20);
         SetIsDirty(true);
 	}
 
@@ -45,7 +44,7 @@ namespace CFrame
        
         if (animator->IsAnimating()) 
         {
-            animator->Update(0.016f); //60fps
+            //animator->Update(timestep, *this); 
         }
 
         int centeredX = x + (width - renderWidth) / 2;
@@ -53,7 +52,7 @@ namespace CFrame
         
 		renderer.DrawRectangle((float)centeredX, (float)centeredY , (float)renderWidth, (float)renderHeight, 
             GetProperties(),
-            animator->GetTime(), 
+            1.0f, 
             animProperties.speed,
             imageTexture.get());
 
@@ -61,30 +60,37 @@ namespace CFrame
 
 	}
 
-    void Button::Render()
+    void Button::Render(float timestep)
     {
+        static float accumulatedTime = 0.0f;
+        accumulatedTime += timestep;
+
+        if (animator && animator->IsAnimating())
+        {
+            animator->Update(timestep, *this); 
+        }
+
         QuadInstance instance{};
 
         instance.position = { x, y };       
         instance.size = { width * properties.scaleX, height*properties.scaleY }; 
 
         // Base colors (RGBA)
-        instance.color1 = { properties.color1.r / 255.0f,properties.color1.g / 255.0f,properties.color1.b / 255.0f , properties.opacity}; 
-        instance.color2 = { properties.color2.r / 255.0f,properties.color2.g / 255.0f,properties.color2.b / 255.0f , properties.opacity }; 
+        instance.color1 = properties.colors.background1;
+        instance.color2 = properties.colors.background2;
 
         // Border colors 
-        instance.borderColor1 = { properties.borderColor1.r / 255.0f,properties.borderColor1.g / 255.0f,properties.borderColor1.b / 255.0f , properties.opacity };
-        instance.borderColor2 = { properties.borderColor2.r / 255.0f,properties.borderColor2.g / 255.0f,properties.borderColor2.b / 255.0f, properties.opacity };
+        instance.borderColor1 = properties.colors.border1;
+        instance.borderColor2 = properties.colors.border2;
 
-        // Border sizes (top, right, bottom, left)
-        instance.borderSizes = { properties.borderTop, properties.borderRight, properties.borderBottom, properties.borderLeft };
+        instance.borderSizes = { properties.border.top, properties.border.right, properties.border.bottom, properties.border.left };
 
         // Radius for corners
         instance.radius = { properties.radius.topLeft, properties.radius.topRight, properties.radius.bottomLeft, properties.radius.bottomRight};
 
         // Animation parameters
-        instance.time = 0.0f;  //  pass actual elapsed time
-        instance.speed = 0.0f;
+        instance.time = accumulatedTime;  //  pass actual elapsed time
+        instance.speed = 0.3f;
         instance.angle = 0.0f; 
 
         if (!imageTexture) {
@@ -97,15 +103,14 @@ namespace CFrame
             instancet.size = { width * properties.scaleX, height * properties.scaleY };
 
             // Base colors (RGBA)
-            instancet.color1 = { properties.color1.r / 255.0f,properties.color1.g / 255.0f,properties.color1.b / 255.0f , properties.opacity };
-            instancet.color2 = { properties.color2.r / 255.0f,properties.color2.g / 255.0f,properties.color2.b / 255.0f , properties.opacity };
+            instance.color1 = properties.colors.background1;
+            instance.color2 = properties.colors.background2;
 
             // Border colors 
-            instancet.borderColor1 = { properties.borderColor1.r / 255.0f,properties.borderColor1.g / 255.0f,properties.borderColor1.b / 255.0f , properties.opacity };
-            instancet.borderColor2 = { properties.borderColor2.r / 255.0f,properties.borderColor2.g / 255.0f,properties.borderColor2.b / 255.0f, properties.opacity };
+            instance.borderColor1 = properties.colors.border1;
+            instance.borderColor2 = properties.colors.border2;
 
-            // Border sizes (top, right, bottom, left)
-            instancet.borderSizes = { properties.borderTop, properties.borderRight, properties.borderBottom, properties.borderLeft };
+            instance.borderSizes = { properties.border.top, properties.border.right, properties.border.bottom, properties.border.left };
 
             // Radius for corners
             instancet.radius = { properties.radius.topLeft, properties.radius.topRight, properties.radius.bottomLeft, properties.radius.bottomRight };
@@ -118,7 +123,6 @@ namespace CFrame
             instancet.p = GetProperties();
             Renderer2D::DrawTextured(instancet);
         }
-        
         Renderer2D::DrawTex({ (float)x, (float)y, textProps, atlasTexture.get(), overflow });
     }
 
@@ -363,11 +367,6 @@ namespace CFrame
     void Button::SetOnClick(std::function<void()> onClick)
     {
         this->onClick = onClick;
-    }
-
-    void Button::StartAnimation()
-    {
-        animator->StartAnimation(animProperties.duration);
     }
 
     void Button::SetText(std::string text)

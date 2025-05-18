@@ -79,13 +79,28 @@ namespace CFrame {
 
 	}
 
-
-	void UIElement::SetMargin(int marginleft, int marginRight, int marginTop, int marginBottom)
+	void UIElement::SetAnimator(std::unique_ptr<Animator> anim) 
 	{
-		properties.marginBottom = marginBottom;
-		properties.marginLeft = marginleft;
-		properties.marginTop = marginTop;
-		properties.marginRight = marginRight;
+		if (animator && animator->IsAnimating()) {
+			// Current animation is still running, so ignore this new animation
+			return;
+		}
+		animator = std::move(anim);
+		applicationManager->RegisterAnimation(*this);
+	}
+
+	void UIElement::StopAnimation()
+	{
+		applicationManager->RemoveAnimator(*this);
+	}
+
+
+	void UIElement::SetMargin(int left, int right, int top, int bottom)
+	{
+		properties.margin.left = left;
+		properties.margin.right = right;
+		properties.margin.top = top;
+		properties.margin.bottom = bottom;
 	}
 
 	void UIElement::SetPadding(int padding)
@@ -143,31 +158,27 @@ namespace CFrame {
 
 	void UIElement::SetBorder(float border)
 	{
-		this->properties.border = border;
-		this->properties.borderBottom = border;
-		this->properties.borderTop = border;
-		this->properties.borderRight = border;
-		this->properties.borderLeft = border;
+		this->properties.border.top = border;
+		this->properties.border.bottom = border;
+		this->properties.border.right = border;
+		this->properties.border.left = border;
 	}
 
 	void UIElement::SetBorder(float t, float b, float r, float l)
 	{
-		this->properties.borderBottom = b;
-		this->properties.borderTop = t;
-		this->properties.borderRight = r;
-		this->properties.borderLeft = l;
+		this->properties.border.top = t;
+		this->properties.border.bottom = b;
+		this->properties.border.right = r;
+		this->properties.border.left = l;
 	}
 
 	void UIElement::SetBorderColor(Color color1, std::optional<Color> color2)
 	{
-		if (color2.has_value()) {
-			this->properties.borderColor1 = color1;
-			this->properties.borderColor2 = color2.value();
-		}
-		else {
-			this->properties.borderColor1 = color1;
-			this->properties.borderColor2 = color1;
-		}
+		glm::vec4 c1 = color1.ToVec4();
+		glm::vec4 c2 = color2.has_value() ? color2.value().ToVec4() : c1;
+
+		properties.colors.border1 = c1;
+		properties.colors.border2 = c2;
 	}
 
 	void UIElement::SetOpacity(float opacity)
@@ -210,14 +221,26 @@ namespace CFrame {
 
 	void UIElement::SetColor(Color color, std::optional<Color> color2)
 	{
+		glm::vec4 c1 = {
+		color.r / 255.0f,
+		color.g / 255.0f,
+		color.b / 255.0f,
+		color.a / 255.0f
+		};
+
+		glm::vec4 c2 = c1;
 		if (color2.has_value()) {
-			this->properties.color1 = color;
-			this->properties.color2 = color2.value();
+			const Color& col2 = color2.value();
+			c2 = {
+				col2.r / 255.0f,
+				col2.g / 255.0f,
+				col2.b / 255.0f,
+				col2.a / 255.0f
+			};
 		}
-		else {
-			this->properties.color1 = color;
-			this->properties.color2 = color;
-		}
+
+		properties.colors.background1 = c1;
+		properties.colors.background2 = c2;
 	}
 	
 	void UIElement::SetOnLeave(std::function<void()> onLeave)

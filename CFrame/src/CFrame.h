@@ -23,6 +23,8 @@
 #include "CFrame/UIElements/TextField.h"
 
 #include "CFrame/UIElements/Button.h"
+
+#include "CFrame/Animator/Scale.h"
 /*Logging*/
 #include "CFrame/Log.h"
 /*Entry point*/

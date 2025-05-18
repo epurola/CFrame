@@ -8,10 +8,12 @@
 #include "Color.h"
 #include "../ApplicationManager.h"
 #include "../Renderer/Renderer1.h"
+#include "../Animator/Animator.h"
 
 namespace CFrame 
 {
     class Renderer1;
+    class Animator;
 
     enum ElementType
     {
@@ -89,29 +91,39 @@ namespace CFrame
         int width  = 0; 
     };
 
+    struct Border {
+        float left = 0.0f;
+        float right = 0.0f;
+        float top = 0.0f;
+        float bottom = 0.0f;
+    };
+
+    struct Colors {
+        glm::vec4 background1 = { 0.5f, 0.5f, 0.5f, 1.0f }; 
+        glm::vec4 background2 = { 0.5f, 0.5f, 0.5f, 1.0f };
+        glm::vec4 border1 = { 0.5f, 0.5f, 0.5f, 1.0f };
+        glm::vec4 border2 = { 0.5f, 0.5f, 0.5f, 1.0f };
+    };
+
+    struct Margin {
+        float left = 0.0f;
+        float right = 0.0f;
+        float top = 0.0f;
+        float bottom = 0.0f;
+    };
 
     struct ElementProperties 
     {
-        int marginLeft     = 0;
-        int marginRight    = 0;
-        int marginTop      = 0;
-        int marginBottom   = 0;
+        Margin margin;
         int padding        = 0;
 
-        Radius radius;
         Vertices vertices;
 
-        float border       = 0;
-        float borderTop    = 0;
-        float borderBottom = 0;
-        float borderLeft   = 0;
-        float borderRight  = 0;
-        float zIndex = 0.0;
+        Radius radius;
+        Border border;
+        Colors colors;
 
-        Color borderColor1 = Color::Gray;
-        Color borderColor2 = Color::Gray;
-        Color color1       = Color::Gray;
-        Color color2       = Color::Gray;
+        float zIndex = 0.0;
 
         float scaleX       = 1;
         float scaleY       = 1;
@@ -139,7 +151,7 @@ namespace CFrame
         virtual ~UIElement() = default;
 
         virtual void Render(Renderer1& renderer) = 0;
-        virtual void Render() = 0;
+        virtual void Render(float timestep) = 0;
         virtual void UpdateChildSizes() {}
         virtual void OnEvent(CFrameEvent& event);
         virtual ElementType GetElementType() const = 0;
@@ -182,7 +194,22 @@ namespace CFrame
         void SetTextColor(Color color1, std::optional<Color> color2 = std::nullopt);
         void SetTextAlign(TextAlign alignX);
 
+        void SetAnimator(std::unique_ptr<Animator> anim);
+
+        template <typename T, typename... Args>
+        void StartAnimation(Args&&... args)
+        {
+            if (animator && animator->IsAnimating()) {
+                // Current animation is still running, so ignore this new animation
+                return;
+            }
+            static_assert(std::is_base_of<Animator, T>::value, "T must derive from Animator");
+            animator = std::make_unique<T>(std::forward<Args>(args)...);
+            applicationManager->RegisterAnimation(*this);
+        }
+
         void AnimateScale(float scaleX, float scaleY);
+        void StopAnimation();
         void AnimateGradient(float speed);
 
         float  GetX()       const  { return x; }
@@ -192,7 +219,6 @@ namespace CFrame
         float  GetAngle()   const  { return properties.angle; }
         float  GetWidth()   const  { return width; }
         float  GetHeight()  const  { return height; }
-        float  GetBorder()  const  { return properties.border; }
         float  GetScaleFactor() const { return scaleFactor; }
 
         bool  IsWidthResizable()        const  { return isWidthResizable; }
@@ -206,6 +232,7 @@ namespace CFrame
         ElementProperties&    GetProperties()      { return properties; };
         AnimationProperties&  GetAnimProperties()  { return animProperties; };
         PositionMode GetAnchor() { return pMode; }
+        Border  GetBorder()  const { return properties.border; }
 
         void  SetOnHover(std::function<void()> onHover);
         void  SetOnLeave(std::function<void()> onLeave);
@@ -239,6 +266,7 @@ namespace CFrame
         PositionMode pMode = PositionMode::TopLeft;
         std::unique_ptr<Texture> imageTexture;
         std::shared_ptr<ApplicationManager> applicationManager;
+        std::unique_ptr<Animator> animator;
         
         ElementProperties properties;
         AnimationProperties animProperties;

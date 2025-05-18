@@ -2,6 +2,9 @@
 #include <cstdint> 
 #include <iostream>
 #include "../Core.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp> 
+
 struct SDL_Color;
 struct CFRAME_API Color {
     uint8_t r, g, b, a;
@@ -37,4 +40,6 @@ struct CFRAME_API Color {
     static const Color Olive;
 
     SDL_Color toSDLColor(float opacity) const;
+
+    glm::vec4 Color::ToVec4() const;
 };

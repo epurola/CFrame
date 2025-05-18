@@ -22,7 +22,7 @@ namespace CFrame {
 
 		void OnEvent(CFrameEvent& event) override;
 		void Render(Renderer1& renderer) override;
-		void Render() override;
+		void Render(float timestep) override;
 		void SetInput(const std::string& value);
 		void UpdateChildSizes() override;
 

@@ -3,25 +3,11 @@
 
 namespace CFrame 
 {
-	class Animator 
-	{
-	public:
-		Animator(UIElement& element) ;
-		~Animator() {};
-
-
-		void Update(float deltaTime);
-		void StartAnimation(float duration);
-		void StopAnimation();
-		float GetTime();
-		void SetSpeed(float speed);
-		inline bool IsAnimating() const { return isAnimating; }
-
-	private:
-		bool isAnimating = false;
-		float animationDuration = 1.0f;
-		float elapsedTime = 0.0;
-		UIElement& element;
-		
-	};
+    class Animator 
+    {
+    public:
+        virtual ~Animator() = default;
+        virtual void Update(float timestep, UIElement& element) = 0;
+        virtual bool IsAnimating() const = 0;
+    };
 }

@@ -21,7 +21,7 @@ namespace CFrame
 		}
 
 		void Render(Renderer1& renderer) override;
-		void Render() override;
+		void Render(float timestep) override;
 		void OnEvent(CFrameEvent& event) override;
 		void SetOnEvent(std::function<void()> onEvent);
 

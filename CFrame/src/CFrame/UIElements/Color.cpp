@@ -32,3 +32,7 @@ SDL_Color Color::toSDLColor(float opacity) const
     Uint8 alpha = static_cast<Uint8>(opacity * 255);
     return SDL_Color{ r, g, b, alpha };
 }
+
+glm::vec4 Color::ToVec4() const {
+    return glm::vec4(r, g, b, a) / 255.0f;
+}

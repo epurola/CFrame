@@ -3,7 +3,6 @@
 #include <functional>
 #include "UIElement.h"
 #include <memory> 
-#include "../Animator/Animator.h"
 #include <map>
 #include <optional>
 #include "../Renderer/Renderer1.h"
@@ -24,12 +23,11 @@ namespace CFrame
         ~Button();
 
         void Render(Renderer1& renderer) override;
-        void Render() override;
+        void Render(float timestep) override;
         void UpdateChildSizes() override; 
         void OnEvent(CFrameEvent& event) override;
         void RegisterAnimator(std::shared_ptr<ApplicationManager> manager) override;
         void SetOnClick(std::function<void()> onClick);
-        void StartAnimation();
 
         void SetText(std::string text);
         void SetIcon(int codePoint);
@@ -49,7 +47,6 @@ namespace CFrame
         std::function<void()> onClick;
         std::string text;
         std::optional<int> icon = std::nullopt;
-        std::unique_ptr<Animator> animator;
         bool hovering = false;
         std::shared_ptr<Texture> atlasTexture;
         std::map<char, fontInfo> glyphs;

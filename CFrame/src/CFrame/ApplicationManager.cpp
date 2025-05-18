@@ -14,9 +14,7 @@ namespace CFrame
 	}
 	void ApplicationManager::RegisterAnimation(UIElement& animatingElement)
 	{
-		
 		animatingElements.insert(&animatingElement);
-		
 	}
 
 	void ApplicationManager::RemoveAnimator(UIElement& animatingElement)

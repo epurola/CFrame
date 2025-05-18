@@ -79,8 +79,8 @@ namespace CFrame {
                      break;
             }
 
-            xpos = xpos + p.marginLeft; 
-            ypos = ypos + p.marginTop;
+            xpos = xpos + p.margin.left; 
+            ypos = ypos + p.margin.top;
   
             child->SetX(xpos);
             child->SetY(ypos);
@@ -107,11 +107,11 @@ namespace CFrame {
             if (child->IsHeightResizable() || child->GetHeight() < 0)
             {
                 child->SetHeight(height - (properties.padding * 2));
-                child->SetX(xpos + p.marginLeft);
-                child->SetY(ypos + p.marginTop);
+                child->SetX(xpos + p.margin.left);
+                child->SetY(ypos + p.margin.top);
             }
 
-            xpos += child->GetWidth() + p.marginRight;
+            xpos += child->GetWidth() + p.margin.right;
 
             if (i < children.size() - 1)
             {
@@ -144,11 +144,11 @@ namespace CFrame {
             if (child->IsWidthResizable())
             {
                 flexibleCount++;
-                totalMargins += child->GetProperties().marginLeft + child->GetProperties().marginRight;
+                totalMargins += child->GetProperties().margin.left + child->GetProperties().margin.right;
             }
             else
             {
-                fixedWidth += child->GetWidth() + (child->GetProperties().marginLeft + child->GetProperties().marginRight);//May not be right
+                fixedWidth += child->GetWidth() + (child->GetProperties().margin.left + child->GetProperties().margin.right);//May not be right
             }
             if (child->GetHeight() > maxChildHeight && !child->IsHeightResizable())
             {
@@ -170,13 +170,13 @@ namespace CFrame {
     {
         if (child.IsWidthResizable()) 
         {
-            child.SetWidth(width - child.GetLocalX() - properties.padding * 2 - child.GetProperties().marginRight);
+            child.SetWidth(width - child.GetLocalX() - properties.padding * 2 - child.GetProperties().margin.right);
         }
 
         if (child.GetAnchor() == PositionMode::BottomLeft) 
         {
             child.SetX(GetX() + child.GetLocalX());
-            child.SetY(GetY() + GetHeight() - child.GetHeight() - child.GetProperties().marginBottom - child.GetLocalY());
+            child.SetY(GetY() + GetHeight() - child.GetHeight() - child.GetProperties().margin.bottom - child.GetLocalY());
         }
         else 
         {

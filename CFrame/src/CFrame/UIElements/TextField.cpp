@@ -50,7 +50,7 @@ namespace CFrame
         }
 	}
 
-    void TextField::Render()
+    void TextField::Render(float timestep)
     {
         QuadInstance instance{};
 
@@ -58,15 +58,14 @@ namespace CFrame
         instance.size = { width * properties.scaleX, height * properties.scaleY };
 
         // Base colors (RGBA)
-        instance.color1 = { properties.color1.r / 255.0f,properties.color1.g / 255.0f,properties.color1.b / 255.0f , properties.opacity }; // White base
-        instance.color2 = { properties.color2.r / 255.0f,properties.color2.g / 255.0f,properties.color2.b / 255.0f , properties.opacity }; // Slight gradient
+        instance.color1 = properties.colors.background1;
+        instance.color2 = properties.colors.background2;
 
         // Border colors 
-        instance.borderColor1 = { properties.borderColor1.r / 255.0f,properties.borderColor1.g / 255.0f,properties.borderColor1.b / 255.0f , properties.opacity }; // Black
-        instance.borderColor2 = { properties.borderColor2.r / 255.0f,properties.borderColor2.g / 255.0f,properties.borderColor2.b / 255.0f, properties.opacity };
+        instance.borderColor1 = properties.colors.border1;
+        instance.borderColor2 = properties.colors.border2;
 
-        // Border sizes (top, right, bottom, left)
-        instance.borderSizes = { properties.borderTop, properties.borderRight, properties.borderBottom, properties.borderLeft };
+        instance.borderSizes = { properties.border.top, properties.border.right, properties.border.bottom, properties.border.left };
 
         // Radius for corners
         instance.radius = { properties.radius.topLeft, properties.radius.topRight, properties.radius.bottomLeft, properties.radius.bottomRight };

@@ -84,7 +84,7 @@ ServerInfoBox::ServerInfoBox(int x, int y, int w, int h)
 	button21->SetColor(Color::LightGray);
 	button21->SetTextAlign(CFrame::TextAlign::Start);
 	button21->SetFontSize(20);
-	button21->SetMargin(50,0,0,0);
+	//button21->SetMargin(50,0,0,0); causes opengl error because scaling
 
 
 	button21->SetPadding(20);

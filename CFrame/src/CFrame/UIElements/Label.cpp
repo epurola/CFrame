@@ -24,8 +24,9 @@ namespace CFrame
         renderer.RenderText(x, y, textProps, atlasTexture.get(), overflow);
 	}
 
-    void Label::Render()
+    void Label::Render(float timestep)
     {
+
         Renderer2D::DrawTex({ (float)x, (float)y, textProps, atlasTexture.get(), overflow });
     }
 

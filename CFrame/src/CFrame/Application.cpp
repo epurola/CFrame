@@ -131,9 +131,14 @@ void Application::run()
 
 	titleBarContainer->SetScaleFactor(scale);
 	sceneContainer->SetScaleFactor(scale);
-	
+
+	auto last_time = std::chrono::steady_clock::now();
+
 	while (running ) {  
 		auto start_time = std::chrono::steady_clock::now();
+
+		std::chrono::duration<float> timestep = start_time - last_time;
+		last_time = start_time;
 
 		bool render = window->OnUpdate(); // Handles even polling return true if there is an event
 		
@@ -142,8 +147,8 @@ void Application::run()
 			Renderer2D::Begin();
 
 			//  Render containers 
-			titleBarContainer->Render();  
-			sceneContainer->Render();
+			titleBarContainer->Render(timestep.count());
+			sceneContainer->Render(timestep.count());
 
 			// End rendering frame
 			Renderer2D::End();
@@ -189,7 +194,7 @@ void Application::run()
 
 	   minimize = new Button(40 , 40);
 	   minimize->SetIcon(0xE738);
-	   minimize->SetFontSize(20 );
+	   minimize->SetFontSize(20);
 	   minimize->SetTextColor(Color::White);
 	   minimize->SetRadius(0);
 	   minimize->SetColor(Color::DarkGray);

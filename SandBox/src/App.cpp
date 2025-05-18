@@ -44,15 +44,18 @@ public:
 						button->SetFontSize(34.0);
 		                button->SetMargin(0, 0, 25, 0);				 
 		                button->SetRadius(10,10,10,10);
+						
+						button->SetOnHover([button]() 
+						{
+						//todo: Add OnEnter so it does not spam the button
+							button->StartAnimation<CFrame::Scale>(1.0f, 1.2f, 0.5f);
+						});
 
-						button->SetOnLeave([button]() {
-							button->SetColor(Color::LightGray);
-							button->SetScale(1.0, 1.0);
+						button->SetOnLeave([button]() 
+						{
+							button->StartAnimation<CFrame::Scale>(1.0f, 1.2f, 0.5f);
 						});
-						button->SetOnHover([button]() {
-							button->SetColor(Color::Blue);
-							button->SetScale(1.5,1.4);
-						});
+
 		CFrame::Button* button1 = new CFrame::Button(50, 50);
 						button1->SetText("Wz");
 						button1->SetFontSize(34.0);

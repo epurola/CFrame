@@ -22,8 +22,8 @@ namespace CFrame
 
         ResetLayoutMetrics();
 
-        int xpos = GetX() + properties.padding + properties.marginLeft; 
-        int ypos = GetY() + properties.padding + properties.marginTop;
+        int xpos = GetX() + properties.padding + properties.margin.left; 
+        int ypos = GetY() + properties.padding + properties.margin.top;
 
         PrecalculateLayoutMetrics();
   
@@ -36,8 +36,8 @@ namespace CFrame
 
             ElementProperties p = child->GetProperties();
             
-            xpos = xpos + p.marginLeft;
-            ypos = ypos + p.marginTop;
+            xpos = xpos + p.margin.left;
+            ypos = ypos + p.margin.top;
 
             if (child->IsPositionAbsolute()) {
                 HandleAbsolutePosition(*child);
@@ -61,7 +61,7 @@ namespace CFrame
 
             if (child->IsWidthResizable())
             {
-                child->SetWidth(width - (properties.padding * 2) - (p.marginRight + p.marginLeft));
+                child->SetWidth(width - (properties.padding * 2) - (p.margin.right + p.margin.left));
 
                 if (xAlign == AlignItems::Center) 
                 {
@@ -74,8 +74,8 @@ namespace CFrame
                 child->SetWidth(width - (properties.padding * 2));
             }
 
-            ypos += child->GetHeight() + p.marginBottom;
-            xpos -= p.marginLeft; //Reset so the next element is 
+            ypos += child->GetHeight() + p.margin.bottom;
+            xpos -= p.margin.left; //Reset so the next element is 
                                   //relative to the container not the element before it
             if (i < children.size() - 1)       
             {
@@ -145,7 +145,7 @@ namespace CFrame
             }
             else
             {
-                fixedHeight += child->GetHeight() + (p.marginTop + p.marginBottom);
+                fixedHeight += child->GetHeight() + (p.margin.top + p.margin.bottom);
             }
 
             if (child->GetWidth() > maxChildWidth && !child->IsWidthResizable())
@@ -153,7 +153,7 @@ namespace CFrame
                 maxChildWidth = child->GetWidth();
             }
 
-            totalMargins += p.marginLeft + p.marginRight;
+            totalMargins += p.margin.left + p.margin.right;
         }
 
         totalSpacing = static_cast<int>(spacing * (children.size() - 1));
@@ -175,7 +175,7 @@ namespace CFrame
 
         if (child.GetAnchor() == PositionMode::BottomLeft) {
             child.SetX(GetX() + child.GetLocalX());
-            child.SetY(GetY() + GetHeight() - child.GetHeight() - child.GetProperties().marginBottom - child.GetLocalY());
+            child.SetY(GetY() + GetHeight() - child.GetHeight() - child.GetProperties().margin.bottom - child.GetLocalY());
         }
         else 
         {

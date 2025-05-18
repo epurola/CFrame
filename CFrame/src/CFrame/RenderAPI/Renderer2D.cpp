@@ -207,25 +207,25 @@ namespace CFrame
 		float windowHeight = s_Camera->GetHeight();
 		//ClipOverflow(x, y, w, h, windowHeight);
 
-		float r = p.color1.r / 255.0f;
-		float g = p.color1.g / 255.0f;
-		float b = p.color1.b / 255.0f;
+		float r = p.colors.background1.r;
+		float g = p.colors.background1.g;
+		float b = p.colors.background1.b;
 		float a = p.opacity;
 
-		float rg = p.color2.r / 255.0f;
-		float gg = p.color2.g / 255.0f;
-		float bg = p.color2.b / 255.0f;
+		float rg = p.colors.background2.r;
+		float gg = p.colors.background2.g;
+		float bg = p.colors.background2.b;
 		float ag = p.opacity;
 
-		float rb = p.borderColor1.r / 255.0f;
-		float gb = p.borderColor1.g / 255.0f;
-		float bb = p.borderColor1.b / 255.0f;
-		float ab = p.borderColor1.a / 255.0f;
+		float rb = p.colors.border1.r ;
+		float gb = p.colors.border1.g ;
+		float bb = p.colors.border1.b ;
+		float ab = p.colors.border1.a ;
 
-		float rgb = p.borderColor2.r / 255.0f;
-		float ggb = p.borderColor2.g / 255.0f;
-		float bgb = p.borderColor2.b / 255.0f;
-		float agb = p.borderColor2.a / 255.0f;
+		float rgb = p.colors.border2.r ;
+		float ggb = p.colors.border2.g ;
+		float bgb = p.colors.border2.b ;
+		float agb = p.colors.border2.a ;
 
 
 		/*Vertices of the rectangle. Calculates the top left as the origin*/
@@ -275,10 +275,10 @@ namespace CFrame
 		shader->SetUniform1f("u_Time", time);
 		shader->SetUniform1f("u_Speed", speed);
 		shader->SetUniform1f("u_Angle", p.angle);
-		shader->SetUniform1f("u_BorderTop", p.borderTop);
-		shader->SetUniform1f("u_BorderBottom", p.borderBottom);
-		shader->SetUniform1f("u_BorderLeft", p.borderLeft);
-		shader->SetUniform1f("u_BorderRight", p.borderRight);
+		shader->SetUniform1f("u_BorderTop", p.border.top);
+		shader->SetUniform1f("u_BorderBottom", p.border.bottom);
+		shader->SetUniform1f("u_BorderLeft", p.border.left);
+		shader->SetUniform1f("u_BorderRight", p.border.right);
 		shader->SetUniform4f("u_BorderColor1", rb, gb, bb, ab);
 		shader->SetUniform4f("u_BorderColor2", rgb, ggb, bgb, agb);
 		shader->SetUniform1i("u_Texture", 0);

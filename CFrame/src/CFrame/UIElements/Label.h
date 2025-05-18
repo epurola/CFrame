@@ -22,7 +22,7 @@ namespace CFrame
         ~Label();
 
         void Render(Renderer1& renderer) override;
-        void Render() override;
+        void Render(float timestep) override;
         void RegisterAnimator(std::shared_ptr<ApplicationManager> manager);
         void UpdateChildSizes() override;
         void OnEvent(CFrameEvent& event) override;
