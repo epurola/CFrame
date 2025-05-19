@@ -72,8 +72,11 @@ namespace CFrame
 
         QuadInstance instance{};
 
-        instance.position = { x, y };       
-        instance.size = { width * properties.scaleX, height*properties.scaleY }; 
+        float offsetX = (width * (1.0f - properties.scaleX)) * 0.5f;
+        float offsetY = (height * (1.0f - properties.scaleY)) * 0.5f;
+
+        instance.position = { x + offsetX, y + offsetY };
+        instance.size = { width * properties.scaleX, height * properties.scaleY };
 
         // Base colors (RGBA)
         properties.colors.background1.a = properties.opacity;
@@ -93,7 +96,7 @@ namespace CFrame
         // Animation parameters
         instance.time = accumulatedTime;  //  pass actual elapsed time
         instance.speed = 0.3f;
-        instance.angle = 0.0f; 
+        instance.angle = glm::radians(properties.angle);
 
         if (!imageTexture) {
             Renderer2D::DrawQuad(instance);
@@ -313,30 +316,34 @@ namespace CFrame
         int xPos = static_cast<int>(e.GetX());
         int yPos = static_cast<int>(e.GetY());
 
-        // Check if the mouse position is inside the button's bounds
-        if (xPos < x || xPos >(x + width) || yPos < y || yPos >(y + height))
+        bool isInside = (xPos >= x && xPos <= x + width && yPos >= y && yPos <= y + height);
+
+        if (!isInside)
         {
             if (hovering)
             {
                 onLeave();
                 hovering = false;
-                applicationManager->RemoveAnimator(*this);
             }
             return false;
         }
 
-        hovering = true;
-
-        if (onHover)
+        // Mouse is inside
+        if (!hovering)
         {
-            onHover();
-            if (animProperties.speed > 0)
+            // Mouse just entered the button area
+            hovering = true;
+
+            if (onHover)
             {
-                applicationManager->RegisterAnimation(*this);
+                onHover();
             }
-            return false;
         }
+      
+
+        return false;
     }
+
 
     bool Button::MouseLeaveEvent()
     {

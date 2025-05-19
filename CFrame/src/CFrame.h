@@ -25,6 +25,8 @@
 #include "CFrame/UIElements/Button.h"
 
 #include "CFrame/Animator/Scale.h"
+
+#include "CFrame/Animator/Rotate.h"
 /*Logging*/
 #include "CFrame/Log.h"
 /*Entry point*/

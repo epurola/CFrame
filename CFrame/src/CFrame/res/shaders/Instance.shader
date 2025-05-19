@@ -36,10 +36,20 @@ out float v_HasTexture;
 out vec2 v_LocalPos;
 out vec2 v_Size;
 
+mat2 rotate(float angle){
+    return mat2(
+        cos(angle), -sin(angle),
+        sin(angle),  cos(angle)
+    );
+}
+
 void main()
 {
-    vec2 adjustedPos = a_Position * i_Size;
+
+    vec2 adjustedPos = rotate(i_Angle) * ( a_Position * i_Size);
+
     vec2 worldPos = adjustedPos + i_Position + (i_Size * 0.5);
+
     gl_Position = u_ViewProjection * vec4(worldPos, 0.0, 1.0);
 
     v_TexCoord = a_TexCoord;
@@ -53,9 +63,11 @@ void main()
     v_Speed = i_Speed;
     v_Angle = i_Angle;
 
+
     // Pass size and relative position to fragment shader
     v_Size = i_Size;
-    v_LocalPos = a_Position * i_Size;
+    //Rotate back for SDF
+    v_LocalPos = rotate(-i_Angle) * adjustedPos;
 }
 
 #shader fragment
@@ -104,15 +116,6 @@ void main()
 {
     vec2 center = vec2(0.0); // local space
     vec2 p = v_LocalPos - center;
-
-    // Apply rotation
-    float angleRad = -v_Angle * 3.14159265 / 180.0;
-    float cosA = cos(angleRad);
-    float sinA = sin(angleRad);
-    p = vec2(
-        cosA * p.x - sinA * p.y,
-        sinA * p.x + cosA * p.y
-    );
 
     vec2 b = v_Size * 0.5;
     vec4 r = vec4(v_Radius.w , v_Radius.y , v_Radius.z, v_Radius.x);

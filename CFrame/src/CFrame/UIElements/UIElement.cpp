@@ -40,7 +40,7 @@ namespace CFrame {
 
 		properties.vertices.topRight.x = centerX + scaledHalfWidth;
 		properties.vertices.topRight.y = centerY + scaledHalfHeight;
-
+		/*
 		if (properties.angle > 0.0f) {
 
 			float angleRadians = properties.angle * M_PI / 180.0f;
@@ -62,6 +62,7 @@ namespace CFrame {
             // Rotate top-right vertex
 		    RotatePoint(properties.vertices.topRight, properties.angle, cosA, sinA, cX, cY);
 		}
+		*/
 	}
 	//Todo: Maybe also take the center in as a point
 	void UIElement::RotatePoint(Point& p, float angle, float cosA, float sinA, float cX, float cY)
@@ -81,10 +82,7 @@ namespace CFrame {
 
 	void UIElement::SetAnimator(std::unique_ptr<Animator> anim) 
 	{
-		if (animator && animator->IsAnimating()) {
-			// Current animation is still running, so ignore this new animation
-			return;
-		}
+	
 		animator = std::move(anim);
 		applicationManager->RegisterAnimation(*this);
 	}

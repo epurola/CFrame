@@ -44,6 +44,7 @@ public:
 						button->SetFontSize(34.0);
 		                button->SetMargin(0, 0, 25, 0);				 
 		                button->SetRadius(10,10,10,10);
+						button->SetAngle(45);
 						
 						button->SetOnHover([button]() 
 						{
@@ -53,7 +54,7 @@ public:
 
 						button->SetOnLeave([button]() 
 						{
-							button->StartAnimation<CFrame::Scale>(1.0f, 1.2f, 0.5f);
+							button->StartAnimation<CFrame::Scale>(1.2f, 1.0f, 0.5f);
 						});
 
 		CFrame::Button* button1 = new CFrame::Button(50, 50);
@@ -216,6 +217,10 @@ public:
 							button8->AnimateGradient(3.0);
 					
 							button8->SetColor(Color::Gray);
+						});
+						button8->SetOnClick([button8]()
+						{
+							button8->StartAnimation<CFrame::Rotate>(0.0, 360.0, 5.0f);
 						});
 					
 		CFrame::Button* button9 = new CFrame::Button(-1, 50);

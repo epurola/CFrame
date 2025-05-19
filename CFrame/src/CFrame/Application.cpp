@@ -137,9 +137,6 @@ void Application::run()
 	while (running ) {  
 		auto start_time = std::chrono::steady_clock::now();
 
-		std::chrono::duration<float> timestep = start_time - last_time;
-		last_time = start_time;
-
 		bool render = window->OnUpdate(); // Handles even polling return true if there is an event
 		
 		if (render || applicationManager->IsAnimating()) 
@@ -147,8 +144,8 @@ void Application::run()
 			Renderer2D::Begin();
 
 			//  Render containers 
-			titleBarContainer->Render(timestep.count());
-			sceneContainer->Render(timestep.count());
+			titleBarContainer->Render(0.016f);
+			sceneContainer->Render(0.016f);
 
 			// End rendering frame
 			Renderer2D::End();
