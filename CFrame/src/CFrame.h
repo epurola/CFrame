@@ -27,6 +27,12 @@
 #include "CFrame/Animator/Scale.h"
 
 #include "CFrame/Animator/Rotate.h"
+
+#include "CFrame/Animator/TranslateX.h"
+
+#include "CFrame/Animator/TranslateY.h"
+
+#include "CFrame/Animator/Translate.h"
 /*Logging*/
 #include "CFrame/Log.h"
 /*Entry point*/

@@ -2,7 +2,7 @@
 
 namespace CFrame 
 {
-	void Rotate::Update(float timestep, UIElement& element)
+	void Rotate::Update(float timestep)
 	{
 		elapsed += timestep;
 		float t = std::min(elapsed / duration, 1.0f);

@@ -27,6 +27,7 @@ namespace CFrame
 		float time;
 		float speed;
 		float angle;
+		float scale = 1.0f;
 	};
 
 	struct QuadInstanceT {

@@ -67,7 +67,7 @@ namespace CFrame
 
         if (animator && animator->IsAnimating())
         {
-            animator->Update(timestep, *this); 
+            animator->Update(timestep); 
         }
 
         QuadInstance instance{};
@@ -97,6 +97,7 @@ namespace CFrame
         instance.time = accumulatedTime;  //  pass actual elapsed time
         instance.speed = 0.3f;
         instance.angle = glm::radians(properties.angle);
+        instance.scale = properties.scaleX;
 
         if (!imageTexture) {
             Renderer2D::DrawQuad(instance);

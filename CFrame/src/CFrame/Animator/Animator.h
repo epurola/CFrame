@@ -7,7 +7,7 @@ namespace CFrame
     {
     public:
         virtual ~Animator() = default;
-        virtual void Update(float timestep, UIElement& element) = 0;
+        virtual void Update(float timestep) = 0;
         virtual bool IsAnimating() const = 0;
     };
 }

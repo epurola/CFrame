@@ -12,11 +12,13 @@ namespace CFrame
         float endScale = 1.0f;
         bool animating = false;
 
-        Scale(float start, float end, float duration)
-            : duration(duration), startScale(start), endScale(end), animating(true) {
-        }
+        UIElement& element;
 
-        void Update(float timestep, UIElement& element) override;
+        Scale(float start, float end, float duration, UIElement& element)
+            : duration(duration), startScale(start), endScale(end), animating(true),
+        element(element){}
+
+        void Update(float timestep) override;
         bool IsAnimating() const override { return animating; }
     };
 }

@@ -12,11 +12,14 @@ namespace CFrame
         float endAngle = 1.0f;
         bool animating = false;
 
-        Rotate(float start, float end, float duration)
-            : duration(duration), startAngle(start), endAngle(end), animating(true) {
+        UIElement& element;
+
+        Rotate(float start, float end, float duration, UIElement& element)
+            : duration(duration), startAngle(start), endAngle(end), animating(true), 
+            element(element) {
         }
 
-        void Update(float timestep, UIElement& element) override;
+        void Update(float timestep) override;
         bool IsAnimating() const override { return animating; }
     };
 }

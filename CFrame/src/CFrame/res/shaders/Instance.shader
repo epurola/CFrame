@@ -16,8 +16,8 @@ layout(location = 9) in vec4 i_Radius;
 layout(location =10) in float i_Time;
 layout(location =11) in float i_Speed;
 layout(location =12) in float i_Angle;
-layout(location =13) in float i_HasTexture;
-layout(location =14) in float i_TextureIndex;
+layout(location =13) in float i_Scale;
+
 
 uniform mat4 u_ViewProjection;
 
@@ -40,6 +40,22 @@ mat2 rotate(float angle){
     return mat2(
         cos(angle), -sin(angle),
         sin(angle),  cos(angle)
+    );
+}
+
+mat2 scale(float scale){
+    return mat2(
+        scale, 0,
+        0,  scale
+    );
+}
+
+mat4 translate(vec2 t) {
+    return mat4(
+        1.0, 0.0, 0.0, 0.0,
+        0.0, 1.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0,
+        t.x, t.y, 0.0, 1.0
     );
 }
 

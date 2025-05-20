@@ -237,6 +237,10 @@ public:
 							button9->AnimateGradient(3.0);
 						});
 						button9->SetOpacity(0.9);
+						button9->SetOnClick([button9]()
+						{
+							button9->StartAnimation<CFrame::Translate>(50.0f, 50.0f, 2.0f);
+						});
 	  
 						
 						

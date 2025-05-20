@@ -68,6 +68,7 @@ namespace CFrame
 		instanceLayout.Push<float>(1);  // time
 		instanceLayout.Push<float>(1);  // speed
 		instanceLayout.Push<float>(1);  // angle
+		instanceLayout.Push<float>(1);  // scale
 
 		VA->AddBuffer(*instanceBuffer, instanceLayout, true, 2);
 	}

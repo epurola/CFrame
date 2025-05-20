@@ -204,7 +204,7 @@ namespace CFrame
                 return;
             }
             static_assert(std::is_base_of<Animator, T>::value, "T must derive from Animator");
-            animator = std::make_unique<T>(std::forward<Args>(args)...);
+            animator = std::make_unique<T>(std::forward<Args>(args)..., *this);
             applicationManager->RegisterAnimation(*this);
         }
 

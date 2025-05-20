@@ -2,7 +2,7 @@
 
 namespace CFrame 
 {
-	void Scale::Update(float timestep, UIElement& element) {
+	void Scale::Update(float timestep) {
 		animating = true;
 		elapsed += timestep;
 		float t = std::min(elapsed / duration, 1.0f);
