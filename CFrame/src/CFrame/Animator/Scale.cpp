@@ -14,8 +14,7 @@ namespace CFrame
 		{
 			animating = false;
 			if (AnimationEndBehavior::Reset == end) {
-				element.SetX(originalScale);
-				element.SetY(originalScale);
+				element.SetScale(originalScale, startScale);
 			}
 			if (AnimationEndBehavior::Reverse == end) {
 				elapsed = 0.0f;

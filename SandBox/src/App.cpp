@@ -241,19 +241,14 @@ public:
 							using namespace CFrame;
 
 							// Quick horizontal scale to simulate squish/stretch
-							button9->StartAnimation<ScaleX>(
+							button9->StartAnimation<Scale>(
 								1.0f,      // From normal size
 								1.5f,      // Stretch a bit
 								0.2f,      // Fast
 								AnimationEndBehavior::Reset
 							);
 
-							// Quick upward and downward motion for bounce
-							button9->StartAnimation<TranslateY>(
-								200.0f,    // Drop downward
-								0.3f,      // Fast
-								AnimationEndBehavior::Reset
-							);
+							
 						});
 	  
 						
