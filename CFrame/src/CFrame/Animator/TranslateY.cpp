@@ -13,7 +13,18 @@ namespace CFrame
 		if (t >= 1.0f)
 		{
 			animating = false;
-			element.StopAnimation();
+			if (AnimationEndBehavior::Reset == ending) {
+				element.SetY(startPos);
+			}
+			if (AnimationEndBehavior::Reverse == ending) {
+				elapsed = 0.0f;
+
+				element.StartAnimation<TranslateY>(
+					-(endPos - startPos),
+					duration,
+					AnimationEndBehavior::None
+				);
+			}
 		}
 	}
 }

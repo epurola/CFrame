@@ -7,7 +7,7 @@ ChessPiece::ChessPiece( std::string path)
 	SetBorderColor(Color::Gold);
 	SetRadius(2, 2, 2, 2);
 	//SetColor(Color::Blue);
-	//SetAngle(20);
+	SetAngle(20);
 	SetOpacity(0);
 }
 

@@ -11,11 +11,11 @@ namespace CFrame
         float startAngle = 1.0f;
         float endAngle = 1.0f;
         bool animating = false;
-
+        AnimationEndBehavior ending;
         UIElement& element;
 
-        Rotate(float start, float end, float duration, UIElement& element)
-            : duration(duration), startAngle(start), endAngle(end), animating(true), 
+        Rotate(float start, float end, float duration, AnimationEndBehavior ending, UIElement& element)
+            : duration(duration), startAngle(start), ending(ending), endAngle(end), animating(true), 
             element(element) {
         }
 

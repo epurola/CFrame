@@ -48,13 +48,12 @@ public:
 						
 						button->SetOnHover([button]() 
 						{
-						//todo: Add OnEnter so it does not spam the button
-							button->StartAnimation<CFrame::Scale>(1.0f, 1.2f, 0.5f);
+							button->StartAnimation<CFrame::Scale>(1.0f, 1.2f, 0.5f, AnimationEndBehavior::Reverse);
 						});
 
 						button->SetOnLeave([button]() 
 						{
-							button->StartAnimation<CFrame::Scale>(1.2f, 1.0f, 0.5f);
+							button->StartAnimation<CFrame::Scale>(1.2f, 1.0f, 0.5f, AnimationEndBehavior::None);
 						});
 
 		CFrame::Button* button1 = new CFrame::Button(50, 50);
@@ -220,7 +219,7 @@ public:
 						});
 						button8->SetOnClick([button8]()
 						{
-							button8->StartAnimation<CFrame::Rotate>(0.0, 360.0, 5.0f);
+							button8->StartAnimation<CFrame::Rotate>(0.0, 360.0, 5.0f, AnimationEndBehavior::Reverse);
 						});
 					
 		CFrame::Button* button9 = new CFrame::Button(-1, 50);
@@ -239,7 +238,22 @@ public:
 						button9->SetOpacity(0.9);
 						button9->SetOnClick([button9]()
 						{
-							button9->StartAnimation<CFrame::Translate>(50.0f, 50.0f, 2.0f);
+							using namespace CFrame;
+
+							// Quick horizontal scale to simulate squish/stretch
+							button9->StartAnimation<ScaleX>(
+								1.0f,      // From normal size
+								1.5f,      // Stretch a bit
+								0.2f,      // Fast
+								AnimationEndBehavior::Reset
+							);
+
+							// Quick upward and downward motion for bounce
+							button9->StartAnimation<TranslateY>(
+								200.0f,    // Drop downward
+								0.3f,      // Fast
+								AnimationEndBehavior::Reset
+							);
 						});
 	  
 						

@@ -1,26 +1,25 @@
-#include "Scale.h"
+#include "ScaleY.h"
 
-namespace CFrame 
+namespace CFrame
 {
-	void Scale::Update(float timestep) {
+	void ScaleY::Update(float timestep) {
 		animating = true;
 		elapsed += timestep;
 		float t = std::min(elapsed / duration, 1.0f);
 
 		float scale = startScale + t * (endScale - startScale);
-		element.SetScale(scale, scale);
+		element.SetScaleY(scale);
 
-		if (t >= 1.0f) 
+		if (t >= 1.0f)
 		{
 			animating = false;
 			if (AnimationEndBehavior::Reset == end) {
-				element.SetX(originalScale);
-				element.SetY(originalScale);
+				element.SetScaleY(originalScale);
 			}
 			if (AnimationEndBehavior::Reverse == end) {
 				elapsed = 0.0f;
 
-				element.StartAnimation<Scale>(
+				element.StartAnimation<ScaleY>(
 					endScale,
 					startScale,
 					duration,

@@ -2,6 +2,8 @@
 #include <vector>
 #include <cmath>
 #include <optional>
+#include <typeindex>
+
 #include "../Core.h"
 #include "../Renderer/FontManager.h"
 #include "../CFrameEvent/CFrameEvent.h"
@@ -125,8 +127,8 @@ namespace CFrame
 
         float zIndex = 0.0;
 
-        float scaleX       = 1;
-        float scaleY       = 1;
+        float scaleX       = 1.0f;
+        float scaleY       = 1.0f;
         float angle        = 0.0f;
         float opacity      = 1;
 
@@ -185,6 +187,8 @@ namespace CFrame
         /// The format is {r,g,b,a}. You can set a custom color using this format.
         void SetColor(Color color, std::optional<Color> color2 = std::nullopt);
         void SetScale(float scaleX, float scaleY);
+        void SetScaleX(float scaleX);
+        void SetScaleY(float scaleY);
         void SetVisibility(bool visibility);
         void SetDragToResize(bool b);
         void SetWidthResizable(bool is) { isWidthResizable = is; };
@@ -199,12 +203,17 @@ namespace CFrame
         template <typename T, typename... Args>
         void StartAnimation(Args&&... args)
         {
-            if (animator && animator->IsAnimating()) {
-                // Current animation is still running, so ignore this new animation
-                return;
-            }
             static_assert(std::is_base_of<Animator, T>::value, "T must derive from Animator");
-            animator = std::make_unique<T>(std::forward<Args>(args)..., *this);
+
+            std::type_index key(typeid(T));
+
+            // Check if animation of this type is already running
+            if (activeAnimators.find(key) != activeAnimators.end() && activeAnimators[key]->IsAnimating()) {
+                return; 
+            }
+
+            activeAnimators[key] = std::make_unique<T>(std::forward<Args>(args)..., *this);
+          
             applicationManager->RegisterAnimation(*this);
         }
 
@@ -266,7 +275,8 @@ namespace CFrame
         PositionMode pMode = PositionMode::TopLeft;
         std::unique_ptr<Texture> imageTexture;
         std::shared_ptr<ApplicationManager> applicationManager;
-        std::unique_ptr<Animator> animator;
+
+        std::unordered_map<std::type_index, std::unique_ptr<Animator>> activeAnimators;
         
         ElementProperties properties;
         AnimationProperties animProperties;

@@ -33,6 +33,10 @@
 #include "CFrame/Animator/TranslateY.h"
 
 #include "CFrame/Animator/Translate.h"
+
+#include "CFrame/Animator/ScaleX.h"
+
+#include "CFrame/Animator/ScaleY.h"
 /*Logging*/
 #include "CFrame/Log.h"
 /*Entry point*/

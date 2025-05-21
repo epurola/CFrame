@@ -52,9 +52,11 @@ namespace CFrame
 		// Animation parameters
 		instancet.time = 0.0f;  //  pass actual elapsed time
 		instancet.speed = 0.0f;
-		instancet.angle = 0.0f;
+		instancet.angle = glm::radians(properties.angle);
 		instancet.texture = imageTexture.get();
+	
 		instancet.p = GetProperties();
+
 		Renderer2D::DrawTextured(instancet);
 	}
 

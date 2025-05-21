@@ -41,11 +41,6 @@ namespace CFrame
             renderWidth  = static_cast<int>(width * properties.scaleX);
             renderHeight = static_cast<int>(height * properties.scaleY);
         }
-       
-        if (animator->IsAnimating()) 
-        {
-            //animator->Update(timestep, *this); 
-        }
 
         int centeredX = x + (width - renderWidth) / 2;
         int centeredY = y + (height - renderHeight) / 2;
@@ -65,9 +60,23 @@ namespace CFrame
         static float accumulatedTime = 0.0f;
         accumulatedTime += timestep;
 
-        if (animator && animator->IsAnimating())
+        for (auto it = activeAnimators.begin(); it != activeAnimators.end(); )
         {
-            animator->Update(timestep); 
+            Animator* animator = it->second.get();
+
+            if (animator->IsAnimating())
+            {
+                animator->Update(timestep);
+                ++it;
+            }
+            else
+            {
+                // Remove finished animations
+                it = activeAnimators.erase(it);
+            }
+            if (activeAnimators.empty()) {
+                applicationManager->RemoveAnimator(*this);
+            }
         }
 
         QuadInstance instance{};

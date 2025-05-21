@@ -1,7 +1,6 @@
 #include "Window.h"
 #include "glad/glad.h"
 #include "SDL3/SDL.h"
-#include <windows.h>
 #include <dwmapi.h>
 #include <ShellScalingApi.h>
 #pragma comment(lib, "dwmapi.lib") 

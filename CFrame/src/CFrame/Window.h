@@ -3,7 +3,8 @@
 #include "CFrameEvent/CFrameEvent.h"
 #include <string>
 #include "Log.h"
-
+#include <windows.h>
+#include <algorithm>
 struct SDL_Window;
 
 

@@ -252,7 +252,7 @@ namespace CFrame
 		shader->SetUniform1f("u_TopLeft", float(p.radius.topLeft));
 		shader->SetUniform1f("u_Time", time);
 		shader->SetUniform1f("u_Speed", speed);
-		shader->SetUniform1f("u_Angle", p.angle);
+		shader->SetUniform1f("u_Angle", glm::radians(p.angle));
 		shader->SetUniform1f("u_BorderTop", p.border.top);
 		shader->SetUniform1f("u_BorderBottom", p.border.bottom);
 		shader->SetUniform1f("u_BorderLeft", p.border.left);

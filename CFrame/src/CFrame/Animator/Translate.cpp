@@ -16,7 +16,20 @@ namespace CFrame
 		if (t >= 1.0f)
 		{
 			animating = false;
-			element.StopAnimation();
+			if (AnimationEndBehavior::Reset == reset) {
+				element.SetX(originalX);
+				element.SetY(originalY);
+			}
+			if (AnimationEndBehavior::Reverse == reset) {
+				elapsed = 0.0f;
+	
+				element.StartAnimation<Translate>(
+					-(endX - startX),
+					-(endY - startY),
+					duration,
+					AnimationEndBehavior::None  
+				);
+			}
 		}
 	}
 }

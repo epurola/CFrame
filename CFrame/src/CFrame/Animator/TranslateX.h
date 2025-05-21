@@ -11,13 +11,16 @@ namespace CFrame
         float startPos = 1.0f;
         float endPos = 1.0f;
         bool animating = false;
+        AnimationEndBehavior ending;
+        float originalX = 1.0f;
 
         UIElement& element;
 
-        TranslateX(float distance, float duration, UIElement& element)
-            : duration(duration), animating(true), element(element) {
+        TranslateX(float distance, float duration, AnimationEndBehavior reset, UIElement& element)
+            : duration(duration), animating(true), ending(reset), element(element) {
             startPos = element.GetX();
             endPos = startPos + distance;
+            originalX = element.GetX();
         }
 
         void Update(float timestep) override;

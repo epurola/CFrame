@@ -13,7 +13,20 @@ namespace CFrame
 		if (t >= 1.0f)
 		{
 			animating = false;
-			element.StopAnimation();
+
+			if (AnimationEndBehavior::Reset == ending) {
+				element.SetAngle(startAngle);
+			}
+			if (AnimationEndBehavior::Reverse == ending) {
+				elapsed = 0.0f;
+
+				element.StartAnimation<Rotate>(
+					endAngle,
+					startAngle,
+					duration,
+					AnimationEndBehavior::None
+				);
+			}
 		}
 	}
 }

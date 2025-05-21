@@ -11,11 +11,13 @@ namespace CFrame
         float startPos = 1.0f;
         float endPos = 1.0f;
         bool animating = false;
+        AnimationEndBehavior ending;
+
 
         UIElement& element;
 
-        TranslateY(float distance, float duration, UIElement& element)
-            : duration(duration), animating(true), element(element) {
+        TranslateY(float distance, float duration, AnimationEndBehavior ending, UIElement& element)
+            : duration(duration), animating(true), ending(ending), element(element) {
             startPos = element.GetY();
             endPos = startPos + distance;
         }

@@ -13,15 +13,20 @@ namespace CFrame
         float endX = 1.0f;
         float endY = 1.0f;
         bool animating = false;
+        float originalX = 1.0f;
+        float originalY = 1.0f;
+        AnimationEndBehavior reset;
 
         UIElement& element;
 
-        Translate(float distanceX, float distanceY,float duration, UIElement& element)
-            : duration(duration), animating(true), element(element) {
+        Translate(float distanceX, float distanceY,float duration, AnimationEndBehavior reset, UIElement& element)
+            : duration(duration), animating(true), reset(reset), element(element) {
             startX = element.GetX();
             endX = startX + distanceX;
             startY = element.GetY();
             endY = startY + distanceY;
+            originalX = element.GetX();
+            originalY = element.GetY();
         }
 
         void Update(float timestep) override;
