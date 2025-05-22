@@ -92,7 +92,12 @@ namespace CFrame
 		if (index < 0 || index >= static_cast<int>(cells.size())) {
 			return;
 		}
+		UIElement* target = cells[index].child;
 		cells[index].child = nullptr;
+
+		// Remove the target from renderChildren
+		auto it = std::remove(renderChildren.begin(), renderChildren.end(), target);
+		renderChildren.erase(it, renderChildren.end());
 	}
 
 	void Grid::InsertChild(UIElement* child, int index)
@@ -103,6 +108,7 @@ namespace CFrame
 
 		if (cells[index].child == nullptr) {
 			cells[index].child = child;
+			renderChildren.push_back(child); 
 		}
 	}
 }
