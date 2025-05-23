@@ -9,7 +9,7 @@ file(GLOB_RECURSE CFRAME_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/CFrame/*.cpp)
 file(GLOB_RECURSE CFRAME_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/src/CFrame/*.h)
 
 # Add static library
-add_library(CFrame STATIC ${CFRAME_SOURCES} ${CFRAME_HEADERS} )
+add_library(CFrame STATIC ${CFRAME_SOURCES} ${CFRAME_HEADERS}  )
 
 # Include paths
 target_include_directories(CFrame PUBLIC

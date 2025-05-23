@@ -17,6 +17,7 @@ namespace CFrame
     class Renderer1;
     class Animator;
 
+
     enum ElementType
     {
         CONTAINER,
@@ -212,10 +213,12 @@ namespace CFrame
                 return; 
             }
 
-            activeAnimators[key] = std::make_unique<T>(std::forward<Args>(args)..., *this);
+            activeAnimators[key] = std::make_shared<T>(std::forward<Args>(args)..., *this);
           
             applicationManager->RegisterAnimation(*this);
         }
+
+        void StartAnimation(Animator* anim);
 
         void AnimateScale(float scaleX, float scaleY);
         void StopAnimation();
@@ -276,7 +279,7 @@ namespace CFrame
         std::unique_ptr<Texture> imageTexture;
         std::shared_ptr<ApplicationManager> applicationManager;
 
-        std::unordered_map<std::type_index, std::unique_ptr<Animator>> activeAnimators;
+        std::unordered_map<std::type_index, std::shared_ptr<Animator>> activeAnimators;
         
         ElementProperties properties;
         AnimationProperties animProperties;

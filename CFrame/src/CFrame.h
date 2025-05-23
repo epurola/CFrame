@@ -37,6 +37,8 @@
 #include "CFrame/Animator/ScaleX.h"
 
 #include "CFrame/Animator/ScaleY.h"
+
+#include "CFrame/Animator/Bounce.h"
 /*Logging*/
 #include "CFrame/Log.h"
 /*Entry point*/

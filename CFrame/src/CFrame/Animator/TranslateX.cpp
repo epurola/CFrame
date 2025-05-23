@@ -24,6 +24,12 @@ namespace CFrame
 					duration,
 					AnimationEndBehavior::None
 				);
+				return;
+			}
+		
+			if (onEnd != nullptr)
+			{
+				onEnd();
 			}
 		}
 	}

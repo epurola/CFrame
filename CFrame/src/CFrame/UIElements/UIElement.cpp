@@ -368,7 +368,19 @@ namespace CFrame {
 		properties.scaleY = scaleY;
 	}
 
+	void UIElement::StartAnimation(Animator* anim)
+	{
+		if (!anim) return;
 
-	
+		std::type_index key(typeid(*anim));
+
+		if (activeAnimators.find(key) != activeAnimators.end() && activeAnimators[key]->IsAnimating()) {
+			return;
+		}
+
+		activeAnimators[key].reset(anim); // Take ownership
+
+		applicationManager->RegisterAnimation(*this);
+	}
 
 }

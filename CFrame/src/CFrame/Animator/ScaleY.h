@@ -1,3 +1,4 @@
+#pragma once
 #include "Animator.h"
 
 namespace CFrame

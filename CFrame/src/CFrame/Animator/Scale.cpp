@@ -18,14 +18,18 @@ namespace CFrame
 			}
 			if (AnimationEndBehavior::Reverse == end) {
 				elapsed = 0.0f;
-
-				element.StartAnimation<Scale>(
-					endScale,
-					startScale,
-					duration,
-					AnimationEndBehavior::None
-				);
+				Scale* anim = new Scale(endScale, startScale, duration, AnimationEndBehavior::None, element);
+				anim->onEnd = onEnd;
+				element.StartAnimation(anim);
+				return;
 			}
+
+			if (onEnd != nullptr) 
+			{
+				onEnd();
+			}
+
 		}
 	}
+
 }

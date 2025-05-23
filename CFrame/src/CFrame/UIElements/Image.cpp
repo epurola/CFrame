@@ -29,10 +29,32 @@ namespace CFrame
 
 	void Image::Render(float timestep)
 	{
+		UpdateVertices();
+		for (auto it = activeAnimators.begin(); it != activeAnimators.end(); )
+		{
+			Animator* animator = it->second.get();
+
+			if (animator->IsAnimating())
+			{
+				animator->Update(timestep);
+				++it;
+			}
+			else
+			{
+				// Remove finished animations
+				it = activeAnimators.erase(it);
+			}
+			if (activeAnimators.empty()) {
+				applicationManager->RemoveAnimator(*this);
+			}
+		}
 		QuadInstanceT instancet{};
 
-		instancet.position = { x, y };
-		instancet.size = { width , height };
+		float offsetX = (width * (1.0f - properties.scaleX)) * 0.5f;
+		float offsetY = (height * (1.0f - properties.scaleY)) * 0.5f;
+
+		instancet.position = { x + offsetX, y + offsetY };
+		instancet.size = { width * properties.scaleX, height * properties.scaleY };
 
 		// Base colors (RGBA)
 		instancet.color1 = properties.colors.background1;
@@ -103,6 +125,11 @@ namespace CFrame
 	void Image::SetOnEvent(std::function<void()> onEvent)
 	{
 		this->onEvent = onEvent;
+	}
+
+	void Image::RegisterAnimator(std::shared_ptr<ApplicationManager> manager)
+	{
+		applicationManager = manager;
 	}
 
 }

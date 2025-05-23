@@ -21,6 +21,7 @@ namespace CFrame
         element(element)
         {
             originalScale = element.GetProperties().scaleX;
+            onEnd = nullptr;
         }
 
         void Update(float timestep) override;

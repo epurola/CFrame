@@ -16,7 +16,8 @@ namespace CFrame
 			if (AnimationEndBehavior::Reset == end) {
 				element.SetScaleY(originalScale);
 			}
-			if (AnimationEndBehavior::Reverse == end) {
+			if (AnimationEndBehavior::Reverse == end)
+			{
 				elapsed = 0.0f;
 
 				element.StartAnimation<ScaleY>(
@@ -25,6 +26,11 @@ namespace CFrame
 					duration,
 					AnimationEndBehavior::None
 				);
+				return;
+			}
+			if (onEnd != nullptr)
+			{
+				onEnd();
 			}
 		}
 	}

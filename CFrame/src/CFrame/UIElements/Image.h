@@ -24,6 +24,7 @@ namespace CFrame
 		void Render(float timestep) override;
 		void OnEvent(CFrameEvent& event) override;
 		void SetOnEvent(std::function<void()> onEvent);
+		void RegisterAnimator(std::shared_ptr<ApplicationManager> manager);
 
 		ElementType GetElementType() const override { return ElementType::IMAGE; };
 

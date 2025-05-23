@@ -219,7 +219,7 @@ public:
 						});
 						button8->SetOnClick([button8]()
 						{
-							button8->StartAnimation<CFrame::Rotate>(0.0, 360.0, 5.0f, AnimationEndBehavior::Reverse);
+							button8->StartAnimation<CFrame::Bounce>();
 						});
 					
 		CFrame::Button* button9 = new CFrame::Button(-1, 50);
@@ -236,19 +236,12 @@ public:
 							button9->AnimateGradient(3.0);
 						});
 						button9->SetOpacity(0.9);
+
+						//Bounce Animation
 						button9->SetOnClick([button9]()
 						{
 							using namespace CFrame;
-
-							// Quick horizontal scale to simulate squish/stretch
-							button9->StartAnimation<Scale>(
-								1.0f,      // From normal size
-								1.5f,      // Stretch a bit
-								0.2f,      // Fast
-								AnimationEndBehavior::Reset
-							);
-
-							
+							button9->StartAnimation<Bounce>();
 						});
 	  
 						

@@ -9,6 +9,8 @@ public:
 	ChessPiece( std::string path);
 	~ChessPiece();
 
+	bool MouseMoveEvent(CFrame::MouseMovedEvent& event) override;
+
 
 private:
 

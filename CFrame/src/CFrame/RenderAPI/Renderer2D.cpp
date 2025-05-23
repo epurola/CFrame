@@ -209,11 +209,12 @@ namespace CFrame
 
 		/*Vertices of the rectangle. Calculates the top left as the origin*/
 		float vertices[] = {
-			p.vertices.topLeft.x,     p.vertices.topLeft.y,    GLM_VEC4_ARGS(p.colors.background1), 0.0f, 1.0f, GLM_VEC4_ARGS(p.colors.background2),
-			p.vertices.topRight.x,    p.vertices.topRight.y,   GLM_VEC4_ARGS(p.colors.background1), 1.0f, 1.0f, GLM_VEC4_ARGS(p.colors.background2),
-			p.vertices.bottomRight.x, p.vertices.bottomRight.y,GLM_VEC4_ARGS(p.colors.background1), 1.0f, 0.0f, GLM_VEC4_ARGS(p.colors.background2),
-			p.vertices.bottomLeft.x,  p.vertices.bottomLeft.y, GLM_VEC4_ARGS(p.colors.background1), 0.0f, 0.0f, GLM_VEC4_ARGS(p.colors.background2),
+			x,     y,      GLM_VEC4_ARGS(p.colors.background1), 0.0f, 0.0f, GLM_VEC4_ARGS(p.colors.background2),  // top-left
+			x + w, y,      GLM_VEC4_ARGS(p.colors.background1), 1.0f, 0.0f, GLM_VEC4_ARGS(p.colors.background2),  // top-right
+			x + w, y + h,  GLM_VEC4_ARGS(p.colors.background1), 1.0f, 1.0f, GLM_VEC4_ARGS(p.colors.background2),  // bottom-right
+			x,     y + h,  GLM_VEC4_ARGS(p.colors.background1), 0.0f, 1.0f, GLM_VEC4_ARGS(p.colors.background2),  // bottom-left
 		};
+
 
 
 		/*create vertex buffer with the vertices and the size of the data

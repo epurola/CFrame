@@ -1,6 +1,7 @@
 #pragma once
 #include "CFrame/UIElements/UIElement.h"
 #include "CFrame/UIElements/Grid.h"
+#include "CFrame/Animator/Bounce.h"
 #include "ChessPiece.h"
 #include "CFrame/CFrameEvent/CFrameEvent.h"
 

@@ -6,14 +6,40 @@ layout(location = 2) in vec2 texCoord;
 uniform mat4 u_MVP;
 uniform vec2 u_Center;
 uniform float u_ZIndex;
+uniform float u_Angle;
+ // Bottom-left corner of the rectangle (x, y)
+uniform vec2 u_RectMin;      
+// Top-right corner of the rectangle (x, y)
+uniform vec2 u_RectMax;  
 out vec4 fragPos;
 out vec2 v_TexCoord;
 
+mat2 rotate(float angle){
+    return mat2(
+        cos(angle), -sin(angle),
+        sin(angle),  cos(angle)
+    );
+}
+
 void main()
 {
-   gl_Position = u_MVP *  vec4(position.x, position.y, u_ZIndex, 1.0);
-   fragPos = position;
-   v_TexCoord = texCoord;
+// Calculate rectangle center from uniforms
+    vec2 center = (u_RectMin + u_RectMax) * 0.5;
+
+    // Translate vertex to origin-centered coords
+    vec2 posCentered = position.xy - center;
+
+    // Rotate around origin (center of rect)
+    mat2 rot = rotate(u_Angle);
+    vec2 rotatedPos = rot * posCentered;
+
+    // Translate back to world coords
+    vec2 finalPos = rotatedPos + center;
+
+    gl_Position = u_MVP * vec4(finalPos, position.z, 1.0);
+
+    fragPos = position;
+    v_TexCoord = texCoord;
 
 };
 

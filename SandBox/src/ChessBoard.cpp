@@ -1,5 +1,6 @@
 #include "ChessBoard.h"
 
+
 ChessBoard::ChessBoard(int w, int h)
 	:Grid(w, h)
 {
@@ -29,6 +30,7 @@ bool ChessBoard::MousePressEvent(CFrame::MouseButtonDownEvent& event)
     index = row * 8 + col;
 
     selectedPiece = static_cast<ChessPiece*>(GetChild(index));
+	selectedPiece->StartAnimation<CFrame::Bounce>();
 	
 	return true;
 }
@@ -42,7 +44,7 @@ bool ChessBoard::MouseMoveEvent(CFrame::MouseMovedEvent& event)
 
 		selectedPiece->SetY(y - (cellWidth / 2));
 		selectedPiece->SetX(x - (cellHeight / 2));
-		selectedPiece->UpdateVertices();
+
 		return true;
 	}
 	return false;
@@ -101,6 +103,8 @@ void ChessBoard::InitializeBoard()
 	ChessPiece* w7 = new ChessPiece( "C:/dev/CFrame/SandBox/src/Images/white-knight.png");
 	ChessPiece* w8 = new ChessPiece( "C:/dev/CFrame/SandBox/src/Images/white-rook.png");
 	ChessPiece* w9 = new ChessPiece( "C:/dev/CFrame/SandBox/src/Images/white-pawn.png");
+
+	
 
 	SetLayout(8, 8);
 	SetBackgroundImage("C:/dev/CFrame/SandBox/src/Images/board.png");
