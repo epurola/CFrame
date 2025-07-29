@@ -11,5 +11,6 @@ C++ GUI Engine
 - Fix paths
 - batch rendering
 - Dont allow same child to be added multiple times
+- Fix paths
 
 
